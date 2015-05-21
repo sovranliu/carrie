@@ -1,0 +1,7 @@
+// 请求入口
+if("html" == context.parameters.get("type")) {
+    return "hello.html";
+}
+else {
+    return "sample.json";
+}

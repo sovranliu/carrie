@@ -1,0 +1,3 @@
+var uri = context.uri;
+context.parameters.put("id", uri.substr(uri.lastIndexOf("/") + 1));
+return "hello.action";

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <provider class="com.slfuture.carrie.center.client.ConfigProvider" cover="world.*" default="true">
+        <server address="center.sl:9527" />
+    </provider>
+    <provider class="com.slfuture.carrie.utility.config.xml.ConfigProvider" cover="db, local">
+        <!-- 这里可以配置 Config Provider 的配置内容 -->
+    </provider>
+</configuration>
