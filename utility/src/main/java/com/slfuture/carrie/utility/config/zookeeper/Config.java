@@ -4,33 +4,42 @@ import com.slfuture.carrie.base.model.Path;
 import com.slfuture.carrie.base.text.Text;
 import com.slfuture.carrie.base.type.Map;
 import com.slfuture.carrie.base.type.Set;
+import com.slfuture.carrie.base.type.StringMixedMapping;
 import com.slfuture.carrie.base.type.Table;
 import com.slfuture.carrie.base.type.core.IMap;
 import com.slfuture.carrie.base.type.core.ISet;
 import com.slfuture.carrie.base.type.core.ITable;
 import com.slfuture.carrie.utility.config.core.IConfig;
+import com.slfuture.carrie.utility.config.core.IConfigWatcher;
 import org.apache.log4j.Logger;
+import org.apache.zookeeper.WatchedEvent;
+import org.apache.zookeeper.Watcher;
+import org.apache.zookeeper.ZooKeeper;
 
 /**
  * 配置对象
  */
-public class Config implements IConfig {
+public class Config extends StringMixedMapping<String> implements IConfig {
     /**
      * 日志对象
      */
     protected static Logger logger = Logger.getLogger(Config.class);
     /**
-     * 父节点
+     * Zookeeper节点
      */
-    protected Config parent = null;
+    protected ZooKeeper node = null;
+    /**
+     * 路径
+     */
+    protected Path path = null;
     /**
      * 属性映射
      */
     protected IMap<String, String> properties = new Map<String, String>();
     /**
-     * 子节点映射
+     * 监视者集合
      */
-    protected ITable<String, ISet<IConfig>> children = new Table<String, ISet<IConfig>>();
+    protected ISet<IConfigWatcher> watchers = new Set<IConfigWatcher>();
 
 
     /**
@@ -108,5 +117,50 @@ public class Config implements IConfig {
             }
         }
         return result;
+    }
+
+    /**
+     * 监听配置变化
+     *
+     * @param watcher 监视者
+     * @throws UnsupportedOperationException 部分配置不支持该操作
+     */
+    @Override
+    public void watch(IConfigWatcher watcher) throws UnsupportedOperationException {
+        if(0 == watchers.size()) {
+            try {
+                node.exists("/" + path.toString("/"), new Watcher() {
+                    @Override
+                    public void process(WatchedEvent event) {
+                        if(Event.EventType.None != event.getType()) {
+                            for(IConfigWatcher watcher : watchers) {
+                                try {
+                                    watcher.onChanged(Config.this);
+                                }
+                                catch(Exception e) {
+                                    logger.error("config watch callback failed", e);
+                                }
+                            }
+                            return;
+                        }
+                        try {
+                            node.exists("/" + path.toString("/"), this);
+                        }
+                        catch (Exception e) {
+                            logger.error("watch zookeeper failed", e);
+                        }
+                    }
+                });
+            }
+            catch (Exception e) {
+                logger.error("watch zookeeper failed", e);
+            }
+        }
+        for(IConfigWatcher confWatch : watchers) {
+            if(confWatch == watcher) {
+                return;
+            }
+        }
+        watchers.add(watcher);
     }
 }

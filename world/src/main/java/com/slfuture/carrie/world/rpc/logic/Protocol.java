@@ -1,4 +1,4 @@
-package com.slfuture.carrie.utility.rpc.protocol;
+package com.slfuture.carrie.world.rpc.logic;
 
 import com.slfuture.carrie.base.model.core.IReFilter;
 import com.slfuture.carrie.base.type.List;
@@ -7,7 +7,7 @@ import com.slfuture.carrie.base.type.core.IList;
 /**
  * 报文协议
  */
-public class PacketProtocol implements IReFilter<byte[], byte[]> {
+public class Protocol implements IReFilter<byte[], byte[]> {
     /**
      * 报文头字节数
      */
@@ -120,6 +120,22 @@ public class PacketProtocol implements IReFilter<byte[], byte[]> {
             }
             i++;
         }
+        return result;
+    }
+
+    /**
+     * 转化为报文字节
+     *
+     * @param bytes 待传输的内容
+     * @return 报文字节
+     */
+    public static byte[] convert(byte[] bytes) {
+        byte[] result = new byte[bytes.length + PACKET_HEAD_SIZE];
+        result[0] = (byte) ((bytes.length >> 24) & 0xFF);
+        result[1] = (byte) ((bytes.length >> 16) & 0xFF);
+        result[2] = (byte) ((bytes.length >> 8) & 0xFF);
+        result[3] = (byte) (bytes.length & 0xFF);
+        System.arraycopy(bytes, 0, result, 4, bytes.length);
         return result;
     }
 }

@@ -120,7 +120,7 @@ public class DateTime implements Comparable<DateTime> {
      *
      * @return 当前日期
      */
-    public static DateTime today() {
+    public static DateTime now() {
         return DateTime.parse(Calendar.getInstance());
     }
 

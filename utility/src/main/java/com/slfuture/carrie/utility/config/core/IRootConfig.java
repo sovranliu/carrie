@@ -11,12 +11,4 @@ public interface IRootConfig extends IConfig {
      * @return 是否执行成功
      */
     public boolean load(String uri);
-
-    /**
-     * 监听配置变化
-     *
-     * @param watcher 监视者
-     * @throws UnsupportedOperationException 部分配置不支持该操作
-     */
-    public void watch(IConfigWatcher watcher) throws UnsupportedOperationException;
 }

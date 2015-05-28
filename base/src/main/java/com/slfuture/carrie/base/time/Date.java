@@ -66,7 +66,7 @@ public class Date implements Comparable<Date> {
      *
      * @return 当前日期
      */
-    public static Date today() {
+    public static Date now() {
         Date result = new Date();
         result.calendar = Calendar.getInstance();
         return result;

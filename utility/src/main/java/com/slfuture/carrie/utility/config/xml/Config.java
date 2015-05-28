@@ -1,15 +1,17 @@
 package com.slfuture.carrie.utility.config.xml;
 
 import com.slfuture.carrie.base.type.Set;
+import com.slfuture.carrie.base.type.StringMixedMapping;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ISet;
 import com.slfuture.carrie.base.xml.core.IXMLNode;
 import com.slfuture.carrie.utility.config.core.IConfig;
+import com.slfuture.carrie.utility.config.core.IConfigWatcher;
 
 /**
  * 配置对象
  */
-public class Config implements IConfig {
+public class Config extends StringMixedMapping<String> implements IConfig {
     /**
      * XML节点
      */
@@ -73,5 +75,16 @@ public class Config implements IConfig {
             result.add(new Config(node));
         }
         return result;
+    }
+
+    /**
+     * 监听配置变化
+     *
+     * @param watcher 监视者
+     * @throws UnsupportedOperationException 部分配置不支持该操作
+     */
+    @Override
+    public void watch(IConfigWatcher watcher) throws UnsupportedOperationException {
+        throw new UnsupportedOperationException("com.slfuture.carrie.utility.config.xml.RootConfig not support watch operation.");
     }
 }

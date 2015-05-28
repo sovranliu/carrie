@@ -27,18 +27,6 @@ public class RootConfig extends Config implements IRootConfig {
      * Zookeeper超时时间
      */
     public final static int ZOOKEEPER_TIMEOUT = 3000;
-    /**
-     * Zookeeper节点
-     */
-    protected ZooKeeper node = null;
-    /**
-     * 路径
-     */
-    protected Path path = null;
-    /**
-     * 监视者集合
-     */
-    protected ISet<IConfigWatcher> watchers = new Set<IConfigWatcher>();
 
 
     /**
@@ -113,50 +101,5 @@ public class RootConfig extends Config implements IRootConfig {
             }
         }
         return true;
-    }
-
-    /**
-     * 监听配置变化
-     *
-     * @param watcher 监视者
-     * @throws UnsupportedOperationException 部分配置不支持该操作
-     */
-    @Override
-    public void watch(IConfigWatcher watcher) throws UnsupportedOperationException {
-        if(0 == watchers.size()) {
-            try {
-                node.exists("/" + path.toString("/"), new Watcher() {
-                    @Override
-                    public void process(WatchedEvent event) {
-                        if(Event.EventType.None != event.getType()) {
-                            for(IConfigWatcher watcher : watchers) {
-                                try {
-                                    watcher.onChanged();
-                                }
-                                catch(Exception e) {
-                                    logger.error("config watch callback failed", e);
-                                }
-                            }
-                            return;
-                        }
-                        try {
-                            node.exists("/" + path.toString("/"), this);
-                        }
-                        catch (Exception e) {
-                            logger.error("watch zookeeper failed", e);
-                        }
-                    }
-                });
-            }
-            catch (Exception e) {
-                logger.error("watch zookeeper failed", e);
-            }
-        }
-        for(IConfigWatcher confWatch : watchers) {
-            if(confWatch == watcher) {
-                return;
-            }
-        }
-        watchers.add(watcher);
     }
 }

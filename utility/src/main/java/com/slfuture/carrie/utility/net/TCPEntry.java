@@ -32,6 +32,9 @@ public abstract class TCPEntry extends NetEntry implements IHandle, ISession<TCP
          */
         @Override
         public void onStatusChanged(int status) {
+            if(TCPConnection.STATUS_DISCONNECTED == status) {
+                connections.delete(local().port);
+            }
             TCPEntry.this.onStatusChanged(this, status);
         }
 

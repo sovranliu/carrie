@@ -6,6 +6,8 @@ package com.slfuture.carrie.utility.config.core;
 public interface IConfigWatcher {
     /**
      * 配置变动回调
+     *
+     * @param conf 配置对象
      */
-    public void onChanged();
+    public void onChanged(IConfig conf);
 }

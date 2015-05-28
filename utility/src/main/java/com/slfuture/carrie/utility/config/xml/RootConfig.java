@@ -41,15 +41,4 @@ public class RootConfig extends Config implements IRootConfig {
         document.close();
         return true;
     }
-
-    /**
-     * 监听配置变化
-     *
-     * @param watcher 监视者
-     * @throws UnsupportedOperationException 部分配置不支持该操作
-     */
-    @Override
-    public void watch(IConfigWatcher watcher) throws UnsupportedOperationException {
-        throw new UnsupportedOperationException("com.slfuture.carrie.utility.config.xml.RootConfig not support watch operation.");
-    }
 }

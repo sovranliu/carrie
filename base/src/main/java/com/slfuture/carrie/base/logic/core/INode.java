@@ -1,6 +1,6 @@
-package com.slfuture.carrie.base.type.core;
+package com.slfuture.carrie.base.logic.core;
 
-import com.slfuture.carrie.base.logic.core.ICondition;
+import com.slfuture.carrie.base.type.core.ISet;
 
 /**
  * 节点接口

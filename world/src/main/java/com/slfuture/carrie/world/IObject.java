@@ -1,5 +1,7 @@
 package com.slfuture.carrie.world;
 
+import com.slfuture.carrie.base.model.GlobeIdentity;
+
 /**
  * 世界对象接口
  *
@@ -26,4 +28,11 @@ public interface IObject {
      * @return 对象类型
      */
     public int type();
+
+    /**
+     * 获取标志
+     *
+     * @return 获取标志
+     */
+    public GlobeIdentity<Object> identity();
 }
