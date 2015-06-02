@@ -1,7 +1,7 @@
 package com.slfuture.carrie.utility.config.core;
 
 /**
- * 根配置对象接口
+ * 根配置接口
  */
 public interface IRootConfig extends IConfig {
     /**
@@ -11,4 +11,12 @@ public interface IRootConfig extends IConfig {
      * @return 是否执行成功
      */
     public boolean load(String uri);
+
+    /**
+     * 附加配置节点
+     *
+     * @param path 节点路径
+     * @param conf 配置节点
+     */
+    public boolean attach(String path, IConfig conf);
 }

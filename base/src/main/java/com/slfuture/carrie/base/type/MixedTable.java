@@ -265,4 +265,15 @@ public class MixedTable<K, V> extends Table<K, V> implements IMixedMapping<K, V>
         }
         return result;
     }
+
+    /**
+     * 获取字符串
+     *
+     * @param key 名
+     * @return 字符串
+     */
+    @Override
+    public String getString(K key) {
+        return String.valueOf(get(key));
+    }
 }

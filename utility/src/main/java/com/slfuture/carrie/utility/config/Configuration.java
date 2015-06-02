@@ -1,8 +1,8 @@
 package com.slfuture.carrie.utility.config;
 
-import com.slfuture.carrie.base.type.safe.Table;
 import com.slfuture.carrie.base.xml.XMLDocument;
 import com.slfuture.carrie.base.xml.core.IXMLNode;
+import com.slfuture.carrie.utility.config.core.IConfig;
 import com.slfuture.carrie.utility.config.core.IRootConfig;
 import org.apache.log4j.Logger;
 
@@ -17,11 +17,11 @@ public class Configuration {
     /**
      * 日志对象
      */
-    protected static Logger logger = Logger.getLogger(Configuration.class);
+    private static Logger logger = Logger.getLogger(Configuration.class);
     /**
-     * 键与根配置的映射
+     * 根节点
      */
-    private static Table<String, IRootConfig> configTable = new Table<String, IRootConfig>();
+    private static IRootConfig root = null;
 
 
     /**
@@ -53,12 +53,17 @@ public class Configuration {
     public static boolean build(IXMLNode xml) {
         for(IXMLNode node : xml.visits("root")) {
             try {
-                IRootConfig root = (IRootConfig) Class.forName(node.get("class")).newInstance();
-                if(!root.load(node.get("uri"))) {
+                IRootConfig conf = (IRootConfig) Class.forName(node.get("class")).newInstance();
+                if(!conf.load(node.get("uri"))) {
                     logger.error("root config load failed:\n" + node.toString());
                     continue;
                 }
-                configTable.put(node.get("name"), root);
+                if(null == root) {
+                    root = conf;
+                }
+                else {
+                    root.attach(node.get("path"), conf);
+                }
             }
             catch(Exception ex) {
                 logger.error("root config build failed:\n" + node.toString(), ex);
@@ -68,12 +73,11 @@ public class Configuration {
     }
 
     /**
-     * 获取指定名称的配置对象
+     * 获取根节点
      *
-     * @param name 配置名称
      * @return 配置对象
      */
-    public static IRootConfig get(String name) {
-        return configTable.get(name);
+    public static IConfig root() {
+        return root;
     }
 }

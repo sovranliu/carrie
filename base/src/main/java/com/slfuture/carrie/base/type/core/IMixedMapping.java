@@ -139,4 +139,12 @@ public interface IMixedMapping<K, V> extends IMapping<K, V> {
      * @return 双精度值
      */
     public double getDouble(K key, double defaultValue);
+
+    /**
+     * 获取字符串
+     *
+     * @param key 名
+     * @return 字符串
+     */
+    public String getString(K key);
 }

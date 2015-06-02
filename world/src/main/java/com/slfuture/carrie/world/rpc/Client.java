@@ -3,7 +3,7 @@ package com.slfuture.carrie.world.rpc;
 import com.slfuture.carrie.base.model.GlobeIdentity;
 import com.slfuture.carrie.utility.config.Configuration;
 import com.slfuture.carrie.utility.config.core.IConfig;
-import com.slfuture.carrie.utility.config.core.IConfigWatcher;
+import com.slfuture.carrie.utility.config.ConfigWatcher;
 import com.slfuture.carrie.utility.config.core.IRootConfig;
 
 /**
@@ -13,7 +13,7 @@ public class Client {
     /**
      * 网络配置监视器类
      */
-    public static class NetConfigWatcher implements IConfigWatcher {
+    public static class NetConfigWatcher implements ConfigWatcher {
         /**
          * 配置变动回调
          *

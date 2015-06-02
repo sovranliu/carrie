@@ -80,10 +80,21 @@ public class Test {
         }
     }
 
+
+    public static abstract class C {
+        public C(int i) {}
+
+        public abstract void on();
+    }
+
     /**
      * 主函数
      */
     public static void main(String[] argv) throws Exception {
+        C c = new C(1) {
+            public  void on() {}
+        };
+
         PropertyConfigurator.configure("/F:/log4j.properties");
         TCPEntry server = new ServerTCPEntry();
         server.ip = "127.0.0.1";

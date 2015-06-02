@@ -1,5 +1,6 @@
 package com.slfuture.carrie.base.xml;
 
+import com.slfuture.carrie.base.model.Path;
 import com.slfuture.carrie.base.type.Table;
 import com.slfuture.carrie.base.type.Set;
 import com.slfuture.carrie.base.type.core.ICollection;
@@ -201,6 +202,16 @@ public class XMLNode extends Table<String, String> implements IXMLNode, Cloneabl
             head = path.substring(0, i) ;
             tail = path.substring(i + 1);
         }
+        // 向上遍历
+        if(Path.PATH_PARENT.equals(head)) {
+            if(null == tail) {
+                return parent;
+            }
+            else {
+                // 迭代遍历
+                return parent.visit(tail);
+            }
+        }
         // 尝试取出子节点索引
         String name = null;
         int index = 0;
@@ -262,6 +273,16 @@ public class XMLNode extends Table<String, String> implements IXMLNode, Cloneabl
         else {
             head = path.substring(0, i) ;
             tail = path.substring(i + 1);
+        }
+        // 向上遍历
+        if(Path.PATH_PARENT.equals(head)) {
+            if(null == tail) {
+                return new Set<IXMLNode>(parent);
+            }
+            else {
+                // 迭代遍历
+                return parent.visits(tail);
+            }
         }
         // 尝试取出子节点索引
         String name = null;

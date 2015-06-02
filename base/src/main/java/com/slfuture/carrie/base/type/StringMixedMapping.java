@@ -221,4 +221,15 @@ public abstract class StringMixedMapping<K> implements IMixedMapping<K, String> 
         }
         return result;
     }
+
+    /**
+     * 获取字符串
+     *
+     * @param key 名
+     * @return 字符串
+     */
+    @Override
+    public String getString(K key) {
+        return get(key);
+    }
 }

@@ -2,22 +2,16 @@ package com.slfuture.carrie.utility.config.zookeeper;
 
 import com.slfuture.carrie.base.json.JSONObject;
 import com.slfuture.carrie.base.json.core.IJSON;
-import com.slfuture.carrie.base.model.Path;
 import com.slfuture.carrie.base.text.Text;
 import com.slfuture.carrie.base.type.Set;
+import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ILink;
-import com.slfuture.carrie.base.type.core.ISet;
 import com.slfuture.carrie.utility.config.core.IConfig;
-import com.slfuture.carrie.utility.config.core.IConfigWatcher;
 import com.slfuture.carrie.utility.config.core.IRootConfig;
 
-import org.apache.zookeeper.WatchedEvent;
-import org.apache.zookeeper.Watcher;
 import org.apache.zookeeper.ZooKeeper;
 
-import java.io.IOException;
 import java.util.List;
-import java.util.Stack;
 
 /**
  * 根配置对象
@@ -27,12 +21,19 @@ public class RootConfig extends Config implements IRootConfig {
      * Zookeeper超时时间
      */
     public final static int ZOOKEEPER_TIMEOUT = 3000;
-
-
     /**
-     * 构造函数
+     * 分隔符
      */
-    public RootConfig() { }
+    public final static String ZOOKEEPER_SEPARATOR = "#";
+    /**
+     * Zookeeper节点
+     */
+    protected ZooKeeper node = null;
+    /**
+     * Zookeeper路径
+     */
+    protected String path = null;
+
 
     /**
      * 加载根配置
@@ -47,58 +48,102 @@ public class RootConfig extends Config implements IRootConfig {
             logger.error("path missing when connecting znode");
             return false;
         }
-        path = new Path(uri.substring(i), "/");
+        path = uri.substring(i);
         uri = uri.substring(0, i);
         try {
             node = new ZooKeeper(uri, ZOOKEEPER_TIMEOUT, null);
         }
-        catch (IOException e) {
-            logger.error("ZooKeeper node create failed", e);
-            return false;
+        catch (Exception e) {
+            logger.error("access zookeeper failed", e);
         }
-        // 递归构建子节点
-        Stack<Config> confStack = new Stack<Config>();
-        Stack<String> pathStack = new Stack<String>();
-        confStack.push(this);
-        pathStack.push("/" + path.toString("/"));
-        while(true) {
-            if(confStack.isEmpty()) {
-                break;
-            }
-            Config currentConfig = confStack.pop();
-            String currentPath = pathStack.pop();
-            try {
-                String data = new String(node.getData(currentPath, false, null), "UTF-8");
-                if(!Text.isBlank(data)) {
-                    JSONObject jObject = JSONObject.convert(data);
-                    for(ILink<String, IJSON> link : jObject) {
-                        currentConfig.properties.put(link.getOrigin(), link.getDestination().toString());
+        return refresh(path, this);
+    }
+
+    /**
+     * 附加配置节点
+     *
+     * @param path 节点路径
+     * @param conf 配置节点
+     */
+    @Override
+    public boolean attach(String path, IConfig conf) {
+        int i = path.lastIndexOf("/");
+        if(-1 == i) {
+            this.children.put(path, new Set<IConfig>(conf));
+            return true;
+        }
+        ((com.slfuture.carrie.utility.config.Config) (visit(path.substring(0, i)))).children.put(path.substring(i + 1), new Set<IConfig>(conf));
+        return true;
+    }
+
+    /**
+     * 获取指定路径的Zookeeper节点保存的配置信息
+     *
+     * @param relativePath 相对路径
+     * @return 配置信息
+     */
+    public Config zget(String relativePath) {
+        Config result = new Config();
+        if(refresh(path + "/" + relativePath, result)) {
+            return result;
+        }
+        return null;
+    }
+
+    /**
+     * 获取指定路径的Zookeeper节点保存的配置信息集合
+     *
+     * @param relativePath 相对路径
+     * @return 配置信息集合
+     */
+    public ICollection<IConfig> zgets(String relativePath) {
+        int i = relativePath.lastIndexOf("/");
+        if(-1 == i) {
+            return new Set<IConfig>();
+        }
+        String mainName = relativePath.substring(i + 1);
+        Set<IConfig> result = new Set<IConfig>();
+        try {
+            List<String> childrenName = node.getChildren(path + "/" + relativePath.substring(0, i), null);
+            for(String childName : childrenName) {
+                if(0 == childName.indexOf(mainName)) {
+                    Config conf = new Config();
+                    conf.name = childName;
+                    if(!refresh(path + "/" + relativePath.substring(0, i) + childName, conf)) {
+                        logger.error("refresh zookeeper node failed");
+                        continue;
                     }
+                    result.add(conf);
                 }
-                List<String> childrenName = node.getChildren("/" + path.toString("/"), null);
-                for(String childName : childrenName) {
-                    i = childName.indexOf("#");
-                    String name = null;
-                    if(-1 == i) {
-                        name = childName;
-                    }
-                    else {
-                        name = childName.substring(0, i);
-                    }
-                    Config childConfig = new Config();
-                    ISet<IConfig> childConfigSet = currentConfig.children.get(name);
-                    if(null == childConfigSet) {
-                        childConfigSet = new Set<IConfig>();
-                        currentConfig.children.put(name, childConfigSet);
-                    }
-                    childConfigSet.add(childConfig);
-                    confStack.push(childConfig);
-                    pathStack.push(currentPath + "/" + childName);
+            }
+        }
+        catch (Exception e) {
+            logger.error("fetch children node failed", e);
+            return null;
+        }
+        return result;
+    }
+
+    /**
+     * 刷新指定路径的配置
+     *
+     * @param path zookeeper节点
+     * @param conf 配置对象
+     */
+    public boolean refresh(String path, Config conf) {
+        try {
+            String data = new String(node.getData(path, false, null), "UTF-8");
+            if(!Text.isBlank(data)) {
+                JSONObject jObject = JSONObject.convert(data);
+                conf.properties.clear();
+                for(ILink<String, IJSON> link : jObject) {
+                    conf.properties.put(link.getOrigin(), link.getDestination().toString());
                 }
             }
-            catch (Exception e) {
-                logger.error("fatch Zookeeper children failed", e);
-            }
+        }
+        catch (Exception e) {
+            logger.error("refresh " + path + " failed", e);
+            return false;
         }
         return true;
     }

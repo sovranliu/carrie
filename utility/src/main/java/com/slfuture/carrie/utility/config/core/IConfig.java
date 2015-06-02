@@ -1,14 +1,30 @@
 package com.slfuture.carrie.utility.config.core;
 
+import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.IMixedMapping;
-import com.slfuture.carrie.base.type.core.ISet;
 
 /**
  * 配置对象接口
- *
- * 基于有向图结构的配置体系
  */
 public interface IConfig extends IMixedMapping<String, String> {
+    /**
+     * 通配符
+     */
+    public final static String CONFIG_NAME_WILDCARD = "*";
+    /**
+     * XML节点路径分隔符
+     */
+    public final static String CONFIG_PATH_SEPARATOR = "/";
+    /**
+     * XML节点路径中节点集索引左括号
+     */
+    public final static String CONFIG_PATH_SBL = "[";
+    /**
+     * XML节点路径中节点集索引右括号
+     */
+    public final static String CONFIG_PATH_SBR = "]";
+
+
     /**
      * 遍历指定路径的节点
      *
@@ -23,13 +39,5 @@ public interface IConfig extends IMixedMapping<String, String> {
      * @param path 路径
      * @return 指定路径下的节点集，不存在返回空集合
      */
-    public ISet<IConfig> visits(String path);
-
-    /**
-     * 监听配置变化
-     *
-     * @param watcher 监视者
-     * @throws UnsupportedOperationException 部分配置不支持该操作
-     */
-    public void watch(IConfigWatcher watcher) throws UnsupportedOperationException;
+    public ICollection<IConfig> visits(String path);
 }
