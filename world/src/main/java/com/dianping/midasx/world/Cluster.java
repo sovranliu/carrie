@@ -6,7 +6,7 @@ import com.dianping.midasx.base.type.core.ISignedEdgedDigraph;
 /**
  * 簇类
  */
-public class Cluster extends Table<String, Relation> implements ISignedEdgedDigraph<String, Cluster, Relation> {
+public class Cluster extends Table<String, Relation> implements ISignedEdgedDigraph<String, Cluster, Relation> { 
     /**
      * 簇名称
      */
