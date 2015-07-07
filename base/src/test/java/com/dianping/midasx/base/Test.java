@@ -33,6 +33,16 @@ public class Test {
     }
 
     public static void main(String[] argv) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, Exception {
+        Integer i = 1;
+        Object o = i;
+        Integer ii = 2;
+        Object oo = i;
+
+        Comparable<?> c = (Comparable<?>) i;
+        Method methodx = o.getClass().getDeclaredMethod("compareTo", o.getClass());
+        System.out.println(methodx.invoke(o, oo));
+        // System.out.println(c.compareTo(oo));
+
         String aa = "hello";
         StringBuilder sb = new StringBuilder();
         sb.append("hello1");

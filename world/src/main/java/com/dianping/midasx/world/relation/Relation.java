@@ -1,11 +1,13 @@
-package com.dianping.midasx.world;
+package com.dianping.midasx.world.relation;
 
 import com.dianping.midasx.base.logic.core.ICondition;
 import com.dianping.midasx.base.type.Link;
 import com.dianping.midasx.base.type.core.IMapping;
 import com.dianping.midasx.base.xml.core.IXMLNode;
-import com.dianping.midasx.world.condition.FieldCondition;
-import com.dianping.midasx.world.condition.RelatedCondition;
+import com.dianping.midasx.world.Cluster;
+import com.dianping.midasx.world.IObject;
+import com.dianping.midasx.world.relation.FieldCondition;
+import com.dianping.midasx.world.relation.RelatedCondition;
 
 import java.text.ParseException;
 

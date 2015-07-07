@@ -2,10 +2,12 @@ package com.dianping.midasx.base.logic;
 
 import com.dianping.midasx.base.logic.core.ICondition;
 
+import java.lang.reflect.Method;
+
 /**
  * 比较条件 V
  */
-public class CompareCondition<T, V extends Comparable<T>, S extends CompareCondition<T, V, S>> extends LogicalCondition<T, S> implements ICondition<T> {
+public class CompareCondition<T, S extends CompareCondition<T, S>> extends LogicalCondition<T, S> implements ICondition<T> {
     /**
      * 等于
      */
@@ -39,7 +41,7 @@ public class CompareCondition<T, V extends Comparable<T>, S extends CompareCondi
     /**
      * 目标值
      */
-    public V value;
+    public Object value;
 
 
     /**
@@ -96,24 +98,45 @@ public class CompareCondition<T, V extends Comparable<T>, S extends CompareCondi
             }
             return true;
         }
-        else if(COMPARETYPE_GREATERTHAN.equals(compareType)) {
-            if(value.compareTo(target) < 0) {
-                return true;
+        else {
+            try {
+                Method method = value.getClass().getDeclaredMethod("compareTo", value.getClass());
+                Integer result = null;
+                if(COMPARETYPE_GREATERTHAN.equals(compareType)) {
+                    if(null == value) {
+                        return false;
+                    }
+                    else {
+                        result = (Integer) (method.invoke(value, target));
+                        if(result < 0) {
+                            return true;
+                        }
+                    }
+                }
+                else if(COMPARETYPE_GREATEREQUAL.equals(compareType)) {
+                    result = (Integer) (method.invoke(value, target));
+                    if(result <= 0) {
+                        return true;
+                    }
+                }
+                else if(COMPARETYPE_LESSTHAN.equals(compareType)) {
+                    result = (Integer) (method.invoke(value, target));
+                    if(result > 0) {
+                        return true;
+                    }
+                }
+                else if(COMPARETYPE_LESSEQUAL.equals(compareType)) {
+                    result = (Integer) (method.invoke(value, target));
+                    if(result >= 0) {
+                        return true;
+                    }
+                }
             }
-        }
-        else if(COMPARETYPE_GREATEREQUAL.equals(compareType)) {
-            if(value.compareTo(target) <= 0) {
-                return true;
-            }
-        }
-        else if(COMPARETYPE_LESSTHAN.equals(compareType)) {
-            if(value.compareTo(target) > 0) {
-                return true;
-            }
-        }
-        else if(COMPARETYPE_LESSEQUAL.equals(compareType)) {
-            if(value.compareTo(target) >= 0) {
-                return true;
+            catch(Exception ex) {
+                try {
+                    throw ex;
+                }
+                catch (Exception e) { }
             }
         }
         return false;
