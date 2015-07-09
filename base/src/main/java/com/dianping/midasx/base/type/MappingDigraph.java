@@ -16,7 +16,7 @@ public class MappingDigraph<K, T extends IMappingDigraph<K, T>> extends Table<K,
      * @return 查找路径，搜索不到返回null
      */
     @Override
-    public IList<T> findPath(ICondition<T> condition) {
+    public IList<T> searchPath(ICondition<T> condition) {
         Stack<T> stack = new Stack<T>();
         stack.push((T) this);
         // 反向指向映射

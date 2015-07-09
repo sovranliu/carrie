@@ -12,7 +12,7 @@ public interface IMappingDigraph<K, T extends IMappingDigraph<K, T>> extends ITa
      * @param condition 条件对象
      * @return 查找路径，搜索不到返回null
      */
-    public IList<T> findPath(ICondition<T> condition);
+    public IList<T> searchPath(ICondition<T> condition);
 
     /**
      * 按条件查找全部

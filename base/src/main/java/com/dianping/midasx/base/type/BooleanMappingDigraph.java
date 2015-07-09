@@ -2,7 +2,6 @@ package com.dianping.midasx.base.type;
 
 import com.dianping.midasx.base.logic.core.ICondition;
 import com.dianping.midasx.base.type.core.ICollection;
-import com.dianping.midasx.base.type.core.ISet;
 
 import java.util.Stack;
 
@@ -231,7 +230,7 @@ public class BooleanMappingDigraph<T extends BooleanMappingDigraph<T>> extends M
                     logicalLink.setNext(next);
                 }
                 else {
-                    if(null != falseCondition.findPath(new ICondition<LogicalMappingDigraph>() {
+                    if(null != falseCondition.searchPath(new ICondition<LogicalMappingDigraph>() {
                         @Override
                         public boolean check(LogicalMappingDigraph target) {
                             return trueCondition == target;
@@ -242,7 +241,7 @@ public class BooleanMappingDigraph<T extends BooleanMappingDigraph<T>> extends M
                         next.condition = falseCondition;
                         logicalLink.setNext(next);
                     }
-                    else if(null != trueCondition.findPath(new ICondition<LogicalMappingDigraph>() {
+                    else if(null != trueCondition.searchPath(new ICondition<LogicalMappingDigraph>() {
                         @Override
                         public boolean check(LogicalMappingDigraph target) {
                             return falseCondition == target;
