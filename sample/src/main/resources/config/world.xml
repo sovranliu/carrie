@@ -1,27 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <world>
 	<clusters>
-		<cluster name="Contract" table="Demo.Contract">
-			<method name="query" sql="UPDATE Demo.Contract SET Status = 0 WHERE Type = {0}" />
-			<method name="cancel" type="LOAD" sql="UPDATE Demo.Contract SET Status = 0 WHERE #if {1} > 0 #then ID = {0} AND #end Version = {Version}" />
-			<method name="approval" sp="Demo.SP_Approval({0}, {1})" />
-			<manager>
-				<method name="create" type="CREATE" sql="INSERT INTO " />
-			</manager>
+		<cluster id="studentId" name="Student" table="Demo.DM_Student">
+			<methods>
+				<method name="query" type="ALTER" sql="UPDATE DM_Student SET Status = 0 WHERE Type = {0}" />
+				<method name="cancel" type="LOAD" sql="UPDATE DM_Student SET Status = 0 WHERE #if {1} > 0 #then ID = {0} AND #end Version = {Version}" />
+				<method name="approval" type="SP" sp="Demo.SP_Approval({0}, {1})" />
+			</methods>
+			<relations>
+				<relation name="classroom" target="Classroom" mode="1">
+					<condition category="relative" type="EQUAL" field="classroomId" value="id" />
+				</relation>
+			</relations>
 		</cluster>
-		<cluster name="Order" table="Demo.Order" class="com.slfuture.demo.Order">
-			<manager class="com.slfuture.demo.OrderManager">
-				<method name="create" type="CREATE" sql="INSERT INTO " />
-			</manager>
+		<cluster name="Classroom" class="com.slfuture.demo.Classroom">
+			<relations>
+				<relation name="students" target="Student" mode="0-N">
+					<condition category="relative" type="EQUAL" field="id" value="classroomId" />
+				</relation>
+				<relation origin="teacher" target="Teacher" mode="1">
+					<condition category="relative" type="EQUAL" field="id" value="classroomId" />
+				</relation>
+			</relations>
+		</cluster>
+		<cluster name="Teacher" class="com.slfuture.demo.Teacher">
+			<relations>
+				<relation name="classroom" target="Classroom" mode="0-1">
+					<condition category="prerequisite" type="EQUAL" field="classroomId" value="id" />
+					<condition link="and" category="relative" type="EQUAL" field="classroomId" value="id" />
+					<condition category="postrequisite" type="EQUAL" field="status" value="(int)1" />
+				</relation>
+			</relations>
 		</cluster>
 	</clusters>
-	<relations>
-		<relation name="Orders" self="Contract" target="Order" mode="1-N">
-			<condition type="EQUAL" field="ID" value="ContractID" />
-		</relation>
-		<relation self="FormalOrder" target="Contract" mode="1">
-			<presuppose datatype="int" not="true" type="EQUAL" field="ContractID" value="0" />
-			<condition type="EQUAL" field="ContractID" value="ID" />
-		</relation>
-	</relations>
 </world>

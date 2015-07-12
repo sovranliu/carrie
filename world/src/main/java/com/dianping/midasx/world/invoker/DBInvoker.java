@@ -130,4 +130,15 @@ public class DBInvoker {
     public int alter(String db, String storedProcedureName, StoredProcedureParameters parameters) {
         return executor.get(db).alter(storedProcedureName, parameters);
     }
+
+    /**
+     * 根据模版生成SQL语句
+     *
+     * @param template 模版语句
+     * @param args 参数列表
+     * @return 生成的SQL语句
+     */
+    public String generate(String template, Object... args) {
+        return null;
+    }
 }

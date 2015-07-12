@@ -1,6 +1,6 @@
 package com.dianping.midasx.lightning.context;
 
-import com.slfuture.carrie.base.type.Table;
+import com.dianping.midasx.base.type.Table;
 import org.apache.velocity.VelocityContext;
 
 import javax.servlet.http.HttpServletRequest;

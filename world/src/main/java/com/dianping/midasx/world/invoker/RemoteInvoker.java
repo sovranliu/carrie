@@ -1,5 +1,7 @@
 package com.dianping.midasx.world.invoker;
 
+import com.dianping.midasx.base.model.Identity;
+
 /**
  * 远程调用
  */
@@ -34,12 +36,13 @@ public class RemoteInvoker {
     /**
      * 远程调用
      *
-     * @param target 目标
+     * @param clusterName 簇名称
+     * @param id 对象标志符
      * @param method 方法名
      * @param parameters 参数
      * @return 返回结果
      */
-    public Object call(String target, String method, Object...parameters) {
+    public Object call(String clusterName, Identity<Object> id, String method, Object...parameters) {
         return null;
     }
 }

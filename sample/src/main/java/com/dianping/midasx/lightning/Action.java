@@ -1,11 +1,11 @@
 package com.dianping.midasx.lightning;
 
 import com.dianping.midasx.lightning.context.PageContext;
-import com.slfuture.carrie.base.character.Encoding;
-import com.slfuture.carrie.base.etc.Digit;
-import com.slfuture.carrie.base.model.Path;
-import com.slfuture.carrie.base.model.core.IModule;
-import com.slfuture.carrie.base.text.Text;
+import com.dianping.midasx.base.character.Encoding;
+import com.dianping.midasx.base.etc.Serial;
+import com.dianping.midasx.base.model.Path;
+import com.dianping.midasx.base.model.core.IModule;
+import com.dianping.midasx.base.text.Text;
 import com.dianping.midasx.lightning.context.PageVisitor;
 import org.apache.log4j.Logger;
 import org.apache.velocity.Template;
@@ -95,7 +95,7 @@ public class Action implements IModule {
                 if(null == engine) {
                     engine = new ScriptEngineManager().getEngineByName("javascript");
                     try {
-                        engine.eval("function $(s) { return com.slfuture.carrie.lightning.Proxy.$$(s); }");
+                        engine.eval("function $(s) { return com.dianping.midasx.lightning.ProxyHandler.$$(s); }");
                     }
                     catch(Exception ex) {
                         logger.error("script engine initialize context failed", ex);
@@ -108,7 +108,7 @@ public class Action implements IModule {
             // 生成脚本运行时
             StringBuilder builder = new StringBuilder();
             builder.append("function ");
-            function = "f" + Digit.makeSerialNumber();
+            function = "f" + Serial.makeSerialNumber();
             builder.append(function);
             builder.append("(visitor, context) {\n");
             builder.append(Text.loadFile(file.getAbsolutePath(), Encoding.ENCODING_UTF8));

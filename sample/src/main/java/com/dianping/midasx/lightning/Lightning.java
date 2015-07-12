@@ -1,8 +1,8 @@
 package com.dianping.midasx.lightning;
 
 import com.dianping.midasx.lightning.context.PageContext;
-import com.slfuture.carrie.base.model.Path;
-import com.slfuture.carrie.base.type.Table;
+import com.dianping.midasx.base.model.Path;
+import com.dianping.midasx.base.type.Table;
 import com.dianping.midasx.lightning.context.PageVisitor;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.Velocity;

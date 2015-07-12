@@ -18,6 +18,20 @@ public class FieldPrepare implements IPrepare {
 
 
     /**
+     * 构造函数
+     */
+    public FieldPrepare() { }
+
+    /**
+     * 构造函数
+     *
+     * @param field 字段名称
+     */
+    public FieldPrepare(String field) {
+        this.field = field;
+    }
+
+    /**
      * 过滤
      *
      * @param origin 源数据
@@ -32,5 +46,30 @@ public class FieldPrepare implements IPrepare {
             logger.error("FieldPrepare.filter(" + origin + ") execute failed", ex);
         }
         return null;
+    }
+
+    /**
+     * 转化为字符串
+     *
+     * @return 字符串
+     */
+    @Override
+    public String toString() {
+        return field;
+    }
+
+    /**
+     * 克隆
+     *
+     * @return 克隆对象
+     */
+    @Override
+    public IPrepare copy() {
+        try {
+            return (IPrepare) super.clone();
+        }
+        catch(CloneNotSupportedException ex) {
+            return null;
+        }
     }
 }

@@ -1,21 +1,42 @@
 package com.dianping.midasx.world;
 
-import com.dianping.midasx.base.type.Table;
+import com.dianping.midasx.base.model.Identity;
 import com.dianping.midasx.base.type.core.IMapping;
 import com.dianping.midasx.world.annotation.Property;
+import com.dianping.midasx.world.relation.Condition;
+import com.dianping.midasx.world.relation.Relation;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 
 /**
- * 代理对象类
+ * 代理句柄类
  */
-public class ProxyObject implements InvocationHandler {
+public class ProxyHandler implements InvocationHandler {
+    /**
+     * 簇对象
+     */
+    public Cluster cluster = null;
     /**
      * 属性映射
      */
-    private IMapping<String, Object> properties = new Table<String, Object>();
+    private IMapping<String, Object> properties = null;
 
+
+    /**
+     * 构造函数
+     */
+    public ProxyHandler() { }
+
+    /**
+     * 构造函数
+     *
+     * @param cluster 簇对象
+     * @param properties 属性
+     */
+    public ProxyHandler(Cluster cluster, IMapping<String, Object> properties) {
+        this.properties = properties;
+    }
 
     /**
      * Processes a method invocation on a proxy instance and returns
@@ -66,11 +87,51 @@ public class ProxyObject implements InvocationHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Property property = method.getAnnotation(Property.class);
         if(null != property) {
-            if("".equals(property.name())) {
-                return properties.get(method.getName());
+            if(method.getDeclaringClass().equals(IProxyInterface.class)) {
+                return properties.get((String) (args[0]));
             }
             else {
-                return properties.get(property.name());
+                if("".equals(property.name())) {
+                    return properties.get(method.getName());
+                }
+                else {
+                    return properties.get(property.name());
+                }
+            }
+        }
+        com.dianping.midasx.world.annotation.Method methodAnnotation = method.getAnnotation(com.dianping.midasx.world.annotation.Method.class);
+        if(null != methodAnnotation) {
+            if(method.getDeclaringClass().equals(IProxyInterface.class)) {
+                return cluster.invoke(new Identity<Object>(properties.get(cluster.idField)), (String) (args[0]), args);
+            }
+            else {
+                return cluster.invoke(new Identity<Object>(properties.get(cluster.idField)), method.getName(), args);
+            }
+        }
+        com.dianping.midasx.world.annotation.Relation relationdAnnotation = method.getAnnotation(com.dianping.midasx.world.annotation.Relation.class);
+        if(null != relationdAnnotation) {
+            Relation relation = null;
+            if(method.getDeclaringClass().equals(IProxyInterface.class)) {
+                relation = cluster.get((String) (args[0]));
+                if(null == relation) {
+                    return null;
+                }
+                Condition condition = relation.deduce(properties);
+                if(relation.isSingle()) {
+                    return cluster.find((Class<?>) args[1], condition);
+                }
+                return cluster.finds((Class<?>) args[1], condition);
+            }
+            else {
+                relation = cluster.get(method.getName());
+                if(null == relation) {
+                    return null;
+                }
+                Condition condition = relation.deduce(properties);
+                if(relation.isSingle()) {
+                    return cluster.find((Class<?>) args[0], condition);
+                }
+                return cluster.finds((Class<?>) args[0], condition);
             }
         }
         return null;

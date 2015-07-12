@@ -1,7 +1,7 @@
 package com.dianping.midasx.lightning.context;
 
-import com.slfuture.carrie.base.interaction.core.IWritable;
-import com.slfuture.carrie.base.type.Table;
+import com.dianping.midasx.base.interaction.core.IWritable;
+import com.dianping.midasx.base.type.Table;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
