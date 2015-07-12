@@ -15,5 +15,6 @@ public class ProxyTest {
                 TestProxyClass.class.getClassLoader(),
                 new Class<?>[] {TestProxyClass.class},
                 handler);
+        proxy.call(1);
     }
 }

@@ -5,11 +5,19 @@ package com.dianping.midasx.base.logic.grammar;
  */
 public class WordLogicalGrammar extends LogicalGrammar {
     /**
+     * 语法常量
+     */
+    public final static String GRAMMAR_AND = "and";
+    public final static String GRAMMAR_OR = "or";
+    public final static String GRAMMAR_NOT = "not";
+
+
+    /**
      * 与
      */
     @Override
     public String and() {
-        return "AND";
+        return GRAMMAR_AND;
     }
 
     /**
@@ -17,7 +25,7 @@ public class WordLogicalGrammar extends LogicalGrammar {
      */
     @Override
     public String or() {
-        return "OR";
+        return GRAMMAR_OR;
     }
 
     /**
@@ -25,6 +33,6 @@ public class WordLogicalGrammar extends LogicalGrammar {
      */
     @Override
     public String not() {
-        return "NOT";
+        return GRAMMAR_NOT;
     }
 }

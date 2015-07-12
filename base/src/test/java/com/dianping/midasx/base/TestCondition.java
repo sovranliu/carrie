@@ -1,6 +1,7 @@
 package com.dianping.midasx.base;
 
 import com.dianping.midasx.base.logic.CompareCondition;
+import com.dianping.midasx.base.logic.ComparisonTool;
 import com.dianping.midasx.base.logic.grammar.SymbolLogicalGrammar;
 import com.dianping.midasx.base.logic.grammar.WordLogicalGrammar;
 
@@ -19,14 +20,14 @@ public class TestCondition {
         // A & (B || C)
         // ? > 1 & (? < 2 || ? == 3)
         MyCompareCondition a = new MyCompareCondition();
-        a.value = 1;
-        a.compareType = CompareCondition.COMPARETYPE_GREATERTHAN;
+        a.target = (1);
+        a.compareType = ComparisonTool.COMPARETYPE_GREATERTHAN;
         MyCompareCondition b = new MyCompareCondition();
-        b.value = 2;
-        b.compareType = CompareCondition.COMPARETYPE_LESSTHAN;
+        b.target = (2);
+        b.compareType = ComparisonTool.COMPARETYPE_LESSTHAN;
         MyCompareCondition c = new MyCompareCondition();
-        c.value = 3;
-        c.compareType = CompareCondition.COMPARETYPE_EQUAL;
+        c.target = (3);
+        c.compareType = ComparisonTool.COMPARETYPE_EQUAL;
         //
         b.put(false, c);
         a.put(true, b);
@@ -42,20 +43,20 @@ public class TestCondition {
         // A || (B && C) || (D && E)
         // ? <= 1 || (? > 2 && ? < 5) || (>= 6 && == 10)
         MyCompareCondition a = new MyCompareCondition();
-        a.value = 1;
-        a.compareType = CompareCondition.COMPARETYPE_LESSEQUAL;
+        a.target = (1);
+        a.compareType = ComparisonTool.COMPARETYPE_LESSEQUAL;
         MyCompareCondition b = new MyCompareCondition();
-        b.value = 2;
-        b.compareType = CompareCondition.COMPARETYPE_GREATERTHAN;
+        b.target = (2);
+        b.compareType = ComparisonTool.COMPARETYPE_GREATERTHAN;
         MyCompareCondition c = new MyCompareCondition();
-        c.value = 5;
-        c.compareType = CompareCondition.COMPARETYPE_LESSTHAN;
+        c.target = (5);
+        c.compareType = ComparisonTool.COMPARETYPE_LESSTHAN;
         MyCompareCondition d = new MyCompareCondition();
-        d.value = 6;
-        d.compareType = CompareCondition.COMPARETYPE_GREATERTHAN;
+        d.target = (6);
+        d.compareType = ComparisonTool.COMPARETYPE_GREATERTHAN;
         MyCompareCondition e = new MyCompareCondition();
-        e.value = 10;
-        e.compareType = CompareCondition.COMPARETYPE_EQUAL;
+        e.target = (10);
+        e.compareType = ComparisonTool.COMPARETYPE_EQUAL;
         //
         b.puts(true, c);
         d.puts(true, e);

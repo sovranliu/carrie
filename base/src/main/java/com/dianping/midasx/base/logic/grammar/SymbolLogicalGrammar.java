@@ -5,11 +5,19 @@ package com.dianping.midasx.base.logic.grammar;
  */
 public class SymbolLogicalGrammar extends LogicalGrammar {
     /**
+     * 语法常量
+     */
+    public final static String GRAMMAR_AND = "&&";
+    public final static String GRAMMAR_OR = "||";
+    public final static String GRAMMAR_NOT = "!";
+
+
+    /**
      * 与
      */
     @Override
     public String and() {
-        return "&&";
+        return GRAMMAR_AND;
     }
 
     /**
@@ -17,7 +25,7 @@ public class SymbolLogicalGrammar extends LogicalGrammar {
      */
     @Override
     public String or() {
-        return "||";
+        return GRAMMAR_OR;
     }
 
     /**
@@ -25,6 +33,6 @@ public class SymbolLogicalGrammar extends LogicalGrammar {
      */
     @Override
     public String not() {
-        return "!";
+        return GRAMMAR_NOT;
     }
 }

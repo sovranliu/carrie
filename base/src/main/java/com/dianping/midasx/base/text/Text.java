@@ -5,6 +5,9 @@ import com.dianping.midasx.base.interaction.FilterReader;
 import com.dianping.midasx.base.io.disk.DiskReadableHandle;
 import com.dianping.midasx.base.model.Result;
 import com.dianping.midasx.base.text.filter.BytesLineFilter;
+import com.dianping.midasx.base.time.Date;
+import com.dianping.midasx.base.time.DateTime;
+import com.dianping.midasx.base.time.Time;
 
 import java.io.File;
 import java.util.regex.Pattern;
@@ -13,6 +16,11 @@ import java.util.regex.Pattern;
  * 文本
  */
 public class Text {
+    /**
+     * 隐藏构造函数
+     */
+    private Text() { }
+
     /**
      * 判断字符串是否为空或者空内容
      *
@@ -139,5 +147,61 @@ public class Text {
             }
         }
         return text.substring(i, j);
+    }
+
+    /**
+     * 字符串转对象
+     *
+     * @param text 文字
+     * @return 对象
+     */
+    public static Object parse(String text) {
+        if(null == text) {
+            return null;
+        }
+        String type = substring(text, "(", ")");
+        if(null == type) {
+            if(isNumber(text)) {
+                return Integer.parseInt(text);
+            }
+            else {
+                return text;
+            }
+        }
+        text = text.substring(text.indexOf(")") + 1);
+        try {
+            if("int".equals(type)) {
+                return Integer.parseInt(text);
+            }
+            else if("long".equals(type)) {
+                return Long.parseLong(text);
+            }
+            else if("byte".equals(type)) {
+                return Byte.parseByte(text);
+            }
+            else if("string".equals(type)) {
+                return text;
+            }
+            else if("date".equals(type)) {
+                return Date.parse(text);
+            }
+            else if("time".equals(type)) {
+                return Time.parse(text);
+            }
+            else if("datetime".equals(type)) {
+                return DateTime.parse(text);
+            }
+            else {
+                return text;
+            }
+        }
+        catch(Exception ex) {
+            try {
+                throw ex;
+            }
+            catch (Exception e) {
+                return null;
+            }
+        }
     }
 }
