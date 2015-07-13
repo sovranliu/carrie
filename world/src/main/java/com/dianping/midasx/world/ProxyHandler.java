@@ -8,6 +8,7 @@ import com.dianping.midasx.world.relation.Relation;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 
 /**
  * 代理句柄类
@@ -21,6 +22,10 @@ public class ProxyHandler implements InvocationHandler {
      * 属性映射
      */
     private IMapping<String, Object> properties = null;
+    /**
+     * 目标对象
+     */
+    private Object target = null;
 
 
     /**
@@ -88,6 +93,10 @@ public class ProxyHandler implements InvocationHandler {
         Property property = method.getAnnotation(Property.class);
         if(null != property) {
             if(method.getDeclaringClass().equals(IProxyInterface.class)) {
+                if(null == properties) {
+                    Method targetMethod = target.getClass().getDeclaredMethod((String) (args[0]), new Class<?>[0]);
+                    return targetMethod.invoke(target, new Object[0]);
+                }
                 return properties.get((String) (args[0]));
             }
             else {
@@ -102,6 +111,30 @@ public class ProxyHandler implements InvocationHandler {
         com.dianping.midasx.world.annotation.Method methodAnnotation = method.getAnnotation(com.dianping.midasx.world.annotation.Method.class);
         if(null != methodAnnotation) {
             if(method.getDeclaringClass().equals(IProxyInterface.class)) {
+                if(null == properties) {
+                    ArrayList<Class<?>> parametersType = new ArrayList<Class<?>>();
+                    boolean sentry = false;
+                    for(Class<?> clazz : method.getParameterTypes()) {
+                        if(sentry) {
+                            parametersType.add(clazz);
+                        }
+                        else {
+                            sentry = true;
+                        }
+                    }
+                    Method targetMethod = target.getClass().getDeclaredMethod((String) (args[0]), parametersType.toArray(new Class<?>[0]));
+                    ArrayList<Object> parametersList = new ArrayList<Object>();
+                    sentry = false;
+                    for(Object object : args) {
+                        if(sentry) {
+                            parametersList.add(object);
+                        }
+                        else {
+                            sentry = true;
+                        }
+                    }
+                    return targetMethod.invoke(target, parametersList.toArray(new Object[0]));
+                }
                 return cluster.invoke(new Identity<Object>(properties.get(cluster.idField)), (String) (args[0]), args);
             }
             else {

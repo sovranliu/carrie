@@ -14,80 +14,23 @@ import com.dianping.midasx.world.invoker.DBInvoker;
 import com.dianping.midasx.world.invoker.RemoteInvoker;
 import com.dianping.midasx.world.relation.Condition;
 import com.dianping.midasx.world.relation.Relation;
-import org.apache.log4j.Logger;
 
+import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
 import java.text.ParseException;
 
 /**
- * 簇类
+ * 本地簇类
  */
-public class Cluster extends Table<String, Relation> {
-    /**
-     * SQL方法
-     */
-    public class SQLMethod {
-        /**
-         * 方法类型
-         */
-        public final static String METHOD_LOAD = "LOAD";
-        public final static String METHOD_SELECT = "SELECT";
-        public final static String METHOD_ALTER = "ALTER";
-        public final static String METHOD_INSERT = "INSERT";
-
-
-        /**
-         * 类型
-         */
-        public String type;
-        /**
-         * 数据库名称
-         */
-        public String db;
-        /**
-         * 模版
-         */
-        public String template;
-    }
-
-    /**
-     * 日志对象
-     */
-    protected static Logger logger = Logger.getLogger(Cluster.class);
-    /**
-     * 标志符字段
-     */
-    public String idField;
-    /**
-     * 簇名称
-     */
-    public String name;
-    /**
-     * 数据库名称
-     */
-    public String db = null;
-    /**
-     * 表名称
-     */
-    public String table = null;
-    /**
-     * 类名称
-     */
-    public String clazz = null;
-    /**
-     * 方法映射
-     */
-    public Table<String, SQLMethod> methods = new Table<String, SQLMethod>();
-
-
+public class LocalCluster extends Cluster {
     /**
      * 构建簇
      *
      * @param conf 配置对象
      * @return 簇
      */
-    public static Cluster build(IConfig conf) throws ParseException {
-        Cluster result = new Cluster();
+    public static LocalCluster build(IConfig conf) throws ParseException {
+        LocalCluster result = new LocalCluster();
         result.idField = conf.get("id");
         result.name = conf.get("name");
         String table = conf.get("table");
@@ -109,8 +52,29 @@ public class Cluster extends Table<String, Relation> {
      * @param condition 查找条件
      * @return 被查找的指定对象
      */
+    @Override
     public <T> T find(Class<T> clazz, Condition condition) {
         if(null != this.clazz) {
+            try {
+                Class<?> targetClazz = Class.forName(this.clazz);
+                Method method = targetClazz.getMethod("find", Condition.class);
+                Object result = method.invoke(null, condition);
+                if(null == result) {
+                    return null;
+                }
+                if(result.getClass().isAssignableFrom(clazz)) {
+                    return (T) result;
+                }
+            }
+            catch (Exception ex) {
+                try {
+                    throw ex;
+                }
+                catch (Exception e) {
+                    logger.error("throw failed", e);
+                }
+            }
+
             IMapping<String, Object> properties = (Table<String, Object>) RemoteInvoker.instance().call(name, null, "find", condition);
             if(null == properties) {
                 return null;
@@ -132,8 +96,9 @@ public class Cluster extends Table<String, Relation> {
      * @param condition 查找条件
      * @return 被查找的指定对象集
      */
+    @Override
     public <T> ICollection<T> finds(Class<T> clazz, Condition condition) {
-        if(null != this.clazz) {
+        if(null != clazz) {
             ISet<IMapping<String, Object>> propertiesSet = (ISet<IMapping<String, Object>>) RemoteInvoker.instance().call(name, null, "find", condition);
             if (null == propertiesSet) {
                 return null;
@@ -174,8 +139,9 @@ public class Cluster extends Table<String, Relation> {
      * @param args 参数
      * @return 调用结果
      */
+    @Override
     public Object invoke(Identity<Object> id, String method, Object[] args) {
-        if(!Text.isBlank(this.clazz)) {
+        if(!Text.isBlank(clazz)) {
             return RemoteInvoker.instance().call(name, id, method, args);
         }
         SQLMethod sqlMethod = methods.get(method);
