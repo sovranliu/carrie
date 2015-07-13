@@ -1,7 +1,7 @@
 package com.dianping.midasx.utility.db.core;
 
 import com.dianping.midasx.base.type.Record;
-import com.dianping.midasx.base.type.core.IList;
+import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.utility.db.StoredProcedureParameters;
 
 /**
@@ -44,7 +44,7 @@ public interface IDBExecutor {
      * @param sql 待执行的SQL语句
      * @return 记录集合
      */
-    public IList<Record> select(String sql);
+    public ICollection<Record> select(String sql);
 
     /**
      * 变更
@@ -78,7 +78,7 @@ public interface IDBExecutor {
      * @param parameters 存储过程参数集合，顺序必须和SP钟参数申明顺序保持一致
      * @return 记录集合
      */
-    public IList<Record> select(String storedProcedureName, StoredProcedureParameters parameters);
+    public ICollection<Record> select(String storedProcedureName, StoredProcedureParameters parameters);
 
     /**
      * 调用存储过程执行变更

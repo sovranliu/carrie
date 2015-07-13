@@ -115,13 +115,13 @@ public class LocalCluster extends Cluster {
             return result;
         }
         String sql = "SELECT * FROM " + table + " WHERE " + condition.toString(new WordLogicalGrammar());
-        IList<Record> recordList = DBInvoker.instance().select(db, sql);
+        ICollection<Record> recordList = DBInvoker.instance().select(db, sql);
         if(null == recordList) {
             return null;
         }
         ISet<T> resultSet = null;
         try {
-            resultSet = recordList.getClass().newInstance();
+            resultSet = (ISet<T>) recordList.getClass().newInstance();
         } catch (Exception e) {
             return null;
         }

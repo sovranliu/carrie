@@ -9,26 +9,26 @@
 			</methods>
 			<relations>
 				<relation name="classroom" target="Classroom" mode="1">
-					<condition category="relative" type="EQUAL" field="classroomId" value="id" />
+					<condition category="relative" type="EQUAL" self-field="classroomId" other-field="id" />
 				</relation>
 			</relations>
 		</cluster>
 		<cluster name="Classroom" class="com.slfuture.demo.Classroom">
 			<relations>
 				<relation name="students" target="Student" mode="0-N">
-					<condition category="relative" type="EQUAL" field="id" value="classroomId" />
+					<condition category="relative" type="EQUAL" self-field="id" other-field="classroomId" />
 				</relation>
 				<relation origin="teacher" target="Teacher" mode="1">
-					<condition category="relative" type="EQUAL" field="id" value="classroomId" />
+					<condition category="relative" type="EQUAL" self-field="id" other-field="classroomId" />
 				</relation>
 			</relations>
 		</cluster>
 		<cluster name="Teacher" class="com.slfuture.demo.Teacher">
 			<relations>
 				<relation name="classroom" target="Classroom" mode="0-1">
-					<condition category="prerequisite" type="EQUAL" field="classroomId" value="id" />
-					<condition link="and" category="relative" type="EQUAL" field="classroomId" value="id" />
-					<condition category="postrequisite" type="EQUAL" field="status" value="(int)1" />
+					<condition category="prerequisite" type="EQUAL" self-field="classroomId" value="(int)0" />
+					<condition link="and" category="relative" type="EQUAL" self-field="classroomId" other-field="id" />
+					<condition category="postrequisite" type="EQUAL" self-field="status" value="(int)1" />
 				</relation>
 			</relations>
 		</cluster>

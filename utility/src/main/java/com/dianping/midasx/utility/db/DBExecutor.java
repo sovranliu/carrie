@@ -3,7 +3,10 @@ package com.dianping.midasx.utility.db;
 import java.sql.*;
 
 import com.dianping.midasx.base.type.List;
+import com.dianping.midasx.base.type.Set;
+import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.base.type.core.IList;
+import com.dianping.midasx.base.type.core.ISet;
 import com.dianping.midasx.utility.db.core.IDBExecutor;
 import org.apache.log4j.Logger;
 
@@ -161,8 +164,8 @@ public class DBExecutor implements IDBExecutor, IModule {
      * @return 记录集合
      */
     @Override
-    public IList<Record> select(String sql) {
-        IList<Record> result = null;
+    public ICollection<Record> select(String sql) {
+        ICollection<Record> result = null;
         Connection connection = null;
         Statement statement = null;
         ResultSet resultSet = null;
@@ -372,8 +375,8 @@ public class DBExecutor implements IDBExecutor, IModule {
      * @return 记录集合
      */
     @Override
-    public IList<Record> select(String storedProcedureName, StoredProcedureParameters parameters) {
-        IList<Record> result = null;
+    public ICollection<Record> select(String storedProcedureName, StoredProcedureParameters parameters) {
+        ICollection<Record> result = null;
         Connection connection = null;
         CallableStatement statement = null;
         ResultSet resultSet = null;
@@ -470,10 +473,10 @@ public class DBExecutor implements IDBExecutor, IModule {
      * @param resultSet DB结果集
      * @return 记录数组
      */
-    public static IList<Record> convert(ResultSet resultSet) {
-        IList<Record> result = null;
+    public static ISet<Record> convert(ResultSet resultSet) {
+        ISet<Record> result = null;
         try {
-            result = new List<Record>();
+            result = new Set<Record>();
             int columnCount = resultSet.getMetaData().getColumnCount();
             int i = 0;
             while(resultSet.next()) {

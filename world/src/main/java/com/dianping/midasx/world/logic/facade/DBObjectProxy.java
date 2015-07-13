@@ -2,12 +2,21 @@ package com.dianping.midasx.world.logic.facade;
 
 import com.dianping.midasx.base.type.Record;
 import com.dianping.midasx.base.type.core.ICollection;
+import com.dianping.midasx.world.World;
 import com.dianping.midasx.world.logic.facade.core.IObjectProxy;
 
 /**
  * 数据库代理对象类
  */
 public class DBObjectProxy implements IObjectProxy {
+    /**
+     * 数据库名称
+     */
+    public String db;
+    /**
+     * 表名称
+     */
+    public String table;
     /**
      * 簇名称
      */
@@ -26,10 +35,12 @@ public class DBObjectProxy implements IObjectProxy {
     /**
      * 构造函数
      *
+     * @param db 数据库名称
+     * @param table 表名称
      * @param cluster 簇名称
      * @param record 数据库记录
      */
-    public DBObjectProxy(String cluster, Record record) {
+    public DBObjectProxy(String db, String table, String cluster, Record record) {
         this.cluster = cluster;
         this.record = record;
     }
@@ -42,7 +53,7 @@ public class DBObjectProxy implements IObjectProxy {
      */
     @Override
     public Object property(String name) {
-        return null;
+        return record.get(name);
     }
 
     /**
@@ -54,6 +65,8 @@ public class DBObjectProxy implements IObjectProxy {
      */
     @Override
     public <T> T relative(Class<T> clazz, String name) {
+        World.getCluster(cluster).get(name).deduce();
+
         return null;
     }
 

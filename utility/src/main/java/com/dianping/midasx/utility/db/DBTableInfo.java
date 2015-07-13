@@ -3,6 +3,7 @@ package com.dianping.midasx.utility.db;
 import com.dianping.midasx.base.type.List;
 import com.dianping.midasx.base.type.Record;
 import com.dianping.midasx.base.type.Table;
+import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.base.type.core.IList;
 import com.dianping.midasx.base.type.core.ITable;
 import com.dianping.midasx.utility.db.core.IDBExecutor;
@@ -26,7 +27,7 @@ public class DBTableInfo {
     /**
      * 主键列表
      */
-    public IList<String> primaryKeys = null;
+    public ICollection<String> primaryKeys = null;
 
 
     /**
@@ -67,7 +68,7 @@ public class DBTableInfo {
         DBTableInfo result = new DBTableInfo();
         result.db = conf.substring(0, i);
         result.table = conf.substring(i + 1);
-        IList<DBFieldInfo> fieldList = DBTableInfo.getColumns(result.table, executor);
+        ICollection<DBFieldInfo> fieldList = DBTableInfo.getColumns(result.table, executor);
         result.fields = new Table<String, DBFieldInfo>();
         for(DBFieldInfo fieldInfo : fieldList) {
             result.fields.put(fieldInfo.name, fieldInfo);
@@ -83,8 +84,8 @@ public class DBTableInfo {
      * @param executor 数据库执行器
      * @return 主键集合
      */
-    public static IList<String> getPrimaryKeys(String tableName, IDBExecutor executor) {
-        IList<Record> ret = executor.select("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_NAME = '" + tableName + "'");
+    public static ICollection<String> getPrimaryKeys(String tableName, IDBExecutor executor) {
+        ICollection<Record> ret = executor.select("SELECT COLUMN_NAME FROM INFORMATION_SCHEMA.KEY_COLUMN_USAGE WHERE TABLE_NAME = '" + tableName + "'");
         IList<String> result = new List<String>();
         for(Record record : ret) {
             if(!result.contains(record.getString("COLUMN_NAME"))) {
@@ -101,8 +102,8 @@ public class DBTableInfo {
      * @param executor 数据库执行器
      * @return 字段信息
      */
-    public static IList<DBFieldInfo> getColumns(String tableName, IDBExecutor executor) {
-        IList<Record> ret = executor.select("SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "'");
+    public static ICollection<DBFieldInfo> getColumns(String tableName, IDBExecutor executor) {
+        ICollection<Record> ret = executor.select("SELECT COLUMN_NAME, DATA_TYPE FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = '" + tableName + "'");
         IList<DBFieldInfo> result = new List<DBFieldInfo>();
         for(Record record : ret) {
             DBFieldInfo field = new DBFieldInfo();

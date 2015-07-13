@@ -4,7 +4,8 @@ import com.dianping.midasx.base.logic.CompareCondition;
 import com.dianping.midasx.base.logic.grammar.WordLogicalGrammar;
 import com.dianping.midasx.base.text.Text;
 import com.dianping.midasx.utility.config.core.IConfig;
-import com.dianping.midasx.world.relation.prepare.FieldPrepare;
+import com.dianping.midasx.world.logic.facade.core.IObjectProxy;
+import com.dianping.midasx.world.relation.prepare.PropertyPrepare;
 import com.dianping.midasx.world.relation.prepare.core.IPrepare;
 
 import java.io.Serializable;
@@ -16,7 +17,7 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
     /**
      * 目标准备对象
      */
-    public IPrepare prepareOrigin = null;
+    public IPrepare prepareSelf = null;
 
 
     /**
@@ -26,11 +27,13 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
      * @return 目标是否通过检查
      */
     @Override
-    public boolean onCheck(Object value) {
-        if(null != prepareOrigin) {
-            value = prepareOrigin.filter(value);
+    public boolean onCheck(IObjectProxy value) {
+        if(null != prepareSelf) {
+            return super.onCheck(prepareSelf.filter(value));
         }
-        return super.onCheck(value);
+        else {
+            return super.onCheck(value);
+        }
     }
 
     /**
@@ -40,10 +43,10 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
      */
     @Override
     public String toString() {
-        if(null == prepareOrigin) {
+        if(null == prepareSelf) {
             return super.toString();
         }
-        return prepareOrigin.toString() + " " + super.toString();
+        return prepareSelf.toString() + " " + super.toString();
     }
 
     /**
@@ -56,7 +59,7 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
         Condition result = new Condition();
         result.target = Text.parse(conf.get("value"));
         result.setCompareType(conf.get("type"));
-        result.prepareOrigin = new FieldPrepare(conf.get("field"));
+        result.prepareSelf = new PropertyPrepare(conf.get("field"));
         //
         Condition firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {

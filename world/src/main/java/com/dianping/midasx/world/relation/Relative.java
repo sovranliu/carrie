@@ -4,7 +4,7 @@ import com.dianping.midasx.base.logic.ComparisonTool;
 import com.dianping.midasx.base.logic.grammar.WordLogicalGrammar;
 import com.dianping.midasx.base.type.core.IMapping;
 import com.dianping.midasx.utility.config.core.IConfig;
-import com.dianping.midasx.world.relation.prepare.FieldPrepare;
+import com.dianping.midasx.world.relation.prepare.PropertyPrepare;
 import com.dianping.midasx.world.relation.prepare.core.IPrepare;
 import com.dianping.midasx.base.logic.BooleanRouteDigraph;
 
@@ -78,7 +78,7 @@ public class Relative extends BooleanRouteDigraph<Object, Relative> {
                 @Override
                 public Condition get(Relative key) {
                     Condition conditon = new Condition();
-                    conditon.prepareOrigin = key.prepareOrigin.copy();
+                    conditon.prepareSelf = key.prepareOrigin.copy();
                     conditon.compareType = key.compareType;
                     conditon.target = key.prepareTarget.filter(origin);
                     return conditon;
@@ -96,8 +96,8 @@ public class Relative extends BooleanRouteDigraph<Object, Relative> {
     public static Relative build(IConfig conf) {
         Relative result = new Relative();
         result.setCompareType(conf.get("type"));
-        result.prepareOrigin = new FieldPrepare(conf.get("field"));
-        result.prepareTarget = new FieldPrepare(conf.get("value"));
+        result.prepareOrigin = new PropertyPrepare(conf.get("field"));
+        result.prepareTarget = new PropertyPrepare(conf.get("value"));
         //
         Relative firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {

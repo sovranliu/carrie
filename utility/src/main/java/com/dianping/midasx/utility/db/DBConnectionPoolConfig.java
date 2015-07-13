@@ -1,6 +1,6 @@
 package com.dianping.midasx.utility.db;
 
-import com.dianping.midasx.base.xml.XMLNode;
+import com.dianping.midasx.utility.config.core.IConfig;
 
 /**
  * 数据库连接池配置
@@ -63,18 +63,19 @@ public class DBConnectionPoolConfig extends DBConnectionConfig {
     }
 
     /**
-     * 引导配置节点
+     * 根据配置节点生成数据库连接池配置
      *
      * @param node 配置节点
      * @return 执行成功返回true，失败返回false
      */
-    public boolean load(XMLNode node) {
+    @Override
+    public boolean load(IConfig node) {
         boolean result = super.load(node);
         if(!result) {
             return false;
         }
         // 处理配置信息
-        XMLNode configNode = (XMLNode) node.visit("config");
+        IConfig configNode = (IConfig) node.visit("config");
         if(null == configNode) {
             return false;
         }

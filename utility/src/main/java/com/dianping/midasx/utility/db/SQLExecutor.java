@@ -1,8 +1,8 @@
 package com.dianping.midasx.utility.db;
 
 import com.dianping.midasx.base.type.Record;
-import com.dianping.midasx.base.type.Table;
-import com.dianping.midasx.base.type.core.IList;
+import com.dianping.midasx.base.type.safe.Table;
+import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.utility.db.core.IDBExecutor;
 
 /**
@@ -45,7 +45,7 @@ public class SQLExecutor extends Table<String, DBExecutor> implements IDBExecuto
      * @return 记录集合
      */
     @Override
-    public IList<Record> select(String sql) {
+    public ICollection<Record> select(String sql) {
         if(null == defaultDBExecutor) {
             return null;
         }
@@ -103,7 +103,7 @@ public class SQLExecutor extends Table<String, DBExecutor> implements IDBExecuto
      * @return 记录集合
      */
     @Override
-    public IList<Record> select(String storedProcedureName, StoredProcedureParameters parameters) {
+    public ICollection<Record> select(String storedProcedureName, StoredProcedureParameters parameters) {
         if(null == defaultDBExecutor) {
             return null;
         }

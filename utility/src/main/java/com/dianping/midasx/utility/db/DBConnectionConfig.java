@@ -1,6 +1,6 @@
 package com.dianping.midasx.utility.db;
 
-import com.dianping.midasx.base.xml.XMLNode;
+import com.dianping.midasx.utility.config.core.IConfig;
 
 /**
  * 数据库连接配置
@@ -102,12 +102,12 @@ public class DBConnectionConfig {
      * @param node 配置节点
      * @return 执行成功返回true，失败返回false
      */
-    public boolean load(XMLNode node) {
+    public boolean load(IConfig node) {
         if(null == node) {
             return false;
         }
         // 处理数据库信息
-        XMLNode dbNode = (XMLNode) node.visit("db");
+        IConfig dbNode = (IConfig) node.visit("db");
         if(null == dbNode) {
             return false;
         }
@@ -132,14 +132,14 @@ public class DBConnectionConfig {
         }
         dbName = dbNode.get("name");
         // 处理用户信息
-        XMLNode userNode = (XMLNode) node.visit("user");
+        IConfig userNode = (IConfig) node.visit("user");
         if(null == userNode) {
             return false;
         }
         user = userNode.get("name");
         password= userNode.get("password");
         // 处理配置信息
-        XMLNode configNode = (XMLNode) node.visit("config");
+        IConfig configNode = (IConfig) node.visit("config");
         if(null == configNode) {
             autoReconnect = false;
             return true;

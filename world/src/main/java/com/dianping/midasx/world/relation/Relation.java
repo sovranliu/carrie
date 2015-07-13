@@ -1,9 +1,7 @@
 package com.dianping.midasx.world.relation;
 
 import com.dianping.midasx.base.type.core.IMapping;
-import com.dianping.midasx.base.xml.core.IXMLNode;
 import com.dianping.midasx.utility.config.core.IConfig;
-import com.dianping.midasx.world.Cluster;
 
 import java.text.ParseException;
 
@@ -78,7 +76,7 @@ public class Relation {
                 @Override
                 public Condition get(Condition key) {
                     Condition conditon = new Condition();
-                    conditon.prepareOrigin = key.prepareOrigin.copy();
+                    conditon.prepareSelf = key.prepareSelf.copy();
                     conditon.compareType = key.compareType;
                     conditon.target = key.target;
                     return conditon;
