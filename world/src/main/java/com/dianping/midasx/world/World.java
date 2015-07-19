@@ -4,7 +4,13 @@ import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.base.type.safe.Table;
 import com.dianping.midasx.utility.config.Configuration;
 import com.dianping.midasx.utility.config.core.IConfig;
+import com.dianping.midasx.world.cluster.Cluster;
+import com.dianping.midasx.world.cluster.DBCluster;
+import com.dianping.midasx.world.cluster.LocalCluster;
+import com.dianping.midasx.world.cluster.RemoteCluster;
+import com.dianping.midasx.world.cluster.core.ICluster;
 import com.dianping.midasx.world.relation.Condition;
+import com.dianping.midasx.world.relation.Relation;
 import org.apache.log4j.Logger;
 
 import java.text.ParseException;
@@ -20,7 +26,7 @@ public class World {
     /**
      * 簇表
      */
-    private static Table<String, Cluster> clusters = new Table<String, Cluster>();
+    private static Table<String, ICluster<?>> clusters = new Table<String, ICluster<?>>();
 
 
     /**
@@ -34,54 +40,65 @@ public class World {
      * @param name 簇名
      * @return 簇
      */
-    public static Cluster getCluster(String name) {
-        Cluster result = clusters.get(name);
+    public static ICluster<?> getCluster(String name) {
+        ICluster<?> result = clusters.get(name);
         if(null != result) {
             return result;
         }
-        IConfig conf = Configuration.root().visit("/world/clusters/" + name);
-        if(null == conf) {
+        result = buildCluster(name);
+        if(null == result) {
             return null;
         }
-        try {
-            result = Cluster.build(conf);
-            clusters.put(name, result);
-        }
-        catch (ParseException e) {
-            logger.error("call Cluster.build(" + conf + ") failed", e);
-        }
+        clusters.put(name, result);
         return result;
     }
 
     /**
-     * 加载指定条件的对象
+     * 构建簇对象
      *
-     * @param clazz 对象类型
-     * @param clusterName 簇名称
-     * @param condition 查找条件
-     * @return 被查找的指定对象
+     * @param name 簇名称
+     * @return 簇对象
      */
-    public static <T> T find(Class<T> clazz, String clusterName, Condition condition) {
-        Cluster cluster = getCluster(clusterName);
-        if(null == cluster) {
+    private static ICluster<?> buildCluster(String name) {
+        IConfig conf = Configuration.root().visit("/world/clusters/" + name);
+        if(null == conf) {
             return null;
         }
-        return cluster.find(clazz, condition);
-    }
-
-    /**
-     * 加载指定条件的对象集
-     *
-     * @param clazz 对象类型
-     * @param clusterName 簇名称
-     * @param condition 查找条件
-     * @return 被查找的指定对象集
-     */
-    public static <T> ICollection<T> finds(Class<T> clazz, String clusterName, Condition condition) {
-        Cluster cluster = getCluster(clusterName);
-        if(null == cluster) {
-            return null;
+        Cluster<?> result = null;
+        if(null != conf.get("class")) {
+            boolean isLocal = true;
+            try {
+                Class.forName(conf.get("class"));
+            }
+            catch (ClassNotFoundException e) {
+                isLocal = false;
+            }
+            if(isLocal) {
+                result = new LocalCluster();
+                ((LocalCluster) result).className = conf.get("class");
+            }
+            else {
+                result = new RemoteCluster();
+            }
         }
-        return cluster.finds(clazz, condition);
+        else if(null != conf.get("table")) {
+            result = new DBCluster();
+            String table = conf.get("table");
+            if (null != table) {
+                ((DBCluster) result).dbName = table.substring(0, table.indexOf("."));
+                ((DBCluster) result).tableName = table.substring(table.indexOf(".") + 1);
+            }
+        }
+        result.name = name;
+        result.primaryKey = conf.get("primarykey");
+        for(IConfig confSon : conf.visits("relations/relation")) {
+            try {
+                result.put(confSon.get("name"), Relation.build(confSon));
+            }
+            catch (ParseException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return result;
     }
 }

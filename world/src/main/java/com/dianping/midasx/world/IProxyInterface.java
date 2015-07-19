@@ -3,7 +3,7 @@ package com.dianping.midasx.world;
 import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.world.annotation.Method;
 import com.dianping.midasx.world.annotation.Property;
-import com.dianping.midasx.world.annotation.Relation;
+import com.dianping.midasx.world.annotation.Relative;
 
 /**
  * 代理对象接口类
@@ -33,7 +33,7 @@ public interface IProxyInterface {
      * @param clazz 关系类
      * @return 关系对象
      */
-    @Relation
+    @Relative
     public <T> T relative(Class<T> clazz);
 
     /**
@@ -42,6 +42,6 @@ public interface IProxyInterface {
      * @param clazz 关系类
      * @return 关系对象列表
      */
-    @Relation
+    @Relative
     public <T> ICollection<T> relatives(Class<T> clazz);
 }

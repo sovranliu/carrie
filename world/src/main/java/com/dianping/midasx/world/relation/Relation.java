@@ -21,7 +21,7 @@ public class Relation {
      * 条件类型
      */
     public final static String CONDITION_CATEGORY_PREREQUISITE = "prerequisite";
-    public final static String CONDITION_CATEGORY_RELATIVE = "relative";
+    public final static String CONDITION_CATEGORY_RELATIVE = "link";
     public final static String CONDITION_CATEGORY_POSTREQUISITE = "postrequisite";
 
 
@@ -44,7 +44,7 @@ public class Relation {
     /**
      * 联系条件
      */
-    public Relative relative = null;
+    public Link link = null;
     /**
      * 后决条件
      */
@@ -70,7 +70,7 @@ public class Relation {
      * @return 目标对象的条件
      */
     public Condition deduce(Object origin) {
-        Condition result = relative.deduce(origin);
+        Condition result = link.deduce(origin);
         if(null != postrequisite) {
             result.put(true, postrequisite.clone(new IMapping<Condition, Condition>() {
                 @Override
@@ -107,11 +107,11 @@ public class Relation {
                 }
             }
             else if(CONDITION_CATEGORY_RELATIVE.equals(node.get("category"))) {
-                if(null == result.relative) {
-                    result.relative = Relative.build(node);
+                if(null == result.link) {
+                    result.link = Link.build(node);
                 }
                 else {
-                    result.relative.put(true, Relative.build(node));
+                    result.link.put(true, Link.build(node));
                 }
             }
             else if(CONDITION_CATEGORY_POSTREQUISITE.equals(node.get("category"))) {

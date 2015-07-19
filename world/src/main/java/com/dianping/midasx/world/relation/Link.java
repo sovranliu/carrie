@@ -11,7 +11,7 @@ import com.dianping.midasx.base.logic.BooleanRouteDigraph;
 /**
  * 对象联系类
  */
-public class Relative extends BooleanRouteDigraph<Object, Relative> {
+public class Link extends BooleanRouteDigraph<Object, Link> {
     /**
      * 比较类型
      */
@@ -74,9 +74,9 @@ public class Relative extends BooleanRouteDigraph<Object, Relative> {
      */
     public Condition deduce(final Object origin) {
         return this.clone(
-            new IMapping<Relative, Condition>() {
+            new IMapping<Link, Condition>() {
                 @Override
-                public Condition get(Relative key) {
+                public Condition get(Link key) {
                     Condition conditon = new Condition();
                     conditon.prepareSelf = key.prepareOrigin.copy();
                     conditon.compareType = key.compareType;
@@ -93,15 +93,15 @@ public class Relative extends BooleanRouteDigraph<Object, Relative> {
      * @param conf 配置对象
      * @return 条件对象
      */
-    public static Relative build(IConfig conf) {
-        Relative result = new Relative();
+    public static Link build(IConfig conf) {
+        Link result = new Link();
         result.setCompareType(conf.get("type"));
         result.prepareOrigin = new PropertyPrepare(conf.get("field"));
         result.prepareTarget = new PropertyPrepare(conf.get("value"));
         //
-        Relative firstSon = null;
+        Link firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {
-            Relative condSon = build(confSon);
+            Link condSon = build(confSon);
             if(null == firstSon) {
                 firstSon = condSon;
                 if(WordLogicalGrammar.GRAMMAR_AND.equalsIgnoreCase(confSon.get("link"))) {

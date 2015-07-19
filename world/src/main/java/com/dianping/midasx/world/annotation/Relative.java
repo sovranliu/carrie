@@ -10,9 +10,11 @@ import java.lang.annotation.Target;
  */
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.METHOD)
-public @interface Relation {
+public @interface Relative {
     /**
      * 关系名称
      */
     String name() default "";
+
+
 }

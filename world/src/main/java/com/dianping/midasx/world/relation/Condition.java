@@ -4,7 +4,6 @@ import com.dianping.midasx.base.logic.CompareCondition;
 import com.dianping.midasx.base.logic.grammar.WordLogicalGrammar;
 import com.dianping.midasx.base.text.Text;
 import com.dianping.midasx.utility.config.core.IConfig;
-import com.dianping.midasx.world.logic.facade.core.IObjectProxy;
 import com.dianping.midasx.world.relation.prepare.PropertyPrepare;
 import com.dianping.midasx.world.relation.prepare.core.IPrepare;
 

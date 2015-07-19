@@ -1,6 +1,9 @@
 package com.dianping.midasx.world.invoker;
 
-import com.dianping.midasx.base.model.Identity;
+import com.dianping.midasx.base.model.Method;
+import com.dianping.midasx.base.type.core.ICollection;
+import com.dianping.midasx.base.type.core.IMapping;
+import com.dianping.midasx.world.relation.Condition;
 
 /**
  * 远程调用
@@ -38,11 +41,33 @@ public class RemoteInvoker {
      *
      * @param clusterName 簇名称
      * @param id 对象标志符
-     * @param method 方法名
+     * @param method 方法
      * @param parameters 参数
      * @return 返回结果
      */
-    public Object call(String clusterName, Identity<Object> id, String method, Object...parameters) {
+    public Object invoke(String clusterName, Object id, Method method, Object...parameters) {
+        return null;
+    }
+
+    /**
+     * 根据条件查找指定对象属性集
+     *
+     * @param clusterName 簇名称
+     * @param condition 查找条件
+     * @return 对象属性集
+     */
+    public IMapping<String, Object> find(String clusterName, Condition condition) {
+        return null;
+    }
+
+    /**
+     * 根据条件查找指定对象属性集
+     *
+     * @param clusterName 簇名称
+     * @param condition 查找条件
+     * @return 对象属性集
+     */
+    public ICollection<IMapping<String, Object>> finds(String clusterName, Condition condition) {
         return null;
     }
 }

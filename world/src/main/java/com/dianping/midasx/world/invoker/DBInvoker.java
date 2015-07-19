@@ -2,11 +2,13 @@ package com.dianping.midasx.world.invoker;
 
 import com.dianping.midasx.base.type.Record;
 import com.dianping.midasx.base.type.core.ICollection;
+import com.dianping.midasx.base.type.core.IMapping;
 import com.dianping.midasx.utility.config.Configuration;
 import com.dianping.midasx.utility.config.core.IConfig;
 import com.dianping.midasx.utility.db.DBExecutor;
 import com.dianping.midasx.utility.db.SQLExecutor;
 import com.dianping.midasx.utility.db.StoredProcedureParameters;
+import com.dianping.midasx.world.relation.Condition;
 import org.apache.log4j.Logger;
 
 /**

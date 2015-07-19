@@ -1,5 +1,6 @@
 package com.dianping.midasx.base;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.regex.Matcher;
@@ -32,7 +33,44 @@ public class Test {
         return -1;
     }
 
+    public static void do1() throws IOException {
+        throw new IOException("IO SSS");
+    }
+
+    public static void do2() {
+        try {
+            do1();
+        }
+        catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static void do3() {
+        try {
+            do2();
+        }
+        catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
+    }
+
+    public static void c(Object object) {
+        System.out.println("c(Object)");
+    }
+
+    public static void c(String object) {
+        System.out.println("c(String)");
+    }
+
     public static void main(String[] argv) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, Exception {
+        String s = "123";
+        Object ooo = s;
+        c(ooo);
+
+        do3();
+
+
         Integer i = 1;
         Object o = i;
         Integer ii = 2;
