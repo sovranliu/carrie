@@ -8,6 +8,8 @@ import com.dianping.midasx.utility.config.core.IConfig;
 import com.dianping.midasx.utility.db.DBExecutor;
 import com.dianping.midasx.utility.db.SQLExecutor;
 import com.dianping.midasx.utility.db.StoredProcedureParameters;
+import com.dianping.midasx.utility.template.Context;
+import com.dianping.midasx.utility.template.VelocityTemplate;
 import com.dianping.midasx.world.relation.Condition;
 import org.apache.log4j.Logger;
 
@@ -159,10 +161,12 @@ public class DBInvoker {
      * 根据模版生成SQL语句
      *
      * @param template 模版语句
-     * @param args 参数列表
+     * @param context 上下文
      * @return 生成的SQL语句
      */
-    public String generate(String template, Object... args) {
-        return null;
+    public String generate(String template, Context context) {
+        VelocityTemplate temp = new VelocityTemplate();
+        temp.setContent(template);
+        return temp.render(context);
     }
 }

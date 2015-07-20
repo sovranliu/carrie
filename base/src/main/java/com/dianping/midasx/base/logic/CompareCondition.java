@@ -9,7 +9,7 @@ public class CompareCondition<T, S extends CompareCondition<T, S>> extends Logic
     /**
      * 比较类型
      */
-    public String compareType;
+    public String compareType = ComparisonTool.COMPARETYPE_EQUAL;
     /**
      * 目标值
      */

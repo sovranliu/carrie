@@ -4,7 +4,7 @@ import com.dianping.midasx.base.logic.CompareCondition;
 import com.dianping.midasx.base.logic.grammar.WordLogicalGrammar;
 import com.dianping.midasx.base.text.Text;
 import com.dianping.midasx.utility.config.core.IConfig;
-import com.dianping.midasx.world.relation.prepare.PropertyPrepare;
+import com.dianping.midasx.world.relation.prepare.AgentPrepare;
 import com.dianping.midasx.world.relation.prepare.core.IPrepare;
 
 import java.io.Serializable;
@@ -58,7 +58,7 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
         Condition result = new Condition();
         result.target = Text.parse(conf.get("value"));
         result.setCompareType(conf.get("type"));
-        result.prepareSelf = new PropertyPrepare(conf.get("field"));
+        result.prepareSelf = new AgentPrepare(conf.get("field"));
         //
         Condition firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {

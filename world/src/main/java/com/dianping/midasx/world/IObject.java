@@ -8,7 +8,7 @@ import com.dianping.midasx.world.annotation.Relative;
 /**
  * 代理对象接口类
  */
-public interface IProxyInterface {
+public interface IObject {
     /**
      * 获取属性
      *

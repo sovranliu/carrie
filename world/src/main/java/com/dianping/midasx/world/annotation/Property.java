@@ -9,7 +9,7 @@ import java.lang.annotation.Target;
  * 属性注解
  */
 @Retention(RetentionPolicy.RUNTIME)
-@Target(ElementType.METHOD)
+@Target({ElementType.FIELD, ElementType.METHOD})
 public @interface Property {
     /**
      * 属性名称

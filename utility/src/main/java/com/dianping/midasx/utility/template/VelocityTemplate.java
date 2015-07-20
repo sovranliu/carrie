@@ -44,7 +44,7 @@ public class VelocityTemplate implements ITemplate {
      * @return 渲染后的文本
      */
     @Override
-    public String render(Context context) throws Exception {
+    public String render(Context context) {
         VelocityContext velocityContext = new VelocityContext();
         for(ILink<String, Object> link : context) {
             velocityContext.put(link.origin(), link.destination());

@@ -1,17 +1,31 @@
 package com.dianping.midasx.world.relation.prepare;
 
-import com.dianping.midasx.world.logic.Adapter;
+import com.dianping.midasx.world.logic.Agent;
 import com.dianping.midasx.world.relation.prepare.core.IPrepare;
 
 /**
  * 对象适配器准备类
  */
-public class AdapterPrepare implements IPrepare {
+public class AgentPrepare implements IPrepare {
     /**
      * 属性名
      */
     public String property = null;
 
+
+    /**
+     * 构造函数
+     */
+    public AgentPrepare() { }
+
+    /**
+     * 构造函数
+     *
+     * @param property 属性名称
+     */
+    public AgentPrepare(String property) {
+        this.property = property;
+    }
 
     /**
      * 过滤
@@ -24,8 +38,8 @@ public class AdapterPrepare implements IPrepare {
         if(null == origin) {
             return null;
         }
-        Adapter adapter = (Adapter) origin;
-        return adapter.property(property);
+        Agent agent = (Agent) origin;
+        return agent.property(property);
     }
 
     /**

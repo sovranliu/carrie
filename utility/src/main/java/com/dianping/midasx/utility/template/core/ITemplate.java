@@ -26,5 +26,5 @@ public interface ITemplate {
      * @param context 上下文
      * @return 渲染后的文本
      */
-    public String render(Context context) throws Exception;
+    public String render(Context context);
 }

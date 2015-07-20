@@ -5,6 +5,8 @@ import com.dianping.midasx.base.model.Method;
 import com.dianping.midasx.base.type.Record;
 import com.dianping.midasx.base.type.Table;
 import com.dianping.midasx.base.type.core.ICollection;
+import com.dianping.midasx.base.type.core.ILink;
+import com.dianping.midasx.utility.template.Context;
 import com.dianping.midasx.world.invoker.DBInvoker;
 import com.dianping.midasx.world.relation.Condition;
 
@@ -75,28 +77,35 @@ public class DBCluster extends Cluster<Record> {
     /**
      * 调用方法
      *
-     * @param id 被调用对象标志符
+     * @param target 被调用对象
      * @param method 方法
      * @param args 参数列表
      * @return 调用结果
      */
     @Override
-    public Object invoke(Object id, Method method, Object... args) {
+    public Object invoke(Record target, Method method, Object...args) {
         SQLMethod sqlMethod = methods.get(method.name);
         if(null == sqlMethod) {
             throw new RuntimeException(new NoSuchMethodException(method.toString()));
         }
+        Context context = new Context();
+        for(ILink<String, Object> link : target) {
+            context.put(link.origin(), link.destination());
+        }
+        for(int i = 0; i < args.length; i++) {
+            context.put(String.valueOf(i), args[i]);
+        }
         if(SQLMethod.TYPE_LOAD.equalsIgnoreCase(sqlMethod.type)) {
-            return DBInvoker.instance().load(dbName, DBInvoker.instance().generate(sqlMethod.template, args));
+            return DBInvoker.instance().load(dbName, DBInvoker.instance().generate(sqlMethod.template, context));
         }
         else if(SQLMethod.TYPE_SELECT.equalsIgnoreCase(sqlMethod.type)) {
-            return DBInvoker.instance().select(dbName, DBInvoker.instance().generate(sqlMethod.template, args));
+            return DBInvoker.instance().select(dbName, DBInvoker.instance().generate(sqlMethod.template, context));
         }
         else if(SQLMethod.TYPE_ALTER.equalsIgnoreCase(sqlMethod.type)) {
-            return DBInvoker.instance().alter(dbName, DBInvoker.instance().generate(sqlMethod.template, args));
+            return DBInvoker.instance().alter(dbName, DBInvoker.instance().generate(sqlMethod.template, context));
         }
         else if(SQLMethod.TYPE_INSERT.equalsIgnoreCase(sqlMethod.type)) {
-            return DBInvoker.instance().insert(dbName, DBInvoker.instance().generate(sqlMethod.template, args));
+            return DBInvoker.instance().insert(dbName, DBInvoker.instance().generate(sqlMethod.template, context));
         }
         throw new RuntimeException("invalid method type : " + sqlMethod.type);
     }

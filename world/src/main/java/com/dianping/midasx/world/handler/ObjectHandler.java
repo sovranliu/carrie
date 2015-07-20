@@ -5,10 +5,11 @@ import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.world.World;
 import com.dianping.midasx.world.annotation.Property;
 import com.dianping.midasx.world.annotation.Relative;
-import com.dianping.midasx.world.logic.Adapter;
+import com.dianping.midasx.world.logic.Agent;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 
 /**
  * 对象句柄
@@ -26,7 +27,7 @@ public class ObjectHandler implements InvocationHandler {
     /**
      * 适配对象
      */
-    public Adapter adapter = null;
+    public Agent agent = null;
 
 
     /**
@@ -112,18 +113,18 @@ public class ObjectHandler implements InvocationHandler {
      */
     protected Object invoke(Class<?> clazz, int invokeType, com.dianping.midasx.base.model.Method method, Object[] args) throws Throwable {
         if(ObjectHandler.INVOKE_TYPE_PROPERTY == invokeType) {
-            return adapter.property(method.name);
+            return agent.property(method.name);
         }
         else if(ObjectHandler.INVOKE_TYPE_RELATIVE == invokeType) {
-            if(World.getCluster(adapter.clusterName).get(method.name).isSingle()) {
-                return convert(adapter.relative(method.name), clazz);
+            if(World.getCluster(agent.clusterName).get(method.name).isSingle()) {
+                return convert(agent.relative(method.name), clazz);
             }
             else {
-                return converts(adapter.relatives(method.name), clazz);
+                return converts(agent.relatives(method.name), clazz);
             }
         }
         else if(ObjectHandler.INVOKE_TYPE_METHOD == invokeType) {
-            return adapter.invoke(method, args);
+            return agent.invoke(method, args);
         }
         return null;
     }
@@ -131,12 +132,12 @@ public class ObjectHandler implements InvocationHandler {
     /**
      * 适配对象转用户对象
      *
-     * @param adapter 适配对象
+     * @param agent 适配对象
      * @param clazz 用户类
      * @return 用户对象
      */
-    public <T> T convert(Adapter adapter, Class<T> clazz) {
-        return null;
+    public <T> T convert(Agent agent, Class<T> clazz) {
+        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), this);
     }
 
     /**
@@ -146,10 +147,10 @@ public class ObjectHandler implements InvocationHandler {
      * @param clazz 用户类
      * @return 用户对象集合
      */
-    public <T> ICollection<T> converts(ICollection<Adapter> adapters, Class<T> clazz) {
+    public <T> ICollection<T> converts(ICollection<Agent> adapters, Class<T> clazz) {
         Set<T> result = new Set<T>();
-        for(Adapter adapter : adapters) {
-            result.add(convert(adapter, clazz));
+        for(Agent agent : adapters) {
+            result.add(convert(agent, clazz));
         }
         return result;
     }

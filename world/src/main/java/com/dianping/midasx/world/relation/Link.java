@@ -4,7 +4,7 @@ import com.dianping.midasx.base.logic.ComparisonTool;
 import com.dianping.midasx.base.logic.grammar.WordLogicalGrammar;
 import com.dianping.midasx.base.type.core.IMapping;
 import com.dianping.midasx.utility.config.core.IConfig;
-import com.dianping.midasx.world.relation.prepare.PropertyPrepare;
+import com.dianping.midasx.world.relation.prepare.AgentPrepare;
 import com.dianping.midasx.world.relation.prepare.core.IPrepare;
 import com.dianping.midasx.base.logic.BooleanRouteDigraph;
 
@@ -99,8 +99,8 @@ public class Link extends BooleanRouteDigraph<Object, Link> {
     public static Link build(IConfig conf) {
         Link result = new Link();
         result.setCompareType(conf.get("type"));
-        result.prepareSelf = new PropertyPrepare(conf.get("field"));
-        result.prepareOther = new PropertyPrepare(conf.get("value"));
+        result.prepareSelf = new AgentPrepare(conf.get("field"));
+        result.prepareOther = new AgentPrepare(conf.get("value"));
         //
         Link firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {

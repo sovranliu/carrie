@@ -2,7 +2,7 @@ package com.dianping.midasx.world.invoker;
 
 import com.dianping.midasx.base.model.Method;
 import com.dianping.midasx.base.type.core.ICollection;
-import com.dianping.midasx.base.type.core.IMapping;
+import com.dianping.midasx.base.type.core.ITable;
 import com.dianping.midasx.world.relation.Condition;
 
 /**
@@ -56,7 +56,7 @@ public class RemoteInvoker {
      * @param condition 查找条件
      * @return 对象属性集
      */
-    public IMapping<String, Object> find(String clusterName, Condition condition) {
+    public ITable<String, Object> find(String clusterName, Condition condition) {
         return null;
     }
 
@@ -67,7 +67,7 @@ public class RemoteInvoker {
      * @param condition 查找条件
      * @return 对象属性集
      */
-    public ICollection<IMapping<String, Object>> finds(String clusterName, Condition condition) {
+    public ICollection<ITable<String, Object>> finds(String clusterName, Condition condition) {
         return null;
     }
 }

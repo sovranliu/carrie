@@ -1,12 +1,8 @@
 package com.dianping.midasx.world.cluster;
 
-import com.dianping.midasx.base.logic.ComparisonTool;
 import com.dianping.midasx.base.model.Method;
 import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.world.relation.Condition;
-import com.dianping.midasx.world.relation.prepare.PropertyPrepare;
-
-import java.util.NoSuchElementException;
 
 /**
  * 本地簇类
@@ -55,21 +51,15 @@ public class LocalCluster extends Cluster<Object> {
     /**
      * 调用方法
      *
-     * @param id     被调用对象标志符
+     * @param target 被调用对象
      * @param method 方法
-     * @param args   参数列表
+     * @param args 参数列表
      * @return 调用结果
      */
-    public Object invoke(Object id, Method method, Object... args) {
-        Condition condition = new Condition();
-        condition.compareType = ComparisonTool.COMPARETYPE_EQUAL;
-        condition.prepareSelf = new PropertyPrepare(primaryKey);
-        Object result = find(condition);
-        if(null == result) {
-            throw new NoSuchElementException("cluster " + name + " find " + condition.toString() +  " failed");
-        }
+    @Override
+    public Object invoke(Object target, Method method, Object...args) {
         try {
-            return result.getClass().getDeclaredMethod(method.name, method.parameters).invoke(result, args);
+            return target.getClass().getDeclaredMethod(method.name, method.parameters).invoke(target, args);
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);
