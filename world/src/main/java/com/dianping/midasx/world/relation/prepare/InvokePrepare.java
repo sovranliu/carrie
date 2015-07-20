@@ -1,6 +1,5 @@
 package com.dianping.midasx.world.relation.prepare;
 
-import com.dianping.midasx.world.logic.facade.core.IObjectProxy;
 import com.dianping.midasx.world.relation.prepare.core.IPrepare;
 import org.apache.log4j.Logger;
 
@@ -51,8 +50,8 @@ public class InvokePrepare implements IPrepare {
      * @return 目标数据结构
      */
     @Override
-    public Object filter(IObjectProxy origin) {
-        return origin.invoke(method, parameterTypes, parameters);
+    public Object filter(Object origin) {
+        return null;
     }
 
     /**

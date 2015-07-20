@@ -26,7 +26,7 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
      * @return 目标是否通过检查
      */
     @Override
-    public boolean onCheck(IObjectProxy value) {
+    public boolean onCheck(Object value) {
         if(null != prepareSelf) {
             return super.onCheck(prepareSelf.filter(value));
         }

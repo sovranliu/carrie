@@ -2,8 +2,16 @@ package com.dianping.midasx.world.logic;
 
 import com.dianping.midasx.base.model.Method;
 import com.dianping.midasx.base.type.Record;
+import com.dianping.midasx.base.type.Set;
 import com.dianping.midasx.base.type.core.ICollection;
 import com.dianping.midasx.base.type.core.IMapping;
+import com.dianping.midasx.world.World;
+import com.dianping.midasx.world.cluster.DBCluster;
+import com.dianping.midasx.world.cluster.LocalCluster;
+import com.dianping.midasx.world.cluster.RemoteCluster;
+import com.dianping.midasx.world.cluster.core.ICluster;
+import com.dianping.midasx.world.relation.Condition;
+import com.dianping.midasx.world.relation.Relation;
 
 /**
  * 对象适配器类
@@ -38,36 +46,6 @@ public class Adapter {
 
 
     /**
-     * 构造函数
-     *
-     * @param record 数据库记录
-     */
-    public Adapter(Record record) {
-        type = TYPE_DB;
-        target = record;
-    }
-
-    /**
-     * 构造函数
-     *
-     * @param object 本地对象
-     */
-    public Adapter(Object object) {
-        type = TYPE_LOCAL;
-        target = object;
-    }
-
-    /**
-     * 构造函数
-     *
-     * @param properties 属性集
-     */
-    public Adapter(IMapping<String, Object> properties) {
-        type = TYPE_REMOTE;
-        target = properties;
-    }
-
-    /**
      * 获取适配对象类型
      *
      * @return 适配对象类型
@@ -82,6 +60,24 @@ public class Adapter {
      * @return 属性值
      */
     public Object property(String property) {
+        switch(type) {
+            case TYPE_DB: {
+                Record record = (Record) target;
+                return record.get(property);
+            }
+            case TYPE_LOCAL: {
+                try {
+                    return target.getClass().getDeclaredField(property).get(target);
+                }
+                catch (Exception ex) {
+                    throw new RuntimeException(ex);
+                }
+            }
+            case TYPE_REMOTE:{
+                IMapping<String, Object> map = (IMapping<String, Object>) target;
+                return map.get(property);
+            }
+        }
         return null;
     }
 
@@ -92,7 +88,22 @@ public class Adapter {
      * @return 关系对象
      */
     public Adapter relative(String name) {
-        return null;
+        Relation relation = World.getCluster(clusterName).get(name);
+        Condition condition = relation.deduce(this);
+        ICluster<?> cluster = World.getCluster(relation.cluster);
+        Adapter result = new Adapter();
+        result.clusterName = relation.cluster;
+        result.target = cluster.find(condition);
+        if(cluster instanceof DBCluster) {
+            result.type = TYPE_DB;
+        }
+        else if(cluster instanceof LocalCluster) {
+            result.type = TYPE_LOCAL;
+        }
+        else if(cluster instanceof RemoteCluster) {
+            result.type = TYPE_REMOTE;
+        }
+        return result;
     }
 
     /**
@@ -102,7 +113,24 @@ public class Adapter {
      * @return 关系对象集
      */
     public ICollection<Adapter> relatives(String name) {
-        return null;
+        Relation relation = World.getCluster(clusterName).get(name);
+        Condition condition = relation.deduce(this);
+        ICluster<?> cluster = World.getCluster(relation.cluster);
+        Set<Adapter> result = new Set<Adapter>();
+        ICollection<Object> col =
+
+        result.clusterName = relation.cluster;
+        result.target = cluster.find(condition);
+        if(cluster instanceof DBCluster) {
+            result.type = TYPE_DB;
+        }
+        else if(cluster instanceof LocalCluster) {
+            result.type = TYPE_LOCAL;
+        }
+        else if(cluster instanceof RemoteCluster) {
+            result.type = TYPE_REMOTE;
+        }
+        return result;
     }
 
     /**

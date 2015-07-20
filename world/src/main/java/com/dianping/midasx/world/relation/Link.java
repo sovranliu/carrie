@@ -19,11 +19,11 @@ public class Link extends BooleanRouteDigraph<Object, Link> {
     /**
      * 目标准备对象
      */
-    public IPrepare prepareOrigin = null;
+    public IPrepare prepareSelf = null;
     /**
      * 目标准备对象
      */
-    public IPrepare prepareTarget = null;
+    public IPrepare prepareOther = null;
 
 
     /**
@@ -78,9 +78,12 @@ public class Link extends BooleanRouteDigraph<Object, Link> {
                 @Override
                 public Condition get(Link key) {
                     Condition conditon = new Condition();
-                    conditon.prepareSelf = key.prepareOrigin.copy();
+                    try {
+                        conditon.prepareSelf = (IPrepare) (key.prepareSelf.clone());
+                    }
+                    catch (CloneNotSupportedException e) {}
                     conditon.compareType = key.compareType;
-                    conditon.target = key.prepareTarget.filter(origin);
+                    conditon.target = key.prepareOther.filter(origin);
                     return conditon;
                 }
             }
@@ -96,8 +99,8 @@ public class Link extends BooleanRouteDigraph<Object, Link> {
     public static Link build(IConfig conf) {
         Link result = new Link();
         result.setCompareType(conf.get("type"));
-        result.prepareOrigin = new PropertyPrepare(conf.get("field"));
-        result.prepareTarget = new PropertyPrepare(conf.get("value"));
+        result.prepareSelf = new PropertyPrepare(conf.get("field"));
+        result.prepareOther = new PropertyPrepare(conf.get("value"));
         //
         Link firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {

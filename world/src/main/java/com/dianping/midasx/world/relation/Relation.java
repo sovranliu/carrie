@@ -2,6 +2,7 @@ package com.dianping.midasx.world.relation;
 
 import com.dianping.midasx.base.type.core.IMapping;
 import com.dianping.midasx.utility.config.core.IConfig;
+import com.dianping.midasx.world.relation.prepare.core.IPrepare;
 
 import java.text.ParseException;
 
@@ -76,7 +77,10 @@ public class Relation {
                 @Override
                 public Condition get(Condition key) {
                     Condition conditon = new Condition();
-                    conditon.prepareSelf = key.prepareSelf.copy();
+                    try {
+                        conditon.prepareSelf = (IPrepare) (key.prepareSelf.clone());
+                    }
+                    catch (CloneNotSupportedException e) {}
                     conditon.compareType = key.compareType;
                     conditon.target = key.target;
                     return conditon;
