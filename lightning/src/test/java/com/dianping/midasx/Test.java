@@ -1,4 +1,4 @@
-package com.dianping.midasx.lightning;
+package com.dianping.midasx;
 
 /**
  * ����
