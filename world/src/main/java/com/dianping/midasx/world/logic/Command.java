@@ -1,5 +1,6 @@
 package com.dianping.midasx.world.logic;
 
+import com.dianping.midasx.base.model.Method;
 import org.apache.log4j.Logger;
 
 import java.io.*;
@@ -9,21 +10,6 @@ import java.util.ArrayList;
  * 调用命令
  */
 public class Command {
-    /**
-     * 调用命令方法
-     */
-    public static class CommandMethod {
-        /**
-         * 方法名称
-         */
-        public String method;
-        /**
-         * 方法参数列表
-         */
-        public Object[] parameters;
-    }
-
-
     /**
      * 日志对象
      */
@@ -43,7 +29,11 @@ public class Command {
     /**
      * 调用方法
      */
-    public CommandMethod method = null;
+    public Method method = null;
+    /**
+     * 参数列表
+     */
+    public Object[] parameters;
     /**
      * 附属信息：调用者报文句柄
      */
@@ -68,13 +58,13 @@ public class Command {
             result.tag = stream.readInt();
             result.cluster = (String) stream.readObject();
             result.targetId = stream.readObject();
-            result.method = new CommandMethod();
-            result.method.method = (String) stream.readObject();
+            result.method = new Method();
+            result.method = Method.build((String) stream.readObject());
             ArrayList<Object> parameterList = new ArrayList<Object>();
             while(stream.available() != -1) {
                 parameterList.add(stream.readObject());
             }
-            result.method.parameters = parameterList.toArray();
+            result.parameters = parameterList.toArray();
         }
         catch(Exception ex) {
             logger.error("Command.build(?, ?) execute failed", ex);
@@ -107,7 +97,7 @@ public class Command {
             objectStream.writeInt(tag);
             objectStream.writeObject(cluster);
             objectStream.writeObject(targetId);
-            objectStream.writeObject(method.method);
+            objectStream.writeObject(method.toString());
             for(Object object : method.parameters) {
                 objectStream.writeObject(object);
             }

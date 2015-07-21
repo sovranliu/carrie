@@ -20,12 +20,12 @@ public interface IObject {
     /**
      * 调用方法
      *
-     * @param method 方法名称
+     * @param method 方法
      * @param args 参数列表
      * @return 方法值
      */
     @Method
-    public Object invoke(String method, Object... args);
+    public Object invoke(com.dianping.midasx.base.model.Method method, Object... args);
 
     /**
      * 获取关系对象

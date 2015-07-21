@@ -17,6 +17,20 @@ public class NetEntry implements Cloneable, Serializable {
 
 
     /**
+     * 比较
+     *
+     * @param object 比较对象
+     * @return 是否相等
+     */
+    @Override
+    public boolean equals(Object object) {
+        if (ip.equals(((NetEntry)object).ip) && port == ((NetEntry)object).port) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
      * 转化为字符串
      *
      * @return 字符串

@@ -3,15 +3,14 @@ package com.dianping.midasx.world.rpc;
 import com.dianping.midasx.base.async.PipeLine;
 import com.dianping.midasx.base.async.core.IOperation;
 import com.dianping.midasx.base.type.core.IMap;
-import com.dianping.midasx.base.type.core.ITable;
 import com.dianping.midasx.base.type.safe.Table;
 import com.dianping.midasx.utility.net.TCPConnection;
 import com.dianping.midasx.utility.net.TCPEntry;
-import com.dianping.midasx.world.rpc.core.IEntityManager;
-import com.dianping.midasx.world.rpc.logic.Command;
+import com.dianping.midasx.world.IObject;
+import com.dianping.midasx.world.World;
+import com.dianping.midasx.world.logic.Command;
+import com.dianping.midasx.world.logic.Result;
 import com.dianping.midasx.world.rpc.logic.Protocol;
-
-import java.lang.reflect.Method;
 
 /**
  * 远程调用服务方
@@ -34,25 +33,15 @@ public class Server extends TCPEntry {
          */
         @Override
         public Void onExecute() {
-            IEntityManager manager = managerTable.get(command.name);
-            if(null == manager) {
-                logger.error("can not finds entity manager : " + command.name);
-                return null;
-            }
-            Object object = manager.load(command.condition);
-            if(null == object) {
-                logger.error("can not finds entity : " + command.condition);
-                return null;
-            }
+            IObject target = World.get(command.cluster, command.targetId, IObject.class);
             try {
-                Method method = object.getClass().getDeclaredMethod(command.method.name, command.method.parameterTypes);
-                Object result = method.invoke(object, command.parameters);
-                TCPConnection connection = connections.get(command.port);
+                Object result = target.invoke(command.method, command.parameters);
+                TCPConnection connection = connections.get(command.callerId);
                 if(null == connection) {
                     logger.error("connection loss when call finished");
                     return null;
                 }
-                connection.write(Protocol.convert(Command.build(command.token, result).toBytes()));
+                connection.write(Protocol.convert((new Result(command.cluster, command.tag, result)).toBytes()));
             }
             catch (Exception e) {
                 logger.error("entity invoke method failed ; " + command.method.name);
@@ -63,10 +52,6 @@ public class Server extends TCPEntry {
     }
 
 
-    /**
-     * 管理器映射
-     */
-    public ITable<String, IEntityManager> managerTable = new Table<String, IEntityManager>();
     /**
      * 协议栈映射
      */
@@ -92,16 +77,6 @@ public class Server extends TCPEntry {
             }
         }
         return pipeLine;
-    }
-
-    /**
-     * 注册/替代实体管理器
-     *
-     * @param name 注册名
-     * @param entityManager 实体管理器,若为null表示解除注册名
-     */
-    public void register(String name, IEntityManager entityManager) {
-
     }
 
     /**
@@ -139,8 +114,7 @@ public class Server extends TCPEntry {
         while(null != bytes) {
             InvokeOperation operation = new InvokeOperation();
             try {
-                operation.command = Command.build(bytes);
-                operation.command.port = target.local().port;
+                operation.command = Command.build(target.local().port, bytes);
                 getPipeLine().supply(operation);
             }
             catch (Exception e) {

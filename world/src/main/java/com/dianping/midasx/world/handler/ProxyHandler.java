@@ -63,22 +63,10 @@ public class ProxyHandler extends ObjectHandler {
         }
         com.dianping.midasx.world.annotation.Method methodAnnotation = method.getAnnotation(com.dianping.midasx.world.annotation.Method.class);
         if(null != methodAnnotation) {
-            com.dianping.midasx.base.model.Method methodModel = new com.dianping.midasx.base.model.Method();
-            methodModel.name = (String)(args[0]);
-            ArrayList<Class<?>> classlist = new ArrayList<Class<?>>();
-            boolean sentry = false;
-            for(Class<?> clazz : method.getParameterTypes()) {
-                if(sentry) {
-                    classlist.add(clazz);
-                }
-                else {
-                    sentry = true;
-                }
-            }
-            methodModel.parameters = classlist.toArray(new Class<?>[0]);
+            com.dianping.midasx.base.model.Method methodModel = (com.dianping.midasx.base.model.Method) (args[0]);
             //
             ArrayList<Object> arglist = new ArrayList<Object>();
-            sentry = false;
+            boolean sentry = false;
             for(Object object : args) {
                 if(sentry) {
                     arglist.add(object);

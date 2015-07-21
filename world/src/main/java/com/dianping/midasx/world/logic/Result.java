@@ -18,7 +18,7 @@ public class Result {
     /**
      * 被调用簇名称
      */
-    public String cluster;
+    public String clusterName;
     /**
      * 调用者报文句柄
      */
@@ -28,6 +28,24 @@ public class Result {
      */
     public Object result;
 
+
+    /**
+     * 构造函数
+     */
+    public Result() { }
+
+    /**
+     * 构造函数
+     *
+     * @param clusterName 簇名称
+     * @param tag 调用者报文句柄
+     * @param result 调用结果
+     */
+    public Result(String clusterName, int tag, Object result) {
+        this.clusterName = clusterName;
+        this.tag = tag;
+        this.result = result;
+    }
 
     /**
      * 从字节流中解析出调用结果对象
@@ -43,7 +61,7 @@ public class Result {
             stream = new ObjectInputStream(new ByteArrayInputStream(bytes));
             result = new Result();
             result.tag = stream.readInt();
-            result.cluster = (String) stream.readObject();
+            result.clusterName = (String) stream.readObject();
             result.result = stream.readObject();
         }
         catch(Exception ex) {
@@ -75,7 +93,7 @@ public class Result {
         try {
             objectStream = new ObjectOutputStream(byteStream);
             objectStream.writeInt(tag);
-            objectStream.writeObject(cluster);
+            objectStream.writeObject(clusterName);
             objectStream.writeObject(result);
         }
         catch(Exception ex) {
