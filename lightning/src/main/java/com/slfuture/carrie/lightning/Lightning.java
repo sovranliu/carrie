@@ -4,6 +4,7 @@ import com.slfuture.carrie.lightning.context.PageContext;
 import com.slfuture.carrie.base.model.Path;
 import com.slfuture.carrie.base.type.Table;
 import com.slfuture.carrie.lightning.context.PageVisitor;
+import com.slfuture.carrie.utility.config.Configuration;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.Velocity;
 
@@ -49,7 +50,7 @@ public class Lightning {
         if(!prepareAction(action)) {
             return false;
         }
-        if(!prepareWorld()) {
+        if(!prepareWorld(dictionary)) {
             return false;
         }
         logger.info("lightning initialize successfully");
@@ -170,10 +171,20 @@ public class Lightning {
     /**
      * 初始化世界系统
      *
+     * @param dictionary 目录
      * @return 执行结果
      */
-    private static boolean prepareWorld() {
-        // TODO:初始化世界系统
+    private static boolean prepareWorld(String dictionary) {
+        String confPath = dictionary + File.separator + "classes" + File.separator + "config" + File.separator + "configuration.xml";
+        // 初始化配置系统
+        if(Configuration.build(confPath)) {
+            logger.info("configuration build successfully");
+        }
+        else {
+            logger.error("configuration build failed");
+            return false;
+        }
+        // 初始化世界系统
         return true;
     }
 }

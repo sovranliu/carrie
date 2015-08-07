@@ -30,18 +30,29 @@ public interface IObject {
     /**
      * 获取关系对象
      *
+     * @param name 关系名称
      * @param clazz 关系类
      * @return 关系对象
      */
     @Relative
-    public <T> T relative(Class<T> clazz);
+    public <T> T relative(String name, Class<T> clazz);
 
     /**
      * 获取关系对象列表
      *
+     * @param name 关系名称
      * @param clazz 关系类
      * @return 关系对象列表
      */
     @Relative
-    public <T> ICollection<T> relatives(Class<T> clazz);
+    public <T> ICollection<T> relatives(String name, Class<T> clazz);
+
+    /**
+     * 获取关系对象
+     *
+     * @param name 关系名称
+     * @return 关系对象
+     */
+    @Relative
+    public Object relative(String name);
 }

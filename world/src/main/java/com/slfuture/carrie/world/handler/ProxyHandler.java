@@ -1,5 +1,6 @@
 package com.slfuture.carrie.world.handler;
 
+import com.slfuture.carrie.world.IObject;
 import com.slfuture.carrie.world.annotation.Property;
 import com.slfuture.carrie.world.annotation.Relative;
 
@@ -79,7 +80,11 @@ public class ProxyHandler extends ObjectHandler {
         }
         Relative relationdAnnotation = method.getAnnotation(Relative.class);
         if(null != relationdAnnotation) {
-            return invoke((Class<?>)args[1], ObjectHandler.INVOKE_TYPE_RELATIVE, new com.slfuture.carrie.base.model.Method((String)(args[0]), null), null);
+            Class<?> resultClass = IObject.class;
+            if(args.length > 1) {
+                resultClass = (Class<?>)args[1];
+            }
+            return invoke(resultClass, ObjectHandler.INVOKE_TYPE_RELATIVE, new com.slfuture.carrie.base.model.Method((String)(args[0]), null), null);
         }
         return null;
     }

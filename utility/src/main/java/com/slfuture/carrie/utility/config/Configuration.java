@@ -1,5 +1,6 @@
 package com.slfuture.carrie.utility.config;
 
+import com.slfuture.carrie.base.model.Path;
 import com.slfuture.carrie.base.xml.XMLDocument;
 import com.slfuture.carrie.base.xml.core.IXMLNode;
 import com.slfuture.carrie.utility.config.core.IRootConfig;
@@ -22,6 +23,10 @@ public class Configuration {
      * 根节点
      */
     private static IRootConfig root = null;
+    /**
+     * 配置路径
+     */
+    private static Path path = null;
 
 
     /**
@@ -41,6 +46,7 @@ public class Configuration {
             logger.error("Configuration initialize file open failed:" + path);
             return false;
         }
+        Configuration.path =  new Path(path, File.separator);
         return build(document.content());
     }
 
@@ -54,7 +60,7 @@ public class Configuration {
         for(IXMLNode node : xml.visits("root")) {
             try {
                 IRootConfig conf = (IRootConfig) Class.forName(node.get("class")).newInstance();
-                if(!conf.load(node.get("uri"))) {
+                if(!conf.load(Configuration.path.roll(Path.PATH_PARENT).roll(node.get("uri").replace("/", File.separator)).toString())) {
                     logger.error("root config find failed:\n" + node.toString());
                     continue;
                 }

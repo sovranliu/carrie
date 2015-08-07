@@ -26,7 +26,7 @@ public class Action implements IModule {
     /**
      * 日志对象
      */
-    private static Logger logger = Logger.getLogger(Action.class);
+    private Logger logger = Logger.getLogger(Action.class);
     /**
      * 脚本引擎对象
      */
@@ -95,7 +95,8 @@ public class Action implements IModule {
                 if(null == engine) {
                     engine = new ScriptEngineManager().getEngineByName("javascript");
                     try {
-                        engine.eval("function $(s) { return com.dianping.midasx.lightning.ProxyHandler.$$(s); }");
+                        engine.eval("function $(s, c) { var v = new com.slfuture.carrie.lightning.prox.WorldProxy(); return v.$(s, c); }");
+                        engine.eval("function $$(s, c) { var v = new com.slfuture.carrie.lightning.prox.WorldProxy(); return v.$$(s, c); }");
                     }
                     catch(Exception ex) {
                         logger.error("script engine initialize context failed", ex);

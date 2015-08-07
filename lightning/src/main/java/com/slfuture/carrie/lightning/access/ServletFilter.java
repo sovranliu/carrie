@@ -15,7 +15,7 @@ public class ServletFilter implements Filter {
     /**
      * 日志对象
      */
-    private static Logger logger = Logger.getLogger(ServletFilter.class);
+    private Logger logger = Logger.getLogger(ServletFilter.class);
 
 
     /**
@@ -42,6 +42,7 @@ public class ServletFilter implements Filter {
             logger.error("ServletFilter.init(?) execute failed");
             throw new ServletException("lightning initialize failed");
         }
+        logger.info("carrie lightning servlet filter initialized");
     }
 
     /**

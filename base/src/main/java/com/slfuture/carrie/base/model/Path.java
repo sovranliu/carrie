@@ -2,6 +2,8 @@ package com.slfuture.carrie.base.model;
 
 import com.slfuture.carrie.base.type.List;
 
+import java.io.File;
+
 /**
  * 路径类
  */
@@ -33,11 +35,10 @@ public class Path implements Cloneable {
      * 构造函数
      *
      * @param path 路径
-     * @param separator 分隔符
      */
-    public Path(String path, String separator) {
+    public Path(String path) {
         onNew();
-        for(String piece : path.split(separator)) {
+        for(String piece : path.split(makeSeparator(File.separator))) {
             if(piece.isEmpty()) {
                 continue;
             }
@@ -57,6 +58,59 @@ public class Path implements Cloneable {
     }
 
     /**
+     * 构造函数
+     *
+     * @param path 路径
+     * @param separator 分隔符
+     */
+    public Path(String path, String separator) {
+        onNew();
+        for(String piece : path.split(makeSeparator(separator))) {
+            if(piece.isEmpty()) {
+                continue;
+            }
+            if(PATH_PARENT.equals(piece)) {
+                if(0 == sections.size()) {
+                    throw new IllegalArgumentException();
+                }
+                sections.delete(sections.size() - 1);
+            }
+            else if(PATH_CURRENT.equals(piece)) {
+                continue;
+            }
+            else {
+                sections.add(piece);
+            }
+        }
+    }
+
+    /**
+     * 判断是否是否是相对路径
+     *
+     * @param path 路径
+     * @return 是否是相对路径
+     */
+    public static boolean isRelativePath(String path) {
+        if(null == path) {
+            return false;
+        }
+        if(path.startsWith(PATH_PARENT) || path.startsWith(PATH_CURRENT)) {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 跳转
+     *
+     * @param path 路径
+     * @return 操作执行结果
+     */
+    public Path roll(String path) {
+        return roll(path, File.separator);
+    }
+
+    /**
      * 跳转
      *
      * @param path 路径
@@ -66,12 +120,17 @@ public class Path implements Cloneable {
     public Path roll(String path, String separator) {
         Path result = null;
         try {
-            result = (Path) this.clone();
+            if(isRelativePath(path)) {
+                result = (Path) this.clone();
+            }
+            else {
+                result = new Path();
+            }
         }
         catch (CloneNotSupportedException e) {
             return null;
         }
-        for(String piece : path.split(separator)) {
+        for(String piece : path.split(makeSeparator(separator))) {
             if(piece.isEmpty()) {
                 continue;
             }
@@ -131,7 +190,7 @@ public class Path implements Cloneable {
      * @return 字符串
      */
     public String toString() {
-        return toString("/");
+        return toString(File.separator);
     }
 
     /**
@@ -193,5 +252,15 @@ public class Path implements Cloneable {
      */
     public void onNew() {
         sections = new List<String>();
+    }
+
+    /**
+     * 处理错误正则
+     *
+     * @param separator 分隔符
+     * @return 正确的分隔符
+     */
+    private String makeSeparator(String separator) {
+        return separator.replace("\\", "\\\\");
     }
 }

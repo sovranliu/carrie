@@ -1,6 +1,7 @@
 package com.slfuture.carrie.world.relation;
 
 import com.slfuture.carrie.base.logic.CompareCondition;
+import com.slfuture.carrie.base.logic.core.ILogicalGrammar;
 import com.slfuture.carrie.base.logic.grammar.WordLogicalGrammar;
 import com.slfuture.carrie.base.text.Text;
 import com.slfuture.carrie.utility.config.core.IConfig;
@@ -8,6 +9,7 @@ import com.slfuture.carrie.world.relation.prepare.AgentPrepare;
 import com.slfuture.carrie.world.relation.prepare.core.IPrepare;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 
 /**
  * 对象条件类
@@ -80,6 +82,41 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
                     firstSon.puts(false, condSon);
                 }
             }
+        }
+        return result;
+    }
+
+    /**
+     * 构建
+     *
+     * @param sentence 条件语句
+     * @param grammar 语法
+     * @return 条件对象
+     */
+    public static Condition build(String sentence, ILogicalGrammar grammar) {
+        // TODO:完善条件语句的解析
+        String[] operators = {">", "=", "<", "<=", ">=", "!="};
+        int i = Text.indexOf(sentence, operators);
+        if(-1 == i) {
+            return null;
+        }
+        boolean sentry = false;
+        for(String operator : operators) {
+            if(operator.equals(sentence.substring(i + 1, 1))) {
+                sentry = true;
+                break;
+            }
+        }
+        Condition result = new Condition();
+        if(sentry) {
+            result.target = Text.parse(sentence.substring(i + 2).trim());
+            result.compareType = sentence.substring(i, i + 2);
+            result.prepareSelf = new AgentPrepare(sentence.substring(0, i).trim());
+        }
+        else {
+            result.target = Text.parse(sentence.substring(i + 1).trim());
+            result.compareType = sentence.substring(i, i + 1);
+            result.prepareSelf = new AgentPrepare(sentence.substring(0, i).trim());
         }
         return result;
     }

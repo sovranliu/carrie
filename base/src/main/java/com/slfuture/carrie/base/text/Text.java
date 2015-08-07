@@ -204,4 +204,37 @@ public class Text {
             }
         }
     }
+
+    /**
+     * 在字符串中查找集合
+     *
+     * @param text 字符串
+     * @param subString 子字符串集合
+     * @return 查找到的字符串起始索引
+     */
+    public static int indexOf(String text, String[] subString) {
+        return indexOf(text, subString, 0);
+    }
+
+    /**
+     * 在字符串中查找集合
+     *
+     * @param text 字符串
+     * @param subString 子字符串集合
+     * @param start 起始索引
+     * @return 查找到的字符串起始索引
+     */
+    public static int indexOf(String text, String[] subString, int start) {
+        int result = -1;
+        for(int i = 0; i < subString.length; i++) {
+            int j = text.indexOf(subString[i], start);
+            if(-1 == j) {
+                continue;
+            }
+            if(j < result) {
+                result = j;
+            }
+        }
+        return result;
+    }
 }
