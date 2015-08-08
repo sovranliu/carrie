@@ -1,7 +1,9 @@
 package com.slfuture.carrie.world.handler;
 
+import com.slfuture.carrie.base.type.List;
 import com.slfuture.carrie.base.type.Set;
 import com.slfuture.carrie.base.type.core.ICollection;
+import com.slfuture.carrie.world.IObject;
 import com.slfuture.carrie.world.World;
 import com.slfuture.carrie.world.annotation.Property;
 import com.slfuture.carrie.world.annotation.Relative;
@@ -29,6 +31,14 @@ public class ObjectHandler implements InvocationHandler {
      */
     public Agent agent = null;
 
+
+    /**
+     * 构造函数
+     */
+    public ObjectHandler() { }
+    public ObjectHandler(Agent agent) {
+        this.agent = agent;
+    }
 
     /**
      * Processes a method invocation on a proxy instance and returns
@@ -137,7 +147,7 @@ public class ObjectHandler implements InvocationHandler {
      * @return 用户对象
      */
     public <T> T convert(Agent agent, Class<T> clazz) {
-        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), this);
+        return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[] { clazz }, new ObjectHandler(agent));
     }
 
     /**
@@ -147,11 +157,12 @@ public class ObjectHandler implements InvocationHandler {
      * @param clazz 用户类
      * @return 用户对象集合
      */
-    public <T> ICollection<T> converts(ICollection<Agent> adapters, Class<T> clazz) {
-        Set<T> result = new Set<T>();
+    public <T> T[] converts(ICollection<Agent> adapters, Class<T> clazz) {
+        Object[] result = new Object[adapters.size()];
+        int i = 0;
         for(Agent agent : adapters) {
-            result.add(convert(agent, clazz));
+            result[i++] = convert(agent, clazz);
         }
-        return result;
+        return (T[]) result;
     }
 }

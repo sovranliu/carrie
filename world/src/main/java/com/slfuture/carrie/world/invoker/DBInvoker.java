@@ -4,6 +4,7 @@ import com.slfuture.carrie.base.type.Record;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.utility.config.Configuration;
 import com.slfuture.carrie.utility.config.core.IConfig;
+import com.slfuture.carrie.utility.db.DBConnectionPoolConfig;
 import com.slfuture.carrie.utility.db.DBExecutor;
 import com.slfuture.carrie.utility.db.SQLExecutor;
 import com.slfuture.carrie.utility.db.StoredProcedureParameters;
@@ -66,7 +67,12 @@ public class DBInvoker {
                 logger.error("db '" + db +"' config missing");
                 return null;
             }
-            if(!result.initialize()) {
+            DBConnectionPoolConfig connectionConfig = new DBConnectionPoolConfig();
+            if(!connectionConfig.load(conf)) {
+                logger.error("connection load failed:\n" + conf.toString());
+                return null;
+            }
+            if(!result.initialize(connectionConfig)) {
                 logger.error("db '" + db +"' connect failed");
                 return null;
             }

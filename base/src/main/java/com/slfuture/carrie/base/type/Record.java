@@ -10,6 +10,70 @@ import java.util.LinkedHashMap;
  */
 public class Record extends MixedTable<String, Object> {
     /**
+     * 键小写和真实键的映射
+     */
+    private Table<String, String> keyTable = new Table<String, String>();
+
+
+    /**
+     * 获取指定键的值
+     *
+     * @param key 键
+     * @return 值
+     */
+    @Override
+    public Object get(String key) {
+        String realKey = keyTable.get(key.toLowerCase());
+        if(null == realKey) {
+            return null;
+        }
+        return super.get(realKey);
+    }
+
+    /**
+     * 设置指定键的值
+     *
+     * @param key   键
+     * @param value 值
+     * @return 键对应的原值，若原值不存在则返回null
+     */
+    @Override
+    public Object put(String key, Object value) {
+        if(null == value) {
+            return delete(key);
+        }
+        String realKey = keyTable.put(key.toLowerCase(), key);
+        if(null != realKey && !realKey.equals(key)) {
+            super.delete(realKey);
+        }
+        return super.put(key, value);
+    }
+
+    /**
+     * 删除指定键的值
+     *
+     * @param key 键
+     * @return 键对应的原值，若原值不存在则返回null
+     */
+    @Override
+    public Object delete(String key) {
+        String realKey = keyTable.delete(key.toLowerCase());
+        if(null == realKey) {
+            return null;
+        }
+        return super.delete(realKey);
+    }
+
+    /**
+     * 清理所有元素
+     */
+    @Override
+    public void clear() {
+        keyTable.clear();
+        super.clear();
+    }
+
+    /**
      * 获取字符串字段值
      *
      * @param key 字段名

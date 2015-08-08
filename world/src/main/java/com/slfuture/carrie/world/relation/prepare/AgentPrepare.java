@@ -43,6 +43,16 @@ public class AgentPrepare implements IPrepare {
     }
 
     /**
+     * 转换为字符串
+     *
+     * @return 字符串
+     */
+    @Override
+    public String toString() {
+        return property;
+    }
+
+    /**
      * 克隆
      *
      * @return 克隆对象

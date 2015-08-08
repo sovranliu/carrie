@@ -49,6 +49,17 @@ public class Config extends StringMixedMapping<String> implements IConfig {
         if(null == path || path.equals("")) {
             return this;
         }
+        if(path.startsWith(CONFIG_PATH_SEPARATOR)) {
+            IConfig forefather = this;
+            while(true) {
+                if(null == forefather.visit(Path.PATH_PARENT)) {
+                    return forefather.visit(path.substring(1));
+                }
+                else {
+                    forefather = forefather.visit(Path.PATH_PARENT);
+                }
+            }
+        }
         String head = null;
         String tail = null;
         // 取出本次分析的段
@@ -120,6 +131,17 @@ public class Config extends StringMixedMapping<String> implements IConfig {
     public ICollection<IConfig> visits(String path) {
         if(null == path || path.equals("")) {
             return new Set<IConfig>(this);
+        }
+        if(path.startsWith(CONFIG_PATH_SEPARATOR)) {
+            IConfig forefather = this;
+            while(true) {
+                if(null == forefather.visit(Path.PATH_PARENT)) {
+                    return forefather.visits(path.substring(1));
+                }
+                else {
+                    forefather = forefather.visit(Path.PATH_PARENT);
+                }
+            }
         }
         String head = null;
         String tail = null;

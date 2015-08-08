@@ -79,11 +79,11 @@ public class Link extends BooleanRouteDigraph<Object, Link> {
                 public Condition get(Link key) {
                     Condition conditon = new Condition();
                     try {
-                        conditon.prepareSelf = (IPrepare) (key.prepareSelf.clone());
+                        conditon.prepareSelf = (IPrepare) (key.prepareOther.clone());
                     }
                     catch (CloneNotSupportedException e) {}
                     conditon.compareType = key.compareType;
-                    conditon.target = key.prepareOther.filter(origin);
+                    conditon.target = key.prepareSelf.filter(origin);
                     return conditon;
                 }
             }
@@ -99,8 +99,8 @@ public class Link extends BooleanRouteDigraph<Object, Link> {
     public static Link build(IConfig conf) {
         Link result = new Link();
         result.setCompareType(conf.get("type"));
-        result.prepareSelf = new AgentPrepare(conf.get("field"));
-        result.prepareOther = new AgentPrepare(conf.get("value"));
+        result.prepareSelf = new AgentPrepare(conf.get("self-field"));
+        result.prepareOther = new AgentPrepare(conf.get("other-field"));
         //
         Link firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {

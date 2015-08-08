@@ -231,7 +231,7 @@ public class Text {
             if(-1 == j) {
                 continue;
             }
-            if(j < result) {
+            if(-1 == result || j < result) {
                 result = j;
             }
         }

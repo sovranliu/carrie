@@ -95,8 +95,9 @@ public class Action implements IModule {
                 if(null == engine) {
                     engine = new ScriptEngineManager().getEngineByName("javascript");
                     try {
-                        engine.eval("function $(s, c) { var v = new com.slfuture.carrie.lightning.prox.WorldProxy(); return v.$(s, c); }");
-                        engine.eval("function $$(s, c) { var v = new com.slfuture.carrie.lightning.prox.WorldProxy(); return v.$$(s, c); }");
+                        engine.put("World", new com.slfuture.carrie.lightning.proxy.WorldProxy());
+                        engine.eval("function $(s, c) { return World.$(s, c); }");
+                        engine.eval("function $$(s, c) { return World.$$(s, c); }");
                     }
                     catch(Exception ex) {
                         logger.error("script engine initialize context failed", ex);

@@ -71,7 +71,6 @@ public class Map<K, V> implements IMap<K, V>, Cloneable {
         map = new java.util.HashMap<K, V>();
     }
 
-
     /**
      * 深度克隆
      *

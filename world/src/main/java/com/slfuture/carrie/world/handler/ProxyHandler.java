@@ -3,14 +3,40 @@ package com.slfuture.carrie.world.handler;
 import com.slfuture.carrie.world.IObject;
 import com.slfuture.carrie.world.annotation.Property;
 import com.slfuture.carrie.world.annotation.Relative;
+import com.slfuture.carrie.world.logic.Agent;
 
 import java.lang.reflect.Method;
+import java.lang.reflect.Proxy;
 import java.util.ArrayList;
 
 /**
  * 代理句柄类
  */
 public class ProxyHandler extends ObjectHandler {
+    /**
+     * 构造函数
+     */
+    public ProxyHandler() { }
+    public ProxyHandler(Agent agent) {
+        this.agent = agent;
+    }
+
+
+    /**
+     * 适配对象转用户对象
+     *
+     * @param agent 适配对象
+     * @param clazz 用户类
+     * @return 用户对象
+     */
+    @Override
+    public <T> T convert(Agent agent, Class<T> clazz) {
+        if(IObject.class.equals(clazz)) {
+            return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new ProxyHandler(agent));
+        }
+        return super.convert(agent, clazz);
+    }
+
     /**
      * Processes a method invocation on a proxy instance and returns
      * the result.  This method will be invoked on an invocation handler

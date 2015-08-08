@@ -45,7 +45,7 @@ public interface IObject {
      * @return 关系对象列表
      */
     @Relative
-    public <T> ICollection<T> relatives(String name, Class<T> clazz);
+    public <T> T[] relatives(String name, Class<T> clazz);
 
     /**
      * 获取关系对象

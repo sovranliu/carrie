@@ -40,6 +40,7 @@ public class PageContext {
      */
     public void set(String key, Object value) {
         context.put(key, value);
+        context.put("xx", new String[] {"b1", "b2", "b3"});
     }
 
     /**

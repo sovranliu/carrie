@@ -102,7 +102,7 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
         }
         boolean sentry = false;
         for(String operator : operators) {
-            if(operator.equals(sentence.substring(i + 1, 1))) {
+            if(operator.equals(sentence.substring(i + 1, i + 2))) {
                 sentry = true;
                 break;
             }

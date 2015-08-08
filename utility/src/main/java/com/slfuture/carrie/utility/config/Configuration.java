@@ -5,6 +5,7 @@ import com.slfuture.carrie.base.xml.XMLDocument;
 import com.slfuture.carrie.base.xml.core.IXMLNode;
 import com.slfuture.carrie.utility.config.core.IRootConfig;
 import com.slfuture.carrie.utility.config.core.IConfig;
+import com.slfuture.carrie.utility.config.xml.RootConfig;
 import org.apache.log4j.Logger;
 
 import java.io.File;

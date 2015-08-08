@@ -3,8 +3,8 @@ package com.slfuture.carrie.base.type;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ISet;
 
-import java.util.HashSet;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 
 /**
  * 集合类
@@ -167,6 +167,6 @@ public class Set<I> implements ISet<I>, Cloneable {
      * 初始化
      */
     public void onNew() {
-        set = new HashSet<I>();
+        set = new LinkedHashSet<I>();
     }
 }

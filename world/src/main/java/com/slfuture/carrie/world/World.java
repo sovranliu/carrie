@@ -73,7 +73,7 @@ public class World {
             handler = new ObjectHandler();
         }
         handler.agent = getCluster(clusterName).findAgent(condition);
-        return (T) (Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), handler));
+        return (T) (Proxy.newProxyInstance(clazz.getClassLoader(), new Class[] {clazz}, handler));
     }
 
     /**
@@ -95,7 +95,7 @@ public class World {
                 handler = new ObjectHandler();
             }
             handler.agent = agent;
-            result.add((T) (Proxy.newProxyInstance(clazz.getClassLoader(), clazz.getInterfaces(), handler)));
+            result.add((T) (Proxy.newProxyInstance(clazz.getClassLoader(), new Class[] {clazz}, handler)));
         }
         return result;
     }
