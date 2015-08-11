@@ -150,10 +150,9 @@ public class World {
         else if(null != conf.get("table")) {
             result = new DBCluster();
             String table = conf.get("table");
-            if (null != table) {
-                ((DBCluster) result).dbName = table.substring(0, table.indexOf("."));
-                ((DBCluster) result).tableName = table.substring(table.indexOf(".") + 1);
-            }
+            ((DBCluster) result).dbName = table.substring(0, table.indexOf("."));
+            ((DBCluster) result).tableName = table.substring(table.indexOf(".") + 1);
+            ((DBCluster) result).parse(conf);
         }
         result.name = name;
         result.primaryKey = conf.get("primarykey");

@@ -51,7 +51,7 @@ public class VelocityTemplate implements ITemplate {
         }
         StringWriter writer = new StringWriter();
         VelocityEngine engine = new VelocityEngine();
-        engine.evaluate(velocityContext, writer, null, content);
+        engine.evaluate(velocityContext, writer, "VelocityTemplate", content);
         return writer.toString();
     }
 }

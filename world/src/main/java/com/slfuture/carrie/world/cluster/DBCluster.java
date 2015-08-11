@@ -6,6 +6,7 @@ import com.slfuture.carrie.base.type.Record;
 import com.slfuture.carrie.base.type.Table;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ILink;
+import com.slfuture.carrie.utility.config.core.IConfig;
 import com.slfuture.carrie.utility.template.Context;
 import com.slfuture.carrie.world.invoker.DBInvoker;
 import com.slfuture.carrie.world.relation.Condition;
@@ -108,5 +109,22 @@ public class DBCluster extends Cluster<Record> {
             return DBInvoker.instance().insert(dbName, DBInvoker.instance().generate(sqlMethod.template, context));
         }
         throw new RuntimeException("invalid method type : " + sqlMethod.type);
+    }
+
+    /**
+     * 解析配置
+     *
+     * @param conf 配置对象
+     * @return 是否解析成功
+     */
+    public boolean parse(IConfig conf) {
+        methods.clear();
+        for(IConfig confMethod : conf.visits("methods/method")) {
+            SQLMethod sqlMethod = new SQLMethod();
+            sqlMethod.type = confMethod.get("type");
+            sqlMethod.template = confMethod.get("sql");
+            methods.put(confMethod.get("name"), sqlMethod);
+        }
+        return true;
     }
 }

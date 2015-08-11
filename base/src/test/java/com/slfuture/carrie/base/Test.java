@@ -3,6 +3,7 @@ package com.slfuture.carrie.base;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -64,12 +65,13 @@ public class Test {
     }
 
     public static void main(String[] argv) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, Exception {
+        System.out.println(UUID.randomUUID());
+
         String s = "123";
         Object ooo = s;
         c(ooo);
 
         do3();
-
 
         Integer i = 1;
         Object o = i;

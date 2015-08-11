@@ -1,9 +1,6 @@
 package com.slfuture.carrie.world.handler;
 
-import com.slfuture.carrie.base.type.List;
-import com.slfuture.carrie.base.type.Set;
 import com.slfuture.carrie.base.type.core.ICollection;
-import com.slfuture.carrie.world.IObject;
 import com.slfuture.carrie.world.World;
 import com.slfuture.carrie.world.annotation.Property;
 import com.slfuture.carrie.world.annotation.Relative;

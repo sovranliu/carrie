@@ -7,7 +7,6 @@ import com.slfuture.carrie.world.logic.Agent;
 
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 
 /**
  * 代理句柄类
@@ -86,23 +85,12 @@ public class ProxyHandler extends ObjectHandler {
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         Property property = method.getAnnotation(Property.class);
         if(null != property) {
-            return invoke(null, ObjectHandler.INVOKE_TYPE_PROPERTY, new com.slfuture.carrie.base.model.Method((String)(args[0]), null), null);
+            return super.invoke(null, ObjectHandler.INVOKE_TYPE_PROPERTY, new com.slfuture.carrie.base.model.Method((String)(args[0]), null), null);
         }
         com.slfuture.carrie.world.annotation.Method methodAnnotation = method.getAnnotation(com.slfuture.carrie.world.annotation.Method.class);
         if(null != methodAnnotation) {
             com.slfuture.carrie.base.model.Method methodModel = (com.slfuture.carrie.base.model.Method) (args[0]);
-            //
-            ArrayList<Object> arglist = new ArrayList<Object>();
-            boolean sentry = false;
-            for(Object object : args) {
-                if(sentry) {
-                    arglist.add(object);
-                }
-                else {
-                    sentry = true;
-                }
-            }
-            return invoke(null, ObjectHandler.INVOKE_TYPE_METHOD, methodModel, arglist.toArray(new Object[0]));
+            return super.invoke(null, ObjectHandler.INVOKE_TYPE_METHOD, methodModel, (Object[]) (args[1]));
         }
         Relative relationdAnnotation = method.getAnnotation(Relative.class);
         if(null != relationdAnnotation) {
@@ -110,7 +98,7 @@ public class ProxyHandler extends ObjectHandler {
             if(args.length > 1) {
                 resultClass = (Class<?>)args[1];
             }
-            return invoke(resultClass, ObjectHandler.INVOKE_TYPE_RELATIVE, new com.slfuture.carrie.base.model.Method((String)(args[0]), null), null);
+            return super.invoke(resultClass, ObjectHandler.INVOKE_TYPE_RELATIVE, new com.slfuture.carrie.base.model.Method((String) (args[0]), null), null);
         }
         return null;
     }
