@@ -64,7 +64,6 @@ public class Lightning {
         actions = null;
     }
 
-
     /**
      * 执行动作
      *
@@ -150,6 +149,14 @@ public class Lightning {
                 if(file.isDirectory()) {
                     stack.push(file);
                     continue;
+                }
+                if(file.getName().endsWith(".function")) {
+                    path = path.substring(0, path.length() - ".function".length());
+                    // 初始化Action
+                    if(!Action.initFunction(file)) {
+                        logger.error("function (" + path + ") initialize failed");
+                        throw new IllegalAccessError();
+                    }
                 }
                 if(file.getName().endsWith(".action")) {
                     path = path.substring(0, path.length() - ".action".length());
