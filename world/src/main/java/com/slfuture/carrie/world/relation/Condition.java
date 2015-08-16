@@ -94,6 +94,9 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
      * @return 条件对象
      */
     public static Condition build(String sentence, ILogicalGrammar grammar) {
+        if(null == sentence) {
+            return null;
+        }
         // TODO:完善条件语句的解析
         String[] operators = {">", "=", "<", "<=", ">=", "!="};
         int i = Text.indexOf(sentence, operators);

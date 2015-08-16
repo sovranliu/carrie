@@ -1,6 +1,7 @@
 package com.slfuture.carrie.base.type;
 
 import com.slfuture.carrie.base.time.Date;
+import com.slfuture.carrie.base.time.DateTime;
 import com.slfuture.carrie.base.type.core.ILink;
 
 import java.util.LinkedHashMap;
@@ -99,6 +100,20 @@ public class Record extends MixedTable<String, Object> {
             return null;
         }
         return Date.parse((java.util.Date) ret);
+    }
+
+    /**
+     * 获取日期时间字段值
+     *
+     * @param key 字段名
+     * @return 日期时间值
+     */
+    public DateTime getDateTime(String key) {
+        Object ret = this.get(key);
+        if(null == ret) {
+            return null;
+        }
+        return DateTime.parse((java.util.Date) ret);
     }
 
     /**

@@ -1,5 +1,8 @@
 package com.slfuture.carrie.utility;
 
+import com.slfuture.carrie.utility.template.Context;
+import com.slfuture.carrie.utility.template.VelocityTemplate;
+
 import java.lang.annotation.Annotation;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -19,10 +22,22 @@ public class Test2 {
         }
     }
 
+    public static class A {
+        public String b() {
+            return "11";
+        }
+    }
+
     /**
      * 主函数
      */
     public static void main(String[] argv) throws Exception {
+        VelocityTemplate velocityTemplate = new VelocityTemplate();
+        velocityTemplate.setContent("$a.b()");
+        Context context = new Context();
+        context.put("a", new A());
+        System.out.println(velocityTemplate.render(context));
+
         Handler handler = new Handler();
         TInterface t = (TInterface) (Proxy.newProxyInstance(TInterface.class.getClassLoader(), new Class[]{TInterface.class}, handler));
         t.cancel();

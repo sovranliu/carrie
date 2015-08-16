@@ -6,6 +6,8 @@ import com.slfuture.carrie.base.type.Table;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 
 /**
  * 页面访问者
@@ -63,8 +65,16 @@ public class PageVisitor implements IWritable<String> {
      * @param expiry 周期
      */
     public void setCookie(String key, String value, int expiry) {
+        try {
+            value = URLEncoder.encode(value, "utf-8");
+        }
+        catch (UnsupportedEncodingException e) {
+            throw new RuntimeException("setCookie(" + key + "," + value + ") failed", e);
+        }
         Cookie cookie = new Cookie(key, value);
-        cookie.setMaxAge(expiry);
+        if(0 != expiry) {
+            cookie.setMaxAge(expiry);
+        }
         response.addCookie(cookie);
     }
 
