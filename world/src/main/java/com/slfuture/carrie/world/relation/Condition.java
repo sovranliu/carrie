@@ -123,4 +123,60 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
         }
         return result;
     }
+
+    /**
+     * 比较
+     *
+     * @param object 待比较对象
+     * @return 比较结果
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(null == object) {
+            return false;
+        }
+        if(object.getClass().isAssignableFrom(Condition.class)) {
+            Condition other = (Condition) object;
+            if(null == prepareSelf) {
+                if(null != other.prepareSelf) {
+                    return false;
+                }
+            }
+            else {
+                if(!prepareSelf.equals(other.prepareSelf)) {
+                    return false;
+                }
+            }
+            return super.equals(object);
+        }
+        return false;
+    }
+
+    /**
+     * 比较
+     *
+     * @param object 待比较对象
+     * @return 比较结果
+     */
+    @Override
+    public boolean equalsIgnoreTarget(Object object) {
+        if(null == object) {
+            return false;
+        }
+        if(Condition.class.isAssignableFrom(object.getClass())) {
+            Condition other = (Condition) object;
+            if(null == prepareSelf) {
+                if(null != other.prepareSelf) {
+                    return false;
+                }
+            }
+            else {
+                if(!prepareSelf.equals(other.prepareSelf)) {
+                    return false;
+                }
+            }
+            return super.equalsIgnoreTarget(object);
+        }
+        return false;
+    }
 }

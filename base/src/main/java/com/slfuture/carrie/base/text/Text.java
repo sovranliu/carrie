@@ -3,13 +3,17 @@ package com.slfuture.carrie.base.text;
 import com.slfuture.carrie.base.character.filter.ByteUTF8Filter;
 import com.slfuture.carrie.base.interaction.FilterReader;
 import com.slfuture.carrie.base.io.disk.DiskReadableHandle;
+import com.slfuture.carrie.base.logic.core.ICondition;
 import com.slfuture.carrie.base.model.Result;
 import com.slfuture.carrie.base.text.filter.BytesLineFilter;
 import com.slfuture.carrie.base.time.Date;
 import com.slfuture.carrie.base.time.DateTime;
 import com.slfuture.carrie.base.time.Time;
+import com.slfuture.carrie.base.type.Set;
+import com.slfuture.carrie.base.type.core.ICollection;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.regex.Pattern;
 
 /**
@@ -170,25 +174,31 @@ public class Text {
         }
         text = text.substring(text.indexOf(")") + 1);
         try {
-            if("int".equals(type)) {
+            if("int".equalsIgnoreCase(type)) {
                 return Integer.parseInt(text);
             }
-            else if("long".equals(type)) {
+            else if("long".equalsIgnoreCase(type)) {
                 return Long.parseLong(text);
             }
-            else if("byte".equals(type)) {
+            else if("short".equalsIgnoreCase(type)) {
+                return Short.parseShort(text);
+            }
+            else if("byte".equalsIgnoreCase(type)) {
                 return Byte.parseByte(text);
             }
-            else if("string".equals(type)) {
+            else if("boolean".equalsIgnoreCase(type)) {
+                return Boolean.parseBoolean(text);
+            }
+            else if("string".equalsIgnoreCase(type)) {
                 return text;
             }
-            else if("date".equals(type)) {
+            else if("date".equalsIgnoreCase(type)) {
                 return Date.parse(text);
             }
-            else if("time".equals(type)) {
+            else if("time".equalsIgnoreCase(type)) {
                 return Time.parse(text);
             }
-            else if("datetime".equals(type)) {
+            else if("datetime".equalsIgnoreCase(type)) {
                 return DateTime.parse(text);
             }
             else {
@@ -234,6 +244,47 @@ public class Text {
             if(-1 == result || j < result) {
                 result = j;
             }
+        }
+        return result;
+    }
+
+    /**
+     * 合并
+     *
+     * @param collection 集合
+     * @param separator 分隔符
+     * @return 合并后的字符串
+     */
+    public static String merge(ICollection<?> collection, String separator) {
+        StringBuilder builder = null;
+        for(Object item : collection) {
+            if(null == builder) {
+                builder = new StringBuilder();
+                builder.append(item);
+            }
+            else {
+                builder.append(separator);
+                builder.append(item);
+            }
+        }
+        if(null == builder) {
+            return "";
+        }
+        return builder.toString();
+    }
+
+    /**
+     * 分割
+     *
+     * @param text 待分割字符串
+     * @param separator 分隔符
+     * @return 拆分后的字符串集合
+     */
+    public static ICollection<String> cut(String text, String separator) {
+        String[] array = text.split(separator);
+        Set<String> result = new Set<String>();
+        for(String item : array) {
+            result.add(item);
         }
         return result;
     }

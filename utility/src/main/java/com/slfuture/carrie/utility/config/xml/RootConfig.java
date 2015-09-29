@@ -5,7 +5,6 @@ import com.slfuture.carrie.base.type.core.ILink;
 import com.slfuture.carrie.base.type.core.ISet;
 import com.slfuture.carrie.base.xml.XMLDocument;
 import com.slfuture.carrie.base.xml.core.IXMLNode;
-import com.slfuture.carrie.utility.config.Config;
 import com.slfuture.carrie.utility.config.core.IConfig;
 import com.slfuture.carrie.utility.config.core.IRootConfig;
 
@@ -70,6 +69,7 @@ public class RootConfig extends Config implements IRootConfig {
         for(ILink<String, String> link : node) {
             result.properties.put(link.origin(), link.destination());
         }
+        result.value = node.getValue();
         for(IXMLNode child : node.children()) {
             ISet<IConfig> configSet = result.children.get(child.getName());
             if(null == configSet) {

@@ -1,8 +1,11 @@
 package com.slfuture.carrie.base;
 
 import java.io.IOException;
+import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.AbstractList;
+import java.util.HashMap;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -64,7 +67,41 @@ public class Test {
         System.out.println("c(String)");
     }
 
+
+    public static class C1 {
+        public int p1;
+    }
+
+    public static class C2 extends C1 {
+        public int p2;
+    }
+
     public static void main(String[] argv) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, Exception {
+        String sssss = "柳君";
+        System.out.println(sssss);
+
+        HashMap<String, String> s1 = new HashMap<String, String>();
+        s1.put("1", "2");
+        s1.put("2", "3");
+        HashMap<String, String> s2 = new HashMap<String, String>();
+        s2.put("1", "2");
+        s2.put("2", "3");
+        System.out.println(s1.equals(s2));
+        s2.put("2", "3");
+        System.out.println(s1.equals(s2));
+        s2.put("3", "4");
+        System.out.println(s1.equals(s2));
+
+        if(s1.getClass().isAssignableFrom(HashMap.class)) {
+
+        }
+
+
+        Field[] fields = C2.class.getFields();
+        System.out.println(fields);
+
+
+
         System.out.println(UUID.randomUUID());
 
         String s = "123";

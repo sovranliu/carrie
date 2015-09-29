@@ -71,6 +71,9 @@ public class Relation {
      * @return 目标对象的条件
      */
     public Condition deduce(Object origin) {
+        if(null == link) {
+            return null;
+        }
         Condition result = link.deduce(origin);
         if(null != postrequisite) {
             result.put(true, postrequisite.clone(new IMapping<Condition, Condition>() {

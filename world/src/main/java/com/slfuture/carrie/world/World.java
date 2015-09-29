@@ -33,6 +33,10 @@ public class World {
      * 簇表
      */
     private static Table<String, ICluster<?>> clusters = new Table<String, ICluster<?>>();
+    /**
+     * 类名和簇映射
+     */
+    private static Table<String, String> clazzMap = new Table<String, String>();
 
 
     /**
@@ -101,6 +105,39 @@ public class World {
     }
 
     /**
+     * 获取指定名称的关系对象
+     *
+     * @param self 自己的节点
+     * @param name 关系名称
+     * @param clazz 关系节点的类型
+     * @return 关系对象
+     */
+    public static <T> T relative(Object self, String name, Class<T> clazz) {
+        String clusterName = clazzMap.get(self.getClass().getName());
+        if(null == clusterName) {
+            return null;
+        }
+        ICluster<?> cluster = clusters.get(clusterName);
+        if(null == cluster) {
+            return null;
+        }
+        cluster.find()
+        return null;
+    }
+
+    /**
+     * 获取指定名称的关系对象
+     *
+     * @param self 自己的节点
+     * @param name 关系名称
+     * @param clazz 关系节点的类型
+     * @return 关系对象
+     */
+    public static <T> T[] relatives(Object self, String name, Class<T> clazz) {
+        return null;
+    }
+
+    /**
      * 获取指定名称的簇
      *
      * @param name 簇名
@@ -142,6 +179,7 @@ public class World {
             if(isLocal) {
                 result = new LocalCluster();
                 ((LocalCluster) result).className = conf.get("class");
+                clazzMap.put(conf.get("class"), name);
             }
             else {
                 result = new RemoteCluster();

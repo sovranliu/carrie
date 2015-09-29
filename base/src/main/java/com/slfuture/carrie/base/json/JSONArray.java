@@ -49,6 +49,9 @@ public class JSONArray extends List<IJSON> implements IJSON {
             else if(object instanceof Double) {
                 result.add(new JSONNumber((Double)object));
             }
+            else if(object instanceof String) {
+                result.add(new JSONString((String)object));
+            }
             else if(object instanceof com.slfuture.carrie.base.json.thirdparty.JSONObject) {
                 result.add(JSONObject.convert((com.slfuture.carrie.base.json.thirdparty.JSONObject) object));
             }

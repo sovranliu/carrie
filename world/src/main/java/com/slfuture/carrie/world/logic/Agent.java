@@ -126,7 +126,7 @@ public class Agent {
             }
             case TYPE_LOCAL: {
                 try {
-                    return target.getClass().getDeclaredField(name).get(target);
+                    return target.getClass().getField(name).get(target);
                 }
                 catch (Exception ex) {
                     throw new RuntimeException(ex);

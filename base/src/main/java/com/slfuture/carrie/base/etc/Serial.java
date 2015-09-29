@@ -2,6 +2,8 @@ package com.slfuture.carrie.base.etc;
 
 import com.slfuture.carrie.base.time.DateTime;
 
+import java.util.Random;
+
 /**
  * 流水工具类
  */
@@ -37,6 +39,33 @@ public class Serial {
      */
     public static String makeSerialString() {
         return String.valueOf(makeSerialNumber());
+    }
+
+    /**
+     * 生成随机字符串
+     *
+     * @param length 字符串长度
+     * @return 随机字符串
+     */
+    public static String makeRandomString(int length) {
+        return makeRandomString("abcdefghijklmnopqrstuvwxyz0123456789", length);
+    }
+
+    /**
+     * 生成随机字符串
+     *
+     * @param baseString 基础字符集
+     * @param length 字符串长度
+     * @return 随机字符串
+     */
+    public static String makeRandomString(String baseString, int length) {
+        Random random = new Random();
+        StringBuffer builder = new StringBuffer();
+        for (int i = 0; i < length; i++) {
+            int number = random.nextInt(baseString.length());
+            builder.append(baseString.charAt(number));
+        }
+        return builder.toString();
     }
 
     /**

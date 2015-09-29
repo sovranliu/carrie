@@ -15,6 +15,7 @@ import org.apache.velocity.app.Velocity;
 
 import javax.script.*;
 import java.io.File;
+import java.io.StringWriter;
 
 /**
  * 动作处理器
@@ -108,7 +109,15 @@ public class Action implements IModule {
             logger.error("template[" + result + "] not exist");
             return;
         }
-        template.merge(context.context, visitor.response.getWriter());
+        if(result.endsWith(".url")) {
+            StringWriter writer = new StringWriter();
+            template.merge(context.velocityContext, writer);
+            writer.close();
+            visitor.response.sendRedirect(writer.toString());
+        }
+        else {
+            template.merge(context.velocityContext, visitor.response.getWriter());
+        }
     }
 
     /**
@@ -128,9 +137,9 @@ public class Action implements IModule {
             // 生成脚本运行时
             StringBuilder builder = new StringBuilder();
             builder.append("function ");
-            function = "f" + Serial.makeSerialNumber();
+            function = "f" + Serial.makeSerialString() + Serial.makeLoopInteger();
             builder.append(function);
-            builder.append("(visitor, context) {\n");
+            builder.append("(visitor, velocityContext) {\n");
             builder.append(initContent(Text.loadFile(file.getAbsolutePath(), Encoding.ENCODING_UTF8)));
             builder.append("\n}");
             // script = ((Compilable) engine).compile(builder.toString());
@@ -223,7 +232,7 @@ public class Action implements IModule {
                         engine.eval("function $$(s, c) { return World.$$(s, c); }");
                     }
                     catch(Exception ex) {
-                        logger.error("Script engine initialize context failed", ex);
+                        logger.error("Script engine initialize velocityContext failed", ex);
                         return false;
                     }
                 }

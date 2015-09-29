@@ -100,6 +100,6 @@ public class ProxyHandler extends ObjectHandler {
             }
             return super.invoke(resultClass, ObjectHandler.INVOKE_TYPE_RELATIVE, new com.slfuture.carrie.base.model.Method((String) (args[0]), null), null);
         }
-        return null;
+        return super.invoke(proxy, method, args);
     }
 }

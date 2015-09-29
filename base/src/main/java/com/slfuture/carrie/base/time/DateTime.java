@@ -161,6 +161,18 @@ public class DateTime implements Comparable<DateTime> {
     }
 
     /**
+     * 解析日期字符串
+     *
+     * @param dateString 日期字符串
+     * @param format 格式
+     * @return 日期对象
+     */
+    public static DateTime parse(String dateString, String format) throws ParseException {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat(format);
+        return DateTime.parse(simpleDateFormat.parse(dateString));
+    }
+
+    /**
      * 解析毫秒
      *
      * @param millis 工具日期对象
@@ -224,6 +236,16 @@ public class DateTime implements Comparable<DateTime> {
     @Override
     public String toString() {
         return (new SimpleDateFormat(DATETIME_FORMAT)).format(calendar.getTime());
+    }
+
+    /**
+     * 转为字符串
+     *
+     * @param format 格式
+     * @return 字符串
+     */
+    public String toString(String format) {
+        return (new SimpleDateFormat(format)).format(calendar.getTime());
     }
 
     /**

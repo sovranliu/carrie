@@ -65,4 +65,55 @@ public class CompareCondition<T, S extends CompareCondition<T, S>> extends Logic
     public String toString() {
         return compareType + " " + target;
     }
+
+    /**
+     * 比较
+     *
+     * @param object 待比较对象
+     * @return 比较结果
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(null == object) {
+            return false;
+        }
+        if(object.getClass().isAssignableFrom(CompareCondition.class)) {
+            CompareCondition<T, S> other = (CompareCondition<T, S>) object;
+            if(!compareType.equals(other.compareType)) {
+                return false;
+            }
+            if(null == target) {
+                if(null != other.target) {
+                    return false;
+                }
+            }
+            else {
+                if(!target.equals(other.target)) {
+                    return false;
+                }
+            }
+            return super.equals(object);
+        }
+        return false;
+    }
+
+    /**
+     * 比较
+     *
+     * @param object 待比较对象
+     * @return 比较结果
+     */
+    public boolean equalsIgnoreTarget(Object object) {
+        if(null == object) {
+            return false;
+        }
+        if(CompareCondition.class.isAssignableFrom(object.getClass())) {
+            CompareCondition<T, S> other = (CompareCondition<T, S>) object;
+            if(!compareType.equals(other.compareType)) {
+                return false;
+            }
+            return super.equals(object);
+        }
+        return false;
+    }
 }

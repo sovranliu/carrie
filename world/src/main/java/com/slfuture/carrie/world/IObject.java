@@ -1,6 +1,5 @@
 package com.slfuture.carrie.world;
 
-import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.world.annotation.Method;
 import com.slfuture.carrie.world.annotation.Property;
 import com.slfuture.carrie.world.annotation.Relative;

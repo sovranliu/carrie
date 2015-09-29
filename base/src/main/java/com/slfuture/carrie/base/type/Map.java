@@ -89,4 +89,46 @@ public class Map<K, V> implements IMap<K, V>, Cloneable {
         }
         return result;
     }
+
+    /**
+     * 转化为字符串
+     *
+     * @return 字符串
+     */
+    @Override
+    public String toString() {
+        StringBuilder builder = null;
+        for(java.util.Map.Entry<K, V> entry : map.entrySet()) {
+            if(null == builder ) {
+                builder = new StringBuilder();
+                builder.append("{");
+            }
+            else {
+                builder.append(",");
+            }
+            builder.append(entry.getKey());
+            builder.append(":");
+            builder.append(entry.getValue());
+        }
+        builder.append("}");
+        return builder.toString();
+    }
+
+
+    /**
+     * 比较
+     *
+     * @param object 待比较对象
+     * @return 比较结果
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(null == object) {
+            return false;
+        }
+        if(Map.class.isAssignableFrom(object.getClass())) {
+            return map.equals(((Map<K, V>) object).map);
+        }
+        return false;
+    }
 }

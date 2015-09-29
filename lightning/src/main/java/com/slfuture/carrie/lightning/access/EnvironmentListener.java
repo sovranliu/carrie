@@ -14,7 +14,7 @@ public class EnvironmentListener implements ServletContextListener {
      * Receives notification that the web application initialization
      * process is starting.
      * <p/>
-     * <p>All ServletContextListeners are notified of context
+     * <p>All ServletContextListeners are notified of velocityContext
      * initialization before any filters or servlets in the web
      * application are initialized.
      *
@@ -39,7 +39,7 @@ public class EnvironmentListener implements ServletContextListener {
      * shut down.
      * <p/>
      * <p>All servlets and filters will have been destroyed before any
-     * ServletContextListeners are notified of context
+     * ServletContextListeners are notified of velocityContext
      * destruction.
      *
      * @param sce the ServletContextEvent containing the ServletContext

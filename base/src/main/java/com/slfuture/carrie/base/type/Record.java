@@ -4,6 +4,7 @@ import com.slfuture.carrie.base.time.Date;
 import com.slfuture.carrie.base.time.DateTime;
 import com.slfuture.carrie.base.type.core.ILink;
 
+import java.lang.reflect.Field;
 import java.util.LinkedHashMap;
 
 /**
@@ -182,6 +183,45 @@ public class Record extends MixedTable<String, Object> {
         }
         builder.append("}");
         return builder.toString();
+    }
+
+    /**
+     * 构建指定类实例
+     *
+     * @param clazz 类
+     * @return 类实例
+     */
+    public <T> T build(Class<T> clazz) throws IllegalAccessException, InstantiationException {
+        T result = (T) clazz.newInstance();
+        for(ILink<String, Object> link : this) {
+            try {
+                for(Field field : clazz.getFields()) {
+                    if(field.getName().equalsIgnoreCase(link.origin())) {
+                        field.set(result, link.destination());
+                    }
+                }
+            }
+            catch (Exception e) { }
+        }
+        return result;
+    }
+
+    /**
+     * 赋值指定实例
+     *
+     * @param target 类实例
+     */
+    public <T> void build(T target) {
+        for(ILink<String, Object> link : this) {
+            try {
+                for(Field field : target.getClass().getDeclaredFields()) {
+                    if(field.getName().equalsIgnoreCase(link.origin())) {
+                        field.set(target, link.destination());
+                    }
+                }
+            }
+            catch (Exception e) { }
+        }
     }
 
     /**

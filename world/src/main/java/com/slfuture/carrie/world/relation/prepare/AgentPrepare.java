@@ -60,4 +60,27 @@ public class AgentPrepare implements IPrepare {
     public Object clone() throws CloneNotSupportedException {
         return super.clone();
     }
+
+    /**
+     * 比较
+     *
+     * @param object 待比较对象
+     * @return 比较结果
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(null == object) {
+            return false;
+        }
+        if(!object.getClass().isAssignableFrom(AgentPrepare.class)) {
+            return false;
+        }
+        AgentPrepare prepare = (AgentPrepare) object;
+        if(null == property) {
+            return null == prepare.property;
+        }
+        else {
+            return property.equals(prepare.property);
+        }
+    }
 }

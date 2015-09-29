@@ -106,7 +106,7 @@ public class ObjectHandler implements InvocationHandler {
         if(null != relationdAnnotation) {
             return invoke((Class<?>)args[0], ObjectHandler.INVOKE_TYPE_RELATIVE, new com.slfuture.carrie.base.model.Method(method.getName(), null), null);
         }
-        return null;
+        return agent.getClass().getMethod(method.getName(), method.getParameterTypes()).invoke(agent, args);
     }
 
     /**
