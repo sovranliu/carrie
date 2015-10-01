@@ -1,10 +1,14 @@
 package com.slfuture.carrie.world.relation.prepare;
 
+import com.slfuture.carrie.world.IObject;
+import com.slfuture.carrie.world.logic.Agent;
 import com.slfuture.carrie.world.relation.prepare.core.IPrepare;
 import org.apache.log4j.Logger;
 
+import java.lang.reflect.Field;
+
 /**
- * 属性准备类
+ * 属性比较准备类
  */
 public class PropertyPrepare implements IPrepare {
     /**
@@ -14,7 +18,7 @@ public class PropertyPrepare implements IPrepare {
     /**
      * 属性名称
      */
-    public String property;
+    public String property = null;
 
 
     /**
@@ -39,7 +43,26 @@ public class PropertyPrepare implements IPrepare {
      */
     @Override
     public Object filter(Object origin) {
-        return null;
+        if(null == origin) {
+            return null;
+        }
+        if(origin.getClass().isAssignableFrom(Agent.class)) {
+            Agent agent = (Agent) origin;
+            return agent.property(property);
+        }
+        else if(origin.getClass().isAssignableFrom(IObject.class)) {
+            IObject object = (IObject) origin;
+            return object.property(property);
+        }
+        else {
+            try {
+                Field field = origin.getClass().getField(property);
+                return field.get(origin);
+            }
+            catch(Exception ex) {
+                throw new RuntimeException(ex);
+            }
+        }
     }
 
     /**
@@ -49,12 +72,7 @@ public class PropertyPrepare implements IPrepare {
      */
     @Override
     public Object clone() throws CloneNotSupportedException {
-        try {
-            return super.clone();
-        }
-        catch(CloneNotSupportedException ex) {
-            return null;
-        }
+        return super.clone();
     }
 
     /**
@@ -65,5 +83,28 @@ public class PropertyPrepare implements IPrepare {
     @Override
     public String toString() {
         return property;
+    }
+
+    /**
+     * 比较
+     *
+     * @param object 待比较对象
+     * @return 比较结果
+     */
+    @Override
+    public boolean equals(Object object) {
+        if(null == object) {
+            return false;
+        }
+        if(!object.getClass().isAssignableFrom(PropertyPrepare.class)) {
+            return false;
+        }
+        PropertyPrepare prepare = (PropertyPrepare) object;
+        if(null == property) {
+            return null == prepare.property;
+        }
+        else {
+            return property.equals(prepare.property);
+        }
     }
 }

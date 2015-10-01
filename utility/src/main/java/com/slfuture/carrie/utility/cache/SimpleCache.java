@@ -1,14 +1,14 @@
 package com.slfuture.carrie.utility.cache;
 
 import com.slfuture.carrie.base.time.DateTime;
-import com.slfuture.carrie.utility.cache.core.ICache;
+import com.slfuture.carrie.utility.cache.core.ITimeLimitedCache;
 
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 内存型缓存
  */
-public abstract class SimpleCache<K, V> implements ICache<K, V> {
+public abstract class SimpleCache<K, V> implements ITimeLimitedCache<K, V> {
     /**
      * 值结构体
      */

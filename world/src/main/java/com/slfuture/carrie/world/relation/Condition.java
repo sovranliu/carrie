@@ -5,11 +5,10 @@ import com.slfuture.carrie.base.logic.core.ILogicalGrammar;
 import com.slfuture.carrie.base.logic.grammar.WordLogicalGrammar;
 import com.slfuture.carrie.base.text.Text;
 import com.slfuture.carrie.utility.config.core.IConfig;
-import com.slfuture.carrie.world.relation.prepare.AgentPrepare;
+import com.slfuture.carrie.world.relation.prepare.PropertyPrepare;
 import com.slfuture.carrie.world.relation.prepare.core.IPrepare;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 
 /**
  * 对象条件类
@@ -60,7 +59,7 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
         Condition result = new Condition();
         result.target = Text.parse(conf.get("value"));
         result.setCompareType(conf.get("type"));
-        result.prepareSelf = new AgentPrepare(conf.get("field"));
+        result.prepareSelf = new PropertyPrepare(conf.get("field"));
         //
         Condition firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {
@@ -114,12 +113,12 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
         if(sentry) {
             result.target = Text.parse(sentence.substring(i + 2).trim());
             result.compareType = sentence.substring(i, i + 2);
-            result.prepareSelf = new AgentPrepare(sentence.substring(0, i).trim());
+            result.prepareSelf = new PropertyPrepare(sentence.substring(0, i).trim());
         }
         else {
             result.target = Text.parse(sentence.substring(i + 1).trim());
             result.compareType = sentence.substring(i, i + 1);
-            result.prepareSelf = new AgentPrepare(sentence.substring(0, i).trim());
+            result.prepareSelf = new PropertyPrepare(sentence.substring(0, i).trim());
         }
         return result;
     }

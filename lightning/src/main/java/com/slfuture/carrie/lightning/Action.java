@@ -33,7 +33,7 @@ public class Action implements IModule {
     /**
      * 脚本引擎对象
      */
-    public static ScriptEngine engine = null;
+    public ScriptEngine engine = null;
 
     /**
      * 编译后的脚本
@@ -135,15 +135,7 @@ public class Action implements IModule {
         }
         try {
             // 生成脚本运行时
-            StringBuilder builder = new StringBuilder();
-            builder.append("function ");
-            function = "f" + Serial.makeSerialString() + Serial.makeLoopInteger();
-            builder.append(function);
-            builder.append("(visitor, velocityContext) {\n");
-            builder.append(initContent(Text.loadFile(file.getAbsolutePath(), Encoding.ENCODING_UTF8)));
-            builder.append("\n}");
-            // script = ((Compilable) engine).compile(builder.toString());
-            engine.eval(builder.toString());
+            engine.eval(initContent(file));
             script = (Invocable) engine;
         }
         catch(Exception ex) {
@@ -165,27 +157,44 @@ public class Action implements IModule {
     /**
      * 初始脚本内容
      *
-     * @param text 脚本
+     * @param file 脚本
      * @return 脚本内容
      */
-    public String initContent(String text) throws Exception {
-        String line = null;
-        int i = 0, j = 0;
+    public String initContent(File file) throws Exception {
+        String text = Text.loadFile(file.getAbsolutePath(), Encoding.ENCODING_UTF8);
+        String rootDictionary = Text.substring(file.getAbsolutePath(), null, "WEB-INF" + File.separator + "action" + File.separator) + "WEB-INF" + File.separator + "action" + File.separator;
+        function = "f" + Serial.makeSerialString() + Serial.makeLoopInteger();
+        String head = "function " + function + "(visitor, velocityContext) {\n";
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
         while(true) {
-            j = Text.indexOf(text, new String[] {"\r", "\n"}, i);
+            int j = Text.indexOf(text, new String[] {"\r", "\n"}, i);
             if(-1 == j) {
-                return text.substring(i);
+                builder.append(head);
+                builder.append(text.substring(i));
+                builder.append("\n}");
+                break;
             }
-            line = text.substring(i, j);
+            String line = text.substring(i, j);
             if(!line.startsWith("#include")) {
-                return text.substring(i);
+                builder.append(head);
+                builder.append(text.substring(i));
+                builder.append("\n}");
+                break;
             }
-            if(null == imports) {
-                imports = new List<String>();
-            }
-            imports.add(Text.substring(line, "<", ">").replace(".action", ""));
             i = j + 1;
+            String fileName = Text.substring(line, "<", ">");
+            if(fileName.endsWith(".function")) {
+                builder.append(Text.loadFile(rootDictionary + fileName, Encoding.ENCODING_UTF8));
+            }
+            else if(fileName.endsWith(".action")) {
+                if(null == imports) {
+                    imports = new List<String>();
+                }
+                imports.add(Text.substring(line, "<", ">").replace(".action", ""));
+            }
         }
+        return builder.toString();
     }
 
     /**
@@ -194,7 +203,7 @@ public class Action implements IModule {
      * @param file 文件地址
      * @return 执行结果
      */
-    public static boolean initFunction(File file) {
+    public boolean initFunction(File file) {
         if(null == engine) {
             if(!initEngine()) {
                 return false;
@@ -218,7 +227,7 @@ public class Action implements IModule {
      *
      * @return 执行结果
      */
-    public static boolean initEngine() {
+    public boolean initEngine() {
         if(null == engine) {
             synchronized (Action.class) {
                 if(null == logger) {

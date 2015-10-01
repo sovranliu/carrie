@@ -4,7 +4,7 @@ import com.slfuture.carrie.base.logic.ComparisonTool;
 import com.slfuture.carrie.base.logic.grammar.WordLogicalGrammar;
 import com.slfuture.carrie.base.type.core.IMapping;
 import com.slfuture.carrie.utility.config.core.IConfig;
-import com.slfuture.carrie.world.relation.prepare.AgentPrepare;
+import com.slfuture.carrie.world.relation.prepare.PropertyPrepare;
 import com.slfuture.carrie.world.relation.prepare.core.IPrepare;
 import com.slfuture.carrie.base.logic.BooleanRouteDigraph;
 
@@ -99,8 +99,8 @@ public class Link extends BooleanRouteDigraph<Object, Link> {
     public static Link build(IConfig conf) {
         Link result = new Link();
         result.setCompareType(conf.get("type"));
-        result.prepareSelf = new AgentPrepare(conf.get("self-field"));
-        result.prepareOther = new AgentPrepare(conf.get("other-field"));
+        result.prepareSelf = new PropertyPrepare(conf.get("self-field"));
+        result.prepareOther = new PropertyPrepare(conf.get("other-field"));
         //
         Link firstSon = null;
         for(IConfig confSon : conf.visits("condition")) {

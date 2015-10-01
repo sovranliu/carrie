@@ -13,12 +13,4 @@ public interface ICache<K, V> extends IMapping<K, V> {
      * @return 值
      */
     public V onMiss(K key);
-
-    /**
-     * 超时回调
-     *
-     * @param key 键
-     * @return 值
-     */
-    public V onExpire(K key);
 }

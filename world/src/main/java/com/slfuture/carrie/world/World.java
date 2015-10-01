@@ -15,7 +15,7 @@ import com.slfuture.carrie.world.handler.ProxyHandler;
 import com.slfuture.carrie.world.logic.Agent;
 import com.slfuture.carrie.world.relation.Condition;
 import com.slfuture.carrie.world.relation.Relation;
-import com.slfuture.carrie.world.relation.prepare.AgentPrepare;
+import com.slfuture.carrie.world.relation.prepare.PropertyPrepare;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Proxy;
@@ -55,7 +55,7 @@ public class World {
      */
     public static <T> T get(String clusterName, Object id, Class<T> clazz) {
         Condition conditon = new Condition();
-        conditon.prepareSelf = new AgentPrepare(getCluster(clusterName).primaryKey());
+        conditon.prepareSelf = new PropertyPrepare(getCluster(clusterName).primaryKey());
         conditon.target = id;
         return get(clusterName, conditon, clazz);
     }
@@ -121,8 +121,12 @@ public class World {
         if(null == cluster) {
             return null;
         }
-        cluster.find()
-        return null;
+        Relation relation = cluster.get(name);
+        if(null == relation) {
+            return null;
+        }
+        Condition condition = relation.deduce(self);
+        return get(relation.cluster, condition, clazz);
     }
 
     /**
@@ -133,8 +137,21 @@ public class World {
      * @param clazz 关系节点的类型
      * @return 关系对象
      */
-    public static <T> T[] relatives(Object self, String name, Class<T> clazz) {
-        return null;
+    public static <T> ICollection<T> relatives(Object self, String name, Class<T> clazz) {
+        String clusterName = clazzMap.get(self.getClass().getName());
+        if(null == clusterName) {
+            return null;
+        }
+        ICluster<?> cluster = clusters.get(clusterName);
+        if(null == cluster) {
+            return null;
+        }
+        Relation relation = cluster.get(name);
+        if(null == relation) {
+            return null;
+        }
+        Condition condition = relation.deduce(self);
+        return gets(relation.cluster, condition, clazz);
     }
 
     /**
