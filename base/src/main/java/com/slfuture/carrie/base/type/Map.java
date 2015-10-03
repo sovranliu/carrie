@@ -2,10 +2,14 @@ package com.slfuture.carrie.base.type;
 
 import com.slfuture.carrie.base.type.core.IMap;
 
+import java.io.Serializable;
+
 /**
  * 映射类
  */
-public class Map<K, V> implements IMap<K, V>, Cloneable {
+public class Map<K, V> implements IMap<K, V>, Cloneable, Serializable {
+    private static final long serialVersionUID = -1;
+
     /**
      * 映射
      */
@@ -98,6 +102,9 @@ public class Map<K, V> implements IMap<K, V>, Cloneable {
     @Override
     public String toString() {
         StringBuilder builder = null;
+        if(null == map) {
+            return null;
+        }
         for(java.util.Map.Entry<K, V> entry : map.entrySet()) {
             if(null == builder ) {
                 builder = new StringBuilder();
@@ -109,6 +116,9 @@ public class Map<K, V> implements IMap<K, V>, Cloneable {
             builder.append(entry.getKey());
             builder.append(":");
             builder.append(entry.getValue());
+        }
+        if(null == builder) {
+            return "{}";
         }
         builder.append("}");
         return builder.toString();

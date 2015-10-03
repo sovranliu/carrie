@@ -2,12 +2,15 @@ package com.slfuture.carrie.base.type;
 
 import com.slfuture.carrie.base.type.core.IArray;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
  * 数组类
  */
-public class Array<I> implements IArray<I> {
+public class Array<I> implements IArray<I> , Cloneable, Serializable {
+    private static final long serialVersionUID = -1;
+
     /**
      * 数组迭代器
      */

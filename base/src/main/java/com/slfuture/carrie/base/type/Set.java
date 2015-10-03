@@ -3,13 +3,16 @@ package com.slfuture.carrie.base.type;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ISet;
 
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedHashSet;
 
 /**
  * 集合类
  */
-public class Set<I> implements ISet<I>, Cloneable {
+public class Set<I> implements ISet<I>, Cloneable, Serializable {
+    private static final long serialVersionUID = -1;
+
     /**
      * 集合
      */

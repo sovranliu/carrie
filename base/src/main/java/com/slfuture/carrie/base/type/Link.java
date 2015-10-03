@@ -2,10 +2,14 @@ package com.slfuture.carrie.base.type;
 
 import com.slfuture.carrie.base.type.core.ILink;
 
+import java.io.Serializable;
+
 /**
  * 连接类
  */
-public class Link<O, D> implements ILink<O, D>, Cloneable {
+public class Link<O, D> implements ILink<O, D>, Cloneable, Serializable {
+    private static final long serialVersionUID = -1;
+
     /**
      * 起点对象
      */

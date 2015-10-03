@@ -1,9 +1,10 @@
 package com.slfuture.carrie.world.cluster;
 
 import com.slfuture.carrie.base.type.Set;
-import com.slfuture.carrie.base.type.Table;
+import com.slfuture.carrie.base.type.safe.Table;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.world.cluster.core.ICluster;
+import com.slfuture.carrie.world.event.EventPipe;
 import com.slfuture.carrie.world.logic.Agent;
 import com.slfuture.carrie.world.relation.Condition;
 import com.slfuture.carrie.world.relation.Relation;
@@ -17,6 +18,10 @@ public abstract class Cluster<T> extends Table<String, Relation> implements IClu
      * 日志对象
      */
     protected static Logger logger = Logger.getLogger(Cluster.class);
+    /**
+     * 捕捉者
+     */
+    public Table<String, ICollection<EventPipe>> catchers = new Table<String, ICollection<EventPipe>>();
     /**
      * 簇名称
      */

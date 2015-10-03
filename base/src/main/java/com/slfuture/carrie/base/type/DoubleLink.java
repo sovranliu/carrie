@@ -3,10 +3,14 @@ package com.slfuture.carrie.base.type;
 
 import com.slfuture.carrie.base.type.core.IDoubleLink;
 
+import java.io.Serializable;
+
 /**
  * 双向连接类
  */
-public class DoubleLink<T extends DoubleLink<T>> implements IDoubleLink<T> {
+public class DoubleLink<T extends DoubleLink<T>> implements IDoubleLink<T>, Cloneable, Serializable {
+    private static final long serialVersionUID = -1;
+
     /**
      * 前一个元素
      */

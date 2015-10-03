@@ -164,7 +164,7 @@ public class Action implements IModule {
         String text = Text.loadFile(file.getAbsolutePath(), Encoding.ENCODING_UTF8);
         String rootDictionary = Text.substring(file.getAbsolutePath(), null, "WEB-INF" + File.separator + "action" + File.separator) + "WEB-INF" + File.separator + "action" + File.separator;
         function = "f" + Serial.makeSerialString() + Serial.makeLoopInteger();
-        String head = "function " + function + "(visitor, velocityContext) {\n";
+        String head = "function " + function + "(visitor, context) {\n";
         StringBuilder builder = new StringBuilder();
         int i = 0;
         while(true) {
@@ -195,31 +195,6 @@ public class Action implements IModule {
             }
         }
         return builder.toString();
-    }
-
-    /**
-     * 初始化函数
-     *
-     * @param file 文件地址
-     * @return 执行结果
-     */
-    public boolean initFunction(File file) {
-        if(null == engine) {
-            if(!initEngine()) {
-                return false;
-            }
-        }
-        try {
-            StringBuilder builder = new StringBuilder();
-            builder.append(Text.loadFile(file.getAbsolutePath(), Encoding.ENCODING_UTF8));
-            // script = ((Compilable) engine).compile(builder.toString());
-            engine.eval(builder.toString());
-        }
-        catch(Exception ex) {
-            logger.error("script load or compile failed, path = " + file.getName(), ex);
-            return false;
-        }
-        return true;
     }
 
     /**

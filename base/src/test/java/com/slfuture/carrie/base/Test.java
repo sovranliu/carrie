@@ -1,11 +1,16 @@
 package com.slfuture.carrie.base;
 
+import com.slfuture.carrie.base.type.Record;
+import com.slfuture.carrie.base.type.RecordSet;
+import com.slfuture.carrie.base.type.Set;
+
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.AbstractList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -77,6 +82,29 @@ public class Test {
     }
 
     public static void main(String[] argv) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, Exception {
+        RecordSet recordSet = new RecordSet();
+        Record record = new Record();
+        record.put("a", "1");
+        record.put("b", 2);
+        recordSet.add(record);
+        record = new Record();
+        record.put("aa", "11");
+        record.put("bb", 22);
+        recordSet.add(record);
+
+
+        Set<String> set = new Set<String>();
+        set.add("1");
+        set.add("2");
+        set.add("3");
+
+
+        Iterator<String> iter = set.iterator();
+        while(iter.hasNext()) {
+            String s = iter.next();
+            System.out.println(s);
+        }
+
         String sssss = "柳君";
         System.out.println(sssss);
 

@@ -1,5 +1,6 @@
 package com.slfuture.carrie.base.time;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -7,11 +8,11 @@ import java.util.Calendar;
 /**
  * 时间类
  */
-public class Time implements Comparable<Time> {
+public class Time implements Comparable<Time>, Serializable {
     /**
      * 时间格式
      */
-    public final static String TIME_FORMAT = "HH:mm:ss.ms";
+    public final static String TIME_FORMAT = "HH:mm:ss";
 
 
     /**

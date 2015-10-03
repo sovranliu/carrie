@@ -1,5 +1,6 @@
 package com.slfuture.carrie.base.time;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -7,7 +8,7 @@ import java.util.Calendar;
 /**
  * 日期类
  */
-public class Date implements Comparable<Date> {
+public class Date implements Comparable<Date>, Serializable {
     /**
      * 日期格式
      */

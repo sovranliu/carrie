@@ -3,6 +3,7 @@ package com.slfuture.carrie.world.cluster.core;
 import com.slfuture.carrie.base.model.Method;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ITable;
+import com.slfuture.carrie.world.IEvent;
 import com.slfuture.carrie.world.logic.Agent;
 import com.slfuture.carrie.world.relation.Condition;
 import com.slfuture.carrie.world.relation.Relation;

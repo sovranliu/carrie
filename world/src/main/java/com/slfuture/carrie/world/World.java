@@ -10,6 +10,7 @@ import com.slfuture.carrie.world.cluster.DBCluster;
 import com.slfuture.carrie.world.cluster.LocalCluster;
 import com.slfuture.carrie.world.cluster.RemoteCluster;
 import com.slfuture.carrie.world.cluster.core.ICluster;
+import com.slfuture.carrie.world.event.EventCenter;
 import com.slfuture.carrie.world.handler.ObjectHandler;
 import com.slfuture.carrie.world.handler.ProxyHandler;
 import com.slfuture.carrie.world.logic.Agent;
@@ -138,7 +139,7 @@ public class World {
      * @return 关系对象
      */
     public static <T> ICollection<T> relatives(Object self, String name, Class<T> clazz) {
-        String clusterName = clazzMap.get(self.getClass().getName());
+        String clusterName = getClusterName(self);
         if(null == clusterName) {
             return null;
         }
@@ -152,6 +153,26 @@ public class World {
         }
         Condition condition = relation.deduce(self);
         return gets(relation.cluster, condition, clazz);
+    }
+
+    /**
+     * 抛出事件
+     *
+     * @param self 自身对象
+     * @param event 事件对象
+     */
+    public static void throwEvent(Object self, IEvent event) {
+        EventCenter.throwEvent(self, event);
+    }
+
+    /**
+     * 获取实例对象的簇名
+     *
+     * @param self 对象
+     * @return 簇名
+     */
+    public static String getClusterName(Object self) {
+        return clazzMap.get(self.getClass().getName());
     }
 
     /**
@@ -217,6 +238,14 @@ public class World {
             }
             catch (ParseException e) {
                 throw new RuntimeException(e);
+            }
+        }
+        for(IConfig confSon : conf.visits("catcher/catch")) {
+            try {
+                EventCenter.createPipe(name, confSon);
+            }
+            catch (Exception ex) {
+                throw new RuntimeException(ex);
             }
         }
         return result;

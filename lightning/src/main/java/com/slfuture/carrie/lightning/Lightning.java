@@ -12,6 +12,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
 import java.util.Properties;
 import java.util.Stack;
 
@@ -73,7 +75,21 @@ public class Lightning {
      * @return 是否被拦截
      */
     public static boolean doAction(String path, HttpServletRequest request, HttpServletResponse response) throws ServletException {
-        return doAction(path, PageVisitor.build(request.getSession(), response), PageContext.build(request));
+        PageContext context = null;
+        boolean result = false;
+        try {
+            context = PageContext.build(request);
+            result = doAction(path, PageVisitor.build(request.getSession(), response), context);
+        }
+        catch(Exception ex) {
+            throw new RuntimeException(ex);
+        }
+        finally {
+            if(null != context) {
+                context.destroy();
+            }
+        }
+        return result;
     }
 
     /**

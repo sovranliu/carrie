@@ -213,14 +213,14 @@ public class Record extends MixedTable<String, Object> {
      */
     public <T> void build(T target) {
         for(ILink<String, Object> link : this) {
-            try {
-                for(Field field : target.getClass().getDeclaredFields()) {
-                    if(field.getName().equalsIgnoreCase(link.origin())) {
+            for(Field field : target.getClass().getDeclaredFields()) {
+                if(field.getName().equalsIgnoreCase(link.origin())) {
+                    try {
                         field.set(target, link.destination());
                     }
+                    catch (Exception e) { }
                 }
             }
-            catch (Exception e) { }
         }
     }
 

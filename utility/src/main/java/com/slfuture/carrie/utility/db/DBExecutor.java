@@ -2,6 +2,7 @@ package com.slfuture.carrie.utility.db;
 
 import java.sql.*;
 
+import com.slfuture.carrie.base.time.DateTime;
 import com.slfuture.carrie.base.type.Set;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ISet;
@@ -481,7 +482,20 @@ public class DBExecutor implements IDBExecutor, IModule {
                 Record record = new Record();
                 for(int j = 1; j <= columnCount; j++) {
                     try {
-                        record.put(resultSet.getMetaData().getColumnLabel(j), resultSet.getObject(j));
+                        Object object = resultSet.getObject(j);
+                        if(object instanceof java.sql.Timestamp) {
+                            object = DateTime.parse(((java.sql.Timestamp) object).getTime());
+                        }
+                        else if(object instanceof java.sql.Time) {
+                            object = DateTime.parse(((java.sql.Time) object).getTime());
+                        }
+                        else if(object instanceof java.sql.Date) {
+                            object = DateTime.parse(((java.sql.Date) object).getTime());
+                        }
+                        else if(object instanceof java.sql.Time) {
+                            object = DateTime.parse(((java.sql.Time) object).getTime());
+                        }
+                        record.put(resultSet.getMetaData().getColumnLabel(j), object);
                     }
                     catch(Exception ex) {
                         logger.error("error in record.put(resultSet.getMetaData().getColumnLabel(j), resultSet.getObject(j))", ex);

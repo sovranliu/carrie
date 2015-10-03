@@ -1,5 +1,6 @@
 package com.slfuture.carrie.base.time;
 
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -7,7 +8,7 @@ import java.util.Calendar;
 /**
  * 日期时间类
  */
-public class DateTime implements Comparable<DateTime> {
+public class DateTime implements Comparable<DateTime>, Serializable {
     /**
      * 日期时间格式
      */
@@ -216,6 +217,9 @@ public class DateTime implements Comparable<DateTime> {
      * @return 时间跨度
      */
     public Duration subtract(DateTime dateTime) {
+        if(null == dateTime) {
+            dateTime = DateTime.now();
+        }
         return new Duration(calendar.getTimeInMillis() - dateTime.calendar.getTimeInMillis());
     }
 

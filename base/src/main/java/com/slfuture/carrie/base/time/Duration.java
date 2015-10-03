@@ -1,9 +1,11 @@
 package com.slfuture.carrie.base.time;
 
+import java.io.Serializable;
+
 /**
  * 时间跨度类
  */
-public class Duration {
+public class Duration implements Serializable {
     /**
      * 一秒包含的毫秒数
      */
