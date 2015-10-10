@@ -30,6 +30,9 @@ public class ProxyHandler extends ObjectHandler {
      */
     @Override
     public <T> T convert(Agent agent, Class<T> clazz) {
+        if(null == agent) {
+            return null;
+        }
         if(IObject.class.equals(clazz)) {
             return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[]{clazz}, new ProxyHandler(agent));
         }

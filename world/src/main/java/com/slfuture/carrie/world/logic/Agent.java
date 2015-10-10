@@ -201,7 +201,11 @@ public class Agent {
         else if(cluster instanceof RemoteCluster) {
             agentType = TYPE_REMOTE;
         }
-        return new Agent(relation.cluster, agentType, cluster.find(condition));
+        Object target = cluster.find(condition);
+        if(null == target) {
+            return null;
+        }
+        return new Agent(relation.cluster, agentType, target);
     }
 
     /**

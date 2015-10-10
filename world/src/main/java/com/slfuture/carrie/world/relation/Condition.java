@@ -96,29 +96,72 @@ public class Condition extends CompareCondition<Object, Condition> implements Se
         if(null == sentence) {
             return null;
         }
-        // TODO:完善条件语句的解析
-        String[] operators = {">", "=", "<", "<=", ">=", "!="};
-        int i = Text.indexOf(sentence, operators);
-        if(-1 == i) {
-            return null;
-        }
-        boolean sentry = false;
-        for(String operator : operators) {
-            if(operator.equals(sentence.substring(i + 1, i + 2))) {
-                sentry = true;
+        Condition result = null;
+        String[] links = new String[2];
+        links[0] = grammar.and();
+        links[1] = grammar.or();
+        int start = 0;
+        int linkType = ILogicalGrammar.GRAMMAR_UNDEFINED;
+        while(true) {
+            String clause = null;
+            int i = Text.indexOf(sentence, links, start);
+            if(-1 == i) {
+                clause = sentence.substring(start);
+                start = -1;
+            }
+            else {
+                clause = sentence.substring(start, i);
+                start = sentence.indexOf(" ", i);
+            }
+            clause = clause.trim();
+            //
+            String[] operators = {">", "=", "<", "<=", ">=", "!="};
+            int j = Text.indexOf(clause, operators);
+            if(-1 == j) {
                 break;
             }
-        }
-        Condition result = new Condition();
-        if(sentry) {
-            result.target = Text.parse(sentence.substring(i + 2).trim());
-            result.compareType = sentence.substring(i, i + 2);
-            result.prepareSelf = new PropertyPrepare(sentence.substring(0, i).trim());
-        }
-        else {
-            result.target = Text.parse(sentence.substring(i + 1).trim());
-            result.compareType = sentence.substring(i, i + 1);
-            result.prepareSelf = new PropertyPrepare(sentence.substring(0, i).trim());
+            boolean sentry = false;
+            for(String operator : operators) {
+                if(operator.equals(clause.substring(j, j + 2))) {
+                    sentry = true;
+                    break;
+                }
+            }
+            Condition condition = new Condition();
+            if(sentry) {
+                condition.target = Text.parse(clause.substring(j + 2).trim());
+                condition.compareType = clause.substring(j, j + 2);
+                condition.prepareSelf = new PropertyPrepare(clause.substring(0, j).trim());
+            }
+            else {
+                condition.target = Text.parse(clause.substring(j + 1).trim());
+                condition.compareType = clause.substring(j, j + 1);
+                condition.prepareSelf = new PropertyPrepare(clause.substring(0, j).trim());
+            }
+            //
+            if(null == result) {
+                result = condition;
+            }
+            else {
+                if(ILogicalGrammar.GRAMMAR_AND == linkType) {
+                    result.put(true, condition);
+                }
+                else if(ILogicalGrammar.GRAMMAR_OR == linkType) {
+                    result.put(false, condition);
+                }
+            }
+            //
+            if(-1 == start) {
+                break;
+            }
+            else {
+                if(grammar.and().equalsIgnoreCase(sentence.substring(i).substring(0, grammar.and().length()))) {
+                    linkType = ILogicalGrammar.GRAMMAR_AND;
+                }
+                else if(grammar.or().equalsIgnoreCase(sentence.substring(i).substring(0, grammar.or().length()))) {
+                    linkType = ILogicalGrammar.GRAMMAR_OR;
+                }
+            }
         }
         return result;
     }

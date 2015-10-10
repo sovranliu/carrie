@@ -52,6 +52,9 @@ public class JSONObject extends Table<String, IJSON> implements IJSON {
      * @return JSON对象
      */
     public static JSONObject convert(String jsonText) {
+        if(null == jsonText) {
+            return null;
+        }
         return JSONObject.convert(new com.slfuture.carrie.base.json.thirdparty.JSONObject(jsonText));
     }
 

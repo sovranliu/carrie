@@ -81,7 +81,21 @@ public class Test {
         public int p2;
     }
 
+    public void dox(int x) {
+
+    }
+
     public static void main(String[] argv) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, Exception {
+        Test ttt = new Test();
+        System.out.println(int.class.equals(Integer.class));
+        for (Method method : ttt.getClass().getMethods()) {
+            Class<?>[] cz = method.getParameterTypes();
+            System.out.println(cz);
+        }
+
+
+
+
         RecordSet recordSet = new RecordSet();
         Record record = new Record();
         record.put("a", "1");

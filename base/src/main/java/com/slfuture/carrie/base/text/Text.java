@@ -288,4 +288,27 @@ public class Text {
         }
         return result;
     }
+
+    /**
+     * 两端删减指定字符
+     *
+     * @param text 被处理字符
+     * @param character 待删减字符
+     * @return 处理后的字符串
+     */
+    public static String trim(String text, String character) {
+        if(Text.isBlank(text) || Text.isBlank(character)) {
+            return text;
+        }
+        while(0 == text.indexOf(character)) {
+            text = text.substring(character.length());
+        }
+        if(0 == text.length()) {
+            return "";
+        }
+        while(text.length() - character.length() == text.lastIndexOf(character)) {
+            text = text.substring(0, text.length() - character.length());
+        }
+        return text;
+    }
 }

@@ -66,9 +66,9 @@ public class DBExecutor implements IDBExecutor, IModule {
             dataSource.setPassword(conf.getPassword());
             String url = null;
             if(DBConnectionConfig.DB_TYPE_MYSQL.equalsIgnoreCase(conf.getType())) {
-                url = "jdbc:" + conf.getType() + "://" + conf.getIp() + ":" + conf.getPort() + "/" + conf.getDbName();
+                url = "jdbc:" + conf.getType() + "://" + conf.getIp() + ":" + conf.getPort() + "/" + conf.getDbName() + "?characterEncoding=UTF-8";
                 if(conf.isAutoReconnect()) {
-                    url = url + "?autoReconnect=true";
+                    url = url + "&autoReconnect=true";
                 }
             }
             else {
@@ -227,6 +227,10 @@ public class DBExecutor implements IDBExecutor, IModule {
             statement = connection.createStatement();
             result = statement.executeUpdate(sql);
         }
+        catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException ex) {
+            logger.warn("execute DBExecutor.insert(" + sql + ") failed", ex);
+            return -2;
+        }
         catch(Exception ex) {
             logger.error("execute DBExecutor.alter(" + sql + ") failed", ex);
             return -1;
@@ -256,7 +260,7 @@ public class DBExecutor implements IDBExecutor, IModule {
      * 插入
      *
      * @param sql SQL语句
-     * @return 自增主键，未能自增主键返回0
+     * @return 自增主键，未能自增主键返回0，-1：主键冲突
      */
     @Override
     public Long insert(String sql) {
@@ -273,6 +277,10 @@ public class DBExecutor implements IDBExecutor, IModule {
                 result = resultSet.getLong(1);
                 return result;
             }
+        }
+        catch (com.mysql.jdbc.exceptions.jdbc4.MySQLIntegrityConstraintViolationException ex) {
+            logger.warn("execute DBExecutor.insert(" + sql + ") failed", ex);
+            return -2L;
         }
         catch(Exception ex) {
             logger.error("execute DBExecutor.insert(" + sql + ") failed", ex);

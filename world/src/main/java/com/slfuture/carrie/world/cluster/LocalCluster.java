@@ -59,7 +59,12 @@ public class LocalCluster extends Cluster<Object> {
     @Override
     public Object invoke(Object target, Method method, Object...args) {
         try {
-            return target.getClass().getMethod(method.name, method.parameters).invoke(target, args);
+            for(java.lang.reflect.Method targetMethod : target.getClass().getMethods()) {
+                if(method.equals(targetMethod)) {
+                    return targetMethod.invoke(target, args);
+                }
+            }
+            throw new NoSuchMethodException(method.name);
         }
         catch (Exception ex) {
             throw new RuntimeException(ex);

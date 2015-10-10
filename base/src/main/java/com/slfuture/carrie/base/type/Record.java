@@ -100,7 +100,7 @@ public class Record extends MixedTable<String, Object> {
         if(null == ret) {
             return null;
         }
-        return Date.parse((java.util.Date) ret);
+        return Date.parse((DateTime) ret);
     }
 
     /**
@@ -114,7 +114,7 @@ public class Record extends MixedTable<String, Object> {
         if(null == ret) {
             return null;
         }
-        return DateTime.parse((java.util.Date) ret);
+        return (DateTime) ret;
     }
 
     /**

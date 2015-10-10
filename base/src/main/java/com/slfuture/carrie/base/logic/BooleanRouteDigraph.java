@@ -251,7 +251,16 @@ public abstract class BooleanRouteDigraph<P, T extends BooleanRouteDigraph<P, T>
                         logicalLink.setNext(next);
                     }
                     else {
-                        throw new IllegalStateException();
+                        // throw new IllegalStateException();
+                        LogicalLink next = new LogicalLink(grammar);
+                        next.setEdge(ILogicalGrammar.GRAMMAR_AND);
+                        next.condition = trueCondition;
+                        logicalLink.setNext(next);
+                        logicalLink = next;
+                        next = new LogicalLink(grammar);
+                        next.setEdge(ILogicalGrammar.GRAMMAR_OR);
+                        next.condition = falseCondition;
+                        logicalLink.setNext(next);
                     }
                 }
             }

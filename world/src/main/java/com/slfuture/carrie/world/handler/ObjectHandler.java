@@ -119,6 +119,9 @@ public class ObjectHandler implements InvocationHandler {
      * @return 调用结果
      */
     protected Object invoke(Class<?> clazz, int invokeType, com.slfuture.carrie.base.model.Method method, Object[] args) throws Throwable {
+        if(null == agent) {
+            return null;
+        }
         if(ObjectHandler.INVOKE_TYPE_PROPERTY == invokeType) {
             return agent.property(method.name);
         }
@@ -144,6 +147,9 @@ public class ObjectHandler implements InvocationHandler {
      * @return 用户对象
      */
     public <T> T convert(Agent agent, Class<T> clazz) {
+        if(null == agent) {
+            return null;
+        }
         return (T) Proxy.newProxyInstance(clazz.getClassLoader(), new Class[] { clazz }, new ObjectHandler(agent));
     }
 

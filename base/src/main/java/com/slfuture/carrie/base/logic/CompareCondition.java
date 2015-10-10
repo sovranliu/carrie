@@ -77,7 +77,7 @@ public class CompareCondition<T, S extends CompareCondition<T, S>> extends Logic
         if(null == object) {
             return false;
         }
-        if(object.getClass().isAssignableFrom(CompareCondition.class)) {
+        if(CompareCondition.class.isAssignableFrom(object.getClass())) {
             CompareCondition<T, S> other = (CompareCondition<T, S>) object;
             if(!compareType.equals(other.compareType)) {
                 return false;
@@ -92,7 +92,25 @@ public class CompareCondition<T, S extends CompareCondition<T, S>> extends Logic
                     return false;
                 }
             }
-            return super.equals(object);
+            CompareCondition pairSelf = null;
+            CompareCondition pairOther = null;
+            pairSelf = get(true);
+            pairOther = other.get(true);
+            if((null == pairSelf) ^ (null == pairOther)) {
+                return false;
+            }
+            else if(null != pairSelf && !pairSelf.equals(pairOther) ) {
+                return false;
+            }
+            pairSelf = get(false);
+            pairOther = other.get(false);
+            if((null == pairSelf) ^ (null == pairOther)) {
+                return false;
+            }
+            else if(null != pairSelf && !pairSelf.equals(pairOther) ) {
+                return false;
+            }
+            return true;
         }
         return false;
     }
@@ -112,7 +130,25 @@ public class CompareCondition<T, S extends CompareCondition<T, S>> extends Logic
             if(!compareType.equals(other.compareType)) {
                 return false;
             }
-            return super.equals(object);
+            CompareCondition pairSelf = null;
+            CompareCondition pairOther = null;
+            pairSelf = get(true);
+            pairOther = other.get(true);
+            if((null == pairSelf) ^ (null == pairOther)) {
+                return false;
+            }
+            else if(null != pairSelf && !pairSelf.equalsIgnoreTarget(pairOther) ) {
+                return false;
+            }
+            pairSelf = get(false);
+            pairOther = other.get(false);
+            if((null == pairSelf) ^ (null == pairOther)) {
+                return false;
+            }
+            else if(null != pairSelf && !pairSelf.equalsIgnoreTarget(pairOther) ) {
+                return false;
+            }
+            return true;
         }
         return false;
     }

@@ -82,6 +82,7 @@ public class ServletFilter implements Filter {
         if(((HttpServletRequest) request).getRequestURI().equals("/")) {
             return;
         }
+        request.setCharacterEncoding("UTF-8");
         response.setCharacterEncoding("UTF-8");
         if(Lightning.doAction(((HttpServletRequest) request).getRequestURI().substring(1), (HttpServletRequest) request,  (HttpServletResponse) response)) {
             return;

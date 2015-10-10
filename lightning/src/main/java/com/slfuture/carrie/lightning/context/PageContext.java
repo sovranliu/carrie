@@ -198,8 +198,8 @@ public class PageContext {
                     fileItem.write(file);
                     result.parameters.put(fileItem.getFieldName(), file);
                 }
-                else if(null != fileItem.getString()) {
-                    result.parameters.put(fileItem.getFieldName(), fileItem.getString());
+                else if(null != fileItem.getString("UTF-8")) {
+                    result.parameters.put(fileItem.getFieldName(), fileItem.getString("UTF-8"));
                 }
             }
         }

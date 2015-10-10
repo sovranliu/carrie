@@ -18,7 +18,7 @@ public class Date implements Comparable<Date>, Serializable {
     /**
      * 日期对象
      */
-    protected Calendar calendar;
+    protected Calendar calendar = null;
 
 
     /**
@@ -117,7 +117,34 @@ public class Date implements Comparable<Date>, Serializable {
      */
     public static Date parse(int dayId) {
         Date result = new Date();
+        result.calendar = Calendar.getInstance();
         result.calendar.setTimeInMillis(dayId * Duration.DAY_MILLIS);
+        return result;
+    }
+
+    /**
+     * 解析日期ID
+     *
+     * @param millis 毫秒数
+     * @return 日期对象
+     */
+    public static Date parse(long millis) {
+        Date result = new Date();
+        result.calendar = Calendar.getInstance();
+        result.calendar.setTimeInMillis(millis);
+        return result;
+    }
+
+    /**
+     * 解析日期时间
+     *
+     * @param dateTime 日期时间
+     * @return 日期对象
+     */
+    public static Date parse(DateTime dateTime) {
+        Date result = new Date();
+        result.calendar = Calendar.getInstance();
+        result.calendar.setTimeInMillis(dateTime.toLong());
         return result;
     }
 

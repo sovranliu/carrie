@@ -113,6 +113,32 @@ public class Serial {
     }
 
     /**
+     * 获取字符串的MD5码
+     *
+     * @param string 待操作的字符串
+     * @return 字符串MD5码
+     */
+    public static String getMD5String(String string) {
+        return getMD5String(string.getBytes());
+    }
+
+    /**
+     * 获取字节数组的MD5码
+     *
+     * @param bytes 待操作的字节数组
+     * @return 字节数组MD5码
+     */
+    public static String getMD5String(byte[] bytes) {
+        if(null == getMessageDigest()) {
+            return null;
+        }
+        synchronized(Serial.class) {
+            messagedigest.update(bytes);
+            return arrayToHex(messagedigest.digest());
+        }
+    }
+
+    /**
      * 获取文件MD5码
      *
      * @param file 被操作文件
