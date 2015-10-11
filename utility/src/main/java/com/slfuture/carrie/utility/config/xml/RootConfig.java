@@ -64,8 +64,8 @@ public class RootConfig extends Config implements IRootConfig {
      * @param node XML节点
      * @return 配置节点
      */
-    public static Config convert(IXMLNode node) {
-        Config result = new Config();
+    public static RootConfig convert(IXMLNode node) {
+        RootConfig result = new RootConfig();
         for(ILink<String, String> link : node) {
             result.properties.put(link.origin(), link.destination());
         }

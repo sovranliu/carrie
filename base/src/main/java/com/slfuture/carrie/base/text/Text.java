@@ -12,8 +12,10 @@ import com.slfuture.carrie.base.time.Time;
 import com.slfuture.carrie.base.type.Set;
 import com.slfuture.carrie.base.type.core.ICollection;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.regex.Pattern;
 
 /**
@@ -88,6 +90,9 @@ public class Text {
      * @return 是否是数字
      */
     public static boolean isNumber(String string) {
+        if(null == string) {
+            return false;
+        }
         return Pattern.compile("[0-9]*").matcher(string).matches();
     }
 
@@ -124,6 +129,29 @@ public class Text {
             handle.close();
         }
         return builder.toString();
+    }
+
+    /**
+     * 从流中获取文字
+     *
+     * @param stream 流对象
+     * @return 文字
+     */
+    public static String loadStream(InputStream stream, String character) {
+        if(null == character) {
+            character = "UTF-8";
+        }
+        ByteArrayOutputStream outStream = new ByteArrayOutputStream();
+        try {
+            byte[] data = new byte[1024];
+            int count = -1;
+            while((count = stream.read(data, 0, 1024)) != -1) {
+                outStream.write(data, 0, count);
+            }
+            return new String(outStream.toByteArray(), character);
+        }
+        catch(Exception ex) {}
+        return null;
     }
 
     /**

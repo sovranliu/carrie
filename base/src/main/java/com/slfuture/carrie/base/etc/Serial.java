@@ -123,6 +123,16 @@ public class Serial {
     }
 
     /**
+     * 获取字符串的哈希散列值
+     *
+     * @param string 待操作的字符串
+     * @return 哈希散列值
+     */
+    public static String getSHA1(String string) {
+        return SHA1.hex_sha1(string);
+    }
+
+    /**
      * 获取字节数组的MD5码
      *
      * @param bytes 待操作的字节数组

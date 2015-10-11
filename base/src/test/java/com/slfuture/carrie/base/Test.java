@@ -1,5 +1,6 @@
 package com.slfuture.carrie.base;
 
+import com.slfuture.carrie.base.etc.SHA1;
 import com.slfuture.carrie.base.type.Record;
 import com.slfuture.carrie.base.type.RecordSet;
 import com.slfuture.carrie.base.type.Set;
@@ -86,6 +87,8 @@ public class Test {
     }
 
     public static void main(String[] argv) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, Exception {
+        System.out.println(SHA1.hex_sha1("asdsadasdds"));
+
         Test ttt = new Test();
         System.out.println(int.class.equals(Integer.class));
         for (Method method : ttt.getClass().getMethods()) {

@@ -27,6 +27,16 @@ public class Method {
      * 构造函数
      *
      * @param name 方法名称
+     */
+    public Method(String name) {
+        this.name = name;
+        this.parameters = new Class<?>[0];
+    }
+
+    /**
+     * 构造函数
+     *
+     * @param name 方法名称
      * @param parameters 参数类型列表
      */
     public Method(String name, Class<?>[] parameters) {

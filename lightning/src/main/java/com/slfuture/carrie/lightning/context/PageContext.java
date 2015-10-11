@@ -11,8 +11,11 @@ import org.apache.commons.fileupload.servlet.ServletFileUpload;
 import org.apache.log4j.Logger;
 import org.apache.velocity.VelocityContext;
 
+import javax.servlet.ServletInputStream;
 import javax.servlet.http.HttpServletRequest;
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.InputStreamReader;
 import java.util.List;
 import java.util.Map;
 
@@ -167,44 +170,60 @@ public class PageContext {
             value = value.replace("*", "");
             result.parameters.put(entry.getKey(), value);
         }
-        if(null == request.getContentType() || !request.getContentType().contains("multipart")) {
+        if(null == request.getContentType()) {
             return result;
         }
-        try {
-            DiskFileItemFactory factory = new DiskFileItemFactory();
-            factory.setSizeThreshold(1024 * 5);
-            ServletFileUpload upload = new ServletFileUpload(factory);
-            upload.setHeaderEncoding("UTF-8");
-            IConfig conf = Configuration.root().visit("/system/upload/size");
-            if(null == conf) {
-                upload.setFileSizeMax(1024 * 1024 * 2);
-            }
-            else {
-                upload.setFileSizeMax(Long.valueOf(conf.get(null)));
-            }
-            String directory = "/app/data/upload/";
-            conf = Configuration.root().visit("/system/upload/directory");
-            if(null != conf) {
-                directory = conf.get(null);
-            }
-            File dir = new File(directory);
-            if(!dir.exists()) {
-                dir.mkdirs();
-            }
-            List<FileItem> fileList = upload.parseRequest(request);
-            for(FileItem fileItem : fileList) {
-                if(null != fileItem.getName()) {
-                    File file = new File(directory + Serial.makeLoopLong() + "." + fileItem.getName());
-                    fileItem.write(file);
-                    result.parameters.put(fileItem.getFieldName(), file);
+        else if(request.getContentType().contains("text/plain")) {
+            try {
+                BufferedReader bufferedReader = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream(), "UTF-8"));
+                StringBuilder builder = new StringBuilder();
+                String line = null;
+                while ((line = bufferedReader.readLine()) != null) {
+                    builder.append(line);
                 }
-                else if(null != fileItem.getString("UTF-8")) {
-                    result.parameters.put(fileItem.getFieldName(), fileItem.getString("UTF-8"));
-                }
+                result.parameters.put("", builder.toString());
+            }
+            catch (Exception ex) {
+                logger.error("fetch plain text failed", ex);
             }
         }
-        catch(Exception ex) {
-            logger.error("fetch file from request failed", ex);
+        else if(request.getContentType().contains("multipart")) {
+            try {
+                DiskFileItemFactory factory = new DiskFileItemFactory();
+                factory.setSizeThreshold(1024 * 5);
+                ServletFileUpload upload = new ServletFileUpload(factory);
+                upload.setHeaderEncoding("UTF-8");
+                IConfig conf = Configuration.root().visit("/system/upload/size");
+                if(null == conf) {
+                    upload.setFileSizeMax(1024 * 1024 * 2);
+                }
+                else {
+                    upload.setFileSizeMax(Long.valueOf(conf.get(null)));
+                }
+                String directory = "/app/data/upload/";
+                conf = Configuration.root().visit("/system/upload/directory");
+                if(null != conf) {
+                    directory = conf.get(null);
+                }
+                File dir = new File(directory);
+                if(!dir.exists()) {
+                    dir.mkdirs();
+                }
+                List<FileItem> fileList = upload.parseRequest(request);
+                for(FileItem fileItem : fileList) {
+                    if(null != fileItem.getName()) {
+                        File file = new File(directory + Serial.makeLoopLong() + "." + fileItem.getName());
+                        fileItem.write(file);
+                        result.parameters.put(fileItem.getFieldName(), file);
+                    }
+                    else if(null != fileItem.getString("UTF-8")) {
+                        result.parameters.put(fileItem.getFieldName(), fileItem.getString("UTF-8"));
+                    }
+                }
+            }
+            catch(Exception ex) {
+                logger.error("fetch file from request failed", ex);
+            }
         }
         return result;
     }

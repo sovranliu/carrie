@@ -79,7 +79,7 @@ public class Lightning {
         boolean result = false;
         try {
             context = PageContext.build(request);
-            result = doAction(path, PageVisitor.build(request.getSession(), response), context);
+            result = doAction(path, PageVisitor.build(request, request.getSession(), response), context);
         }
         catch(Exception ex) {
             throw new RuntimeException(ex);

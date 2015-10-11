@@ -93,6 +93,9 @@ public class Action implements IModule {
         if(result.endsWith(".json")) {
             visitor.response.setContentType("application/json");
         }
+        if(result.endsWith(".xml")) {
+            visitor.response.setContentType("application/xml");
+        }
         else if(result.endsWith(".html")) {
             visitor.response.setContentType("text/html");
         }

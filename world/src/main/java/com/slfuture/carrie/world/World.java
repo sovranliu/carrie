@@ -78,6 +78,9 @@ public class World {
             handler = new ObjectHandler();
         }
         handler.agent = getCluster(clusterName).findAgent(condition);
+        if(null == handler.agent) {
+            return null;
+        }
         return (T) (Proxy.newProxyInstance(clazz.getClassLoader(), new Class[] {clazz}, handler));
     }
 

@@ -4,10 +4,13 @@ import com.slfuture.carrie.base.interaction.core.IWritable;
 import com.slfuture.carrie.base.type.Table;
 
 import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.UnsupportedEncodingException;
+import java.net.InetAddress;
 import java.net.URLEncoder;
+import java.net.UnknownHostException;
 
 /**
  * 页面访问者
@@ -25,6 +28,10 @@ public class PageVisitor implements IWritable<String> {
      * 上下文
      */
     public Table<String, Object> context = null;
+    /**
+     * IP地址
+     */
+    public String ip = null;
 
 
     /**
@@ -91,15 +98,50 @@ public class PageVisitor implements IWritable<String> {
     /**
      * 构建页面访问者对象
      *
+     * @param request 请求
      * @param session 会话
      * @param response 回覆
      * @return 页面访问者
      */
-    public static PageVisitor build(HttpSession session, HttpServletResponse response) {
+    public static PageVisitor build(HttpServletRequest request, HttpSession session, HttpServletResponse response) {
         PageVisitor result = new PageVisitor();
         result.session = session;
         result.response = response;
         result.context = new Table<String, Object>();
+        result.ip = fetchIP(request);
         return result;
+    }
+
+    /**
+     * 从请求中抽取IP
+     *
+     * @param request 请求
+     * @return 真实IP
+     */
+    public static String fetchIP(HttpServletRequest request) {
+        String ipAddress = request.getHeader("x-forwarded-for");
+        if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("Proxy-Client-IP");
+        }
+        if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getHeader("WL-Proxy-Client-IP");
+        }
+        if(ipAddress == null || ipAddress.length() == 0 || "unknown".equalsIgnoreCase(ipAddress)) {
+            ipAddress = request.getRemoteAddr();
+            if(ipAddress.equals("127.0.0.1") || ipAddress.equals("0:0:0:0:0:0:0:1")) {
+                InetAddress inet = null;
+                try {
+                    inet = InetAddress.getLocalHost();
+                }
+                catch (UnknownHostException e) { }
+                ipAddress= inet.getHostAddress();
+            }
+        }
+        if(ipAddress != null && ipAddress.length() > 15) {
+            if(ipAddress.indexOf(",") > 0){
+                ipAddress = ipAddress.substring(0,ipAddress.indexOf(","));
+            }
+        }
+        return ipAddress;
     }
 }
