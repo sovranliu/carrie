@@ -61,7 +61,11 @@ public abstract class Cluster<T> extends Table<String, Relation> implements IClu
      */
     @Override
     public Agent findAgent(Condition condition) {
-        return new Agent(this, this.find(condition));
+        Object object = this.find(condition);
+        if(null == object) {
+            return null;
+        }
+        return new Agent(this, object);
     }
 
     /**

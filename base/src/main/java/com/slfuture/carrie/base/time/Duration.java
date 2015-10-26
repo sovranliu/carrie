@@ -29,7 +29,7 @@ public class Duration implements Serializable {
     /**
      * 一小时包含的毫秒数
      */
-    public final static long HOUR_MILLIS = HOUR_SECONDS * HOUR_MINUTES;
+    public final static long HOUR_MILLIS = MINUTE_MILLIS * HOUR_MINUTES;
     /**
      * 一天包含的小时数
      */

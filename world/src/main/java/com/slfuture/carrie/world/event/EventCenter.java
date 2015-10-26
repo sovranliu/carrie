@@ -48,6 +48,6 @@ public class EventCenter {
             pool = new EventPool();
             pools.put(key, pool);
         }
-        pool.createPipe(catcher, conf);
+        pool.createPipe(catcher, conf.getString("mode"), conf);
     }
 }

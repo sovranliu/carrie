@@ -15,6 +15,10 @@ import java.lang.reflect.Proxy;
  */
 public class ObjectHandler implements InvocationHandler {
     /**
+     * 簇名
+     */
+    public final static String CLUSTER_NAME = "cluster";
+    /**
      * 调用类型
      */
     public final static int INVOKE_TYPE_UNKNOWEN = 0;
@@ -84,6 +88,9 @@ public class ObjectHandler implements InvocationHandler {
      */
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
+        if(CLUSTER_NAME.equals(method.getName())) {
+            return invoke(null, ObjectHandler.INVOKE_TYPE_UNKNOWEN, new com.slfuture.carrie.base.model.Method(CLUSTER_NAME), null);
+        }
         Property property = method.getAnnotation(Property.class);
         if(null != property) {
             String propertyName = null;
@@ -122,7 +129,10 @@ public class ObjectHandler implements InvocationHandler {
         if(null == agent) {
             return null;
         }
-        if(ObjectHandler.INVOKE_TYPE_PROPERTY == invokeType) {
+        if(ObjectHandler.INVOKE_TYPE_UNKNOWEN == invokeType && CLUSTER_NAME.equals(method.name)) {
+            return agent.clusterName;
+        }
+        else if(ObjectHandler.INVOKE_TYPE_PROPERTY == invokeType) {
             return agent.property(method.name);
         }
         else if(ObjectHandler.INVOKE_TYPE_RELATIVE == invokeType) {

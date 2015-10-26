@@ -5,6 +5,7 @@ import com.slfuture.carrie.base.type.Set;
 import com.slfuture.carrie.base.type.StringMixedMapping;
 import com.slfuture.carrie.base.type.Table;
 import com.slfuture.carrie.base.type.core.ICollection;
+import com.slfuture.carrie.base.type.core.ILink;
 import com.slfuture.carrie.base.type.core.ISet;
 import com.slfuture.carrie.base.type.core.ITable;
 import com.slfuture.carrie.utility.config.core.IConfig;
@@ -131,6 +132,13 @@ public class Config extends StringMixedMapping<String> implements IConfig {
     public ICollection<IConfig> visits(String path) {
         if(null == path || path.equals("")) {
             return new Set<IConfig>(this);
+        }
+        else if(CONFIG_NAME_WILDCARD.equals(path)) {
+            Set<IConfig> result = new Set<IConfig>();
+            for(ILink<String, ISet<IConfig>> link : children) {
+                result.add(link.destination());
+            }
+            return result;
         }
         if(path.startsWith(CONFIG_PATH_SEPARATOR)) {
             IConfig forefather = this;

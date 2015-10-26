@@ -72,7 +72,10 @@ public class Method {
      * @return 是否相等
      */
     public static boolean classEquals(Class<?> self, Class<?> other) {
-        if(byte.class.equals(self) || Byte.class.equals(self)) {
+        if(Object.class.equals(self) || Object.class.equals(other)) {
+            return true;
+        }
+        else if(byte.class.equals(self) || Byte.class.equals(self)) {
             if(byte.class.equals(other) || Byte.class.equals(other)) {
                 return true;
             }

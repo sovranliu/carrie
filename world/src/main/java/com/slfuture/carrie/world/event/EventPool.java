@@ -2,6 +2,7 @@ package com.slfuture.carrie.world.event;
 
 import com.slfuture.carrie.utility.config.core.IConfig;
 import com.slfuture.carrie.world.IEvent;
+import org.apache.log4j.Logger;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -9,6 +10,10 @@ import java.util.concurrent.ConcurrentLinkedQueue;
  * 事件池
  */
 public class EventPool {
+    /**
+     * 日志对象
+     */
+    public static Logger logger = Logger.getLogger(EventPool.class);
     /**
      * 事件管道集合
      */
@@ -23,7 +28,12 @@ public class EventPool {
      */
     public void throwEvent(Object self, IEvent event) {
         for(EventPipe pipe : pipes) {
-            pipe.throwEvent(self, event);
+            try {
+                pipe.throwEvent(self, event);
+            }
+            catch (Exception ex) {
+                logger.error("call EventPipe.throwEvent(?, ?) failed\nself = " + self + "\nevent =" + event, ex);
+            }
         }
     }
 
@@ -31,10 +41,11 @@ public class EventPool {
      * 构建管道
      *
      * @param catcher 捕捉者簇名
+     * @param mode 模式
      * @param conf 配置对象
      */
-    public void createPipe(String catcher, IConfig conf) {
-        EventPipe pipe = EventPipe.build(catcher, conf);
+    public void createPipe(String catcher, String mode, IConfig conf) {
+        EventPipe pipe = EventPipe.build(catcher, mode, conf);
         if(null == pipe) {
             return;
         }

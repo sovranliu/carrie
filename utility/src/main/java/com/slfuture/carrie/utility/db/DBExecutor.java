@@ -117,8 +117,26 @@ public class DBExecutor implements IDBExecutor, IModule {
             int columnCount = resultSet.getMetaData().getColumnCount();
             if(resultSet.next()) {
                 result = new Record();
-                for(int i = 1; i <= columnCount; i++) {
-                    result.put(resultSet.getMetaData().getColumnLabel(i), resultSet.getObject(i));
+                for(int j = 1; j <= columnCount; j++) {
+                    try {
+                        Object object = resultSet.getObject(j);
+                        if(object instanceof java.sql.Timestamp) {
+                            object = DateTime.parse(((java.sql.Timestamp) object).getTime());
+                        }
+                        else if(object instanceof java.sql.Time) {
+                            object = DateTime.parse(((java.sql.Time) object).getTime());
+                        }
+                        else if(object instanceof java.sql.Date) {
+                            object = DateTime.parse(((java.sql.Date) object).getTime());
+                        }
+                        else if(object instanceof java.sql.Time) {
+                            object = DateTime.parse(((java.sql.Time) object).getTime());
+                        }
+                        result.put(resultSet.getMetaData().getColumnLabel(j), object);
+                    }
+                    catch(Exception ex) {
+                        logger.error("error in record.put(resultSet.getMetaData().getColumnLabel(j), resultSet.getObject(j))", ex);
+                    }
                 }
                 return result;
             }

@@ -34,7 +34,16 @@ public class Text {
      * @return 如果输入字符串为空或者空内容则返回true，否则返回false
      */
     public static boolean isBlank(String string) {
-        return (null == string) ? true : (string.equals(""));
+        int strLen;
+        if (string == null || (strLen = string.length()) == 0) {
+            return true;
+        }
+        for (int i = 0; i < strLen; i++) {
+            if ((Character.isWhitespace(string.charAt(i)) == false)) {
+                return false;
+            }
+        }
+        return true;
     }
 
     /**
@@ -197,6 +206,13 @@ public class Text {
                 return Integer.parseInt(text);
             }
             else {
+                text = text.trim();
+                if(text.startsWith("'") && text.endsWith("'")) {
+                    return Text.substring(text, "'", "'");
+                }
+                else if(text.startsWith("\"") && text.endsWith("\"")) {
+                    return Text.substring(text, "\"", "\"");
+                }
                 return text;
             }
         }

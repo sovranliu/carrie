@@ -65,16 +65,6 @@ public class Action implements IModule {
      * @return 下一步动作
      */
     public String invoke(PageVisitor visitor, PageContext context) throws Exception {
-        return (String) script.invokeFunction(function, visitor, context);
-    }
-
-    /**
-     * 执行动作
-     *
-     * @param visitor 访问者
-     * @param context 上下文
-     */
-    public void run(PageVisitor visitor, PageContext context) throws Exception {
         String result = null;
         if(null != imports) {
             for(String actionName : imports) {
@@ -85,8 +75,19 @@ public class Action implements IModule {
             }
         }
         if(null == result) {
-            result = invoke(visitor, context);
+            result = (String) script.invokeFunction(function, visitor, context);
         }
+        return result;
+    }
+
+    /**
+     * 执行动作
+     *
+     * @param visitor 访问者
+     * @param context 上下文
+     */
+    public void run(PageVisitor visitor, PageContext context) throws Exception {
+        String result = invoke(visitor, context);
         if(null == result) {
             return;
         }
@@ -99,11 +100,18 @@ public class Action implements IModule {
         else if(result.endsWith(".html")) {
             visitor.response.setContentType("text/html");
         }
+        else if(result.endsWith(".txt")) {
+            visitor.response.setContentType("text/plain");
+        }
         else if(result.endsWith(".js")) {
             visitor.response.setContentType("application/x-javascript");
         }
         else if(result.endsWith(".action")) {
             Lightning.doAction(result.substring(0, result.length() - ".action".length()), visitor, context);
+            return;
+        }
+        else if(result.endsWith(".code")) {
+            visitor.response.sendError(Integer.valueOf(result.replace(".code", "")));
             return;
         }
         // 渲染指定模板

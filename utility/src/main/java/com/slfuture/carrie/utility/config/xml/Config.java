@@ -9,6 +9,10 @@ public class Config extends com.slfuture.carrie.utility.config.Config {
     /**
      * 值
      */
+    public String name = null;
+    /**
+     * 值
+     */
     public String value = null;
 
 
@@ -22,6 +26,9 @@ public class Config extends com.slfuture.carrie.utility.config.Config {
     public String get(String name) {
         if(Text.isBlank(name)) {
             return value;
+        }
+        else if(CONFIG_PATH_SEPARATOR.equals(name)) {
+            return this.name;
         }
         return super.get(name);
     }

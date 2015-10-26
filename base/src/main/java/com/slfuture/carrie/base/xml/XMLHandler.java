@@ -61,7 +61,12 @@ class XMLHandler extends DefaultHandler {
     @Override
     public void characters(char[] ch, int start, int length) throws SAXException {
         XMLNode son = stack.peek();
-        son.setValue(String.copyValueOf(ch, start, length));
+        if(null == son.getValue()) {
+            son.setValue(String.copyValueOf(ch, start, length));
+        }
+        else {
+            son.setValue(son.getValue() + String.copyValueOf(ch, start, length));
+        }
     }
 
     /**

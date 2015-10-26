@@ -1,10 +1,14 @@
 package com.slfuture.carrie.base;
 
 import com.slfuture.carrie.base.etc.SHA1;
+import com.slfuture.carrie.base.etc.Serial;
 import com.slfuture.carrie.base.type.Record;
 import com.slfuture.carrie.base.type.RecordSet;
 import com.slfuture.carrie.base.type.Set;
+import com.slfuture.carrie.base.xml.XMLDocument;
+import com.slfuture.carrie.base.xml.XMLNode;
 
+import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -87,6 +91,15 @@ public class Test {
     }
 
     public static void main(String[] argv) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException, Exception {
+        String sssssss = Serial.getSHA1("jsapi_ticket=kgt8ON7yVITDhtdwci0qefF4d5Ft90DDwAlBCgU8_hvGXkJIfchSyjgKHr4sST_hK9sV7UJ8Ry2o3YJWs0vYYg&noncestr=CURPOGHUVXWMLDUD1ZA3PUNSFGTYK6YA&timestamp=1445361886517&url=http://www.angeldinner.com/mp/user/stage");
+
+
+        // XMLNode node = XMLNode.convert("<a><![CDATA[ sb ]]></a>");
+        XMLDocument document = new XMLDocument();
+        document.open(new File("\\F:\\slfuture\\technical\\industry\\angel\\server\\angel-mp\\src\\main\\resources\\config\\templates.xml"));
+        document = new XMLDocument();
+        document.open(new File("\\F:\\slfuture\\technical\\industry\\angel\\server\\angel-mp\\src\\main\\resources\\config\\world.xml"));
+
         System.out.println(SHA1.hex_sha1("asdsadasdds"));
 
         Test ttt = new Test();

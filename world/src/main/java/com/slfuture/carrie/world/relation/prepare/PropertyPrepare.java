@@ -50,7 +50,7 @@ public class PropertyPrepare implements IPrepare {
             Agent agent = (Agent) origin;
             return agent.property(property);
         }
-        else if(origin.getClass().isAssignableFrom(IObject.class)) {
+        else if(IObject.class.isAssignableFrom(origin.getClass())) {
             IObject object = (IObject) origin;
             return object.property(property);
         }

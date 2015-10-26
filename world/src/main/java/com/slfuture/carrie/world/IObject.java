@@ -9,6 +9,11 @@ import com.slfuture.carrie.world.annotation.Relative;
  */
 public interface IObject {
     /**
+     * 获取簇名称
+     */
+    public String cluster();
+
+    /**
      * 获取属性
      *
      * @return 属性值

@@ -190,7 +190,7 @@ public class Path implements Cloneable {
      * @return 字符串
      */
     public String toString() {
-        return toString(File.separator);
+        return File.separator + "" + toString(File.separator);
     }
 
     /**

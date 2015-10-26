@@ -173,7 +173,7 @@ public class PageContext {
         if(null == request.getContentType()) {
             return result;
         }
-        else if(request.getContentType().contains("text/plain")) {
+        else if(request.getContentType().startsWith("text/")) {
             try {
                 BufferedReader bufferedReader = new BufferedReader(new InputStreamReader((ServletInputStream) request.getInputStream(), "UTF-8"));
                 StringBuilder builder = new StringBuilder();

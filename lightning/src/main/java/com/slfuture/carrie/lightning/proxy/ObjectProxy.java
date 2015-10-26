@@ -65,7 +65,10 @@ public class ObjectProxy {
         Class<?>[] parameterTypes = new Class<?>[parameters.length];
         int i = 0;
         for(Object parameter : parameters) {
-            if(Double.class.equals(parameter.getClass())) {
+            if(null == parameter) {
+                parameterTypes[i++] = Object.class;
+            }
+            else if(Double.class.equals(parameter.getClass())) {
                 double doubleValue = (Double) parameter;
                 if(doubleValue % 1 > 0) {
                     parameterTypes[i++] = parameter.getClass();

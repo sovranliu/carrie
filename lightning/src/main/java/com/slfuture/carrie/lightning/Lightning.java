@@ -5,6 +5,7 @@ import com.slfuture.carrie.base.model.Path;
 import com.slfuture.carrie.base.type.Table;
 import com.slfuture.carrie.lightning.context.PageVisitor;
 import com.slfuture.carrie.utility.config.Configuration;
+import com.slfuture.carrie.world.World;
 import org.apache.log4j.Logger;
 import org.apache.velocity.app.Velocity;
 
@@ -108,7 +109,11 @@ public class Lightning {
                 if(null == (redirect = redirect.roll(Path.PATH_PARENT, "/"))) {
                     return false;
                 }
-                action = Lightning.actions.get(redirect.toString() + "/" + Action.ACTION_ROUTE);
+                String directory = redirect.toString("/") + "/";
+                if(directory.startsWith("/")) {
+                    directory = directory.substring(1);
+                }
+                action = Lightning.actions.get(directory + Action.ACTION_ROUTE);
                 if(null != action) {
                     break;
                 }
@@ -208,6 +213,6 @@ public class Lightning {
             return false;
         }
         // 初始化世界系统
-        return true;
+        return World.initialize();
     }
 }

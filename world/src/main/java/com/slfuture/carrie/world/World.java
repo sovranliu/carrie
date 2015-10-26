@@ -47,6 +47,18 @@ public class World {
 
 
     /**
+     * 系统初始化
+     *
+     * @return 执行结果
+     */
+    public static boolean initialize() {
+        for(IConfig conf : Configuration.root().visits("/world/clusters/*")) {
+            getCluster(conf.get(IConfig.CONFIG_PATH_SEPARATOR));
+        }
+        return true;
+    }
+
+    /**
      * 获取指定条件的单个对象
      *
      * @param clusterName 簇名称
@@ -117,7 +129,7 @@ public class World {
      * @return 关系对象
      */
     public static <T> T relative(Object self, String name, Class<T> clazz) {
-        String clusterName = clazzMap.get(self.getClass().getName());
+        String clusterName = getClusterName(self);
         if(null == clusterName) {
             return null;
         }
@@ -175,7 +187,15 @@ public class World {
      * @return 簇名
      */
     public static String getClusterName(Object self) {
-        return clazzMap.get(self.getClass().getName());
+        if(self.getClass().equals(Agent.class)) {
+            return ((Agent) self).clusterName;
+        }
+        else if(self.getClass().equals(IObject.class) || IObject.class.isAssignableFrom(self.getClass())) {
+            return ((IObject) self).cluster();
+        }
+        else {
+            return clazzMap.get(self.getClass().getName());
+        }
     }
 
     /**

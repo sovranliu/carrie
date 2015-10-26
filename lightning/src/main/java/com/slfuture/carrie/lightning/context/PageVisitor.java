@@ -72,17 +72,27 @@ public class PageVisitor implements IWritable<String> {
      * @param expiry 周期
      */
     public void setCookie(String key, String value, int expiry) {
-        try {
-            value = URLEncoder.encode(value, "utf-8");
+        if(null == value) {
+            Cookie cookie = new Cookie(key, null);
+            cookie.setMaxAge(0);
+            response.addCookie(cookie);
         }
-        catch (UnsupportedEncodingException e) {
-            throw new RuntimeException("setCookie(" + key + "," + value + ") failed", e);
+        else {
+            try {
+                value = URLEncoder.encode(value, "utf-8");
+            }
+            catch (UnsupportedEncodingException e) {
+                throw new RuntimeException("setCookie(" + key + "," + value + ") failed", e);
+            }
+            Cookie cookie = new Cookie(key, value);
+            if(0 == expiry) {
+                cookie.setMaxAge(60 * 60 * 24 * 7);
+            }
+            else {
+                cookie.setMaxAge(expiry);
+            }
+            response.addCookie(cookie);
         }
-        Cookie cookie = new Cookie(key, value);
-        if(0 != expiry) {
-            cookie.setMaxAge(expiry);
-        }
-        response.addCookie(cookie);
     }
 
     /**

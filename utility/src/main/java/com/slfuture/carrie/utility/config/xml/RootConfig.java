@@ -69,6 +69,7 @@ public class RootConfig extends Config implements IRootConfig {
         for(ILink<String, String> link : node) {
             result.properties.put(link.origin(), link.destination());
         }
+        result.name = node.getName();
         result.value = node.getValue();
         for(IXMLNode child : node.children()) {
             ISet<IConfig> configSet = result.children.get(child.getName());

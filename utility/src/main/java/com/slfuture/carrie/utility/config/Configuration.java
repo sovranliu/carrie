@@ -62,7 +62,7 @@ public class Configuration {
             try {
                 IRootConfig conf = (IRootConfig) Class.forName(node.get("class")).newInstance();
                 if(!conf.load(Configuration.path.roll(Path.PATH_PARENT).roll(node.get("uri").replace("/", File.separator)).toString())) {
-                    logger.error("root config find failed:\n" + node.toString());
+                    logger.error("root config find failed:\n" + node.toString() + "\n" + Configuration.path + "\n" + Configuration.path.roll(Path.PATH_PARENT).roll(node.get("uri").replace("/", File.separator)).toString());
                     continue;
                 }
                 if(null == root) {
