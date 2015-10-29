@@ -292,6 +292,7 @@ public class DateTime implements Comparable<DateTime>, Serializable {
      */
     @Override
     public int compareTo(DateTime o) {
-        return (int) (calendar.getTimeInMillis() - o.calendar.getTimeInMillis());
+        long grap = (calendar.getTimeInMillis() - o.calendar.getTimeInMillis()) / 1000;
+        return (int) grap;
     }
 }
