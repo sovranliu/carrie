@@ -197,7 +197,22 @@ public class Record extends MixedTable<String, Object> {
             try {
                 for(Field field : clazz.getFields()) {
                     if(field.getName().equalsIgnoreCase(link.origin())) {
-                        field.set(result, link.destination());
+                        if(field.getType().equals(boolean.class) || field.getType().equals(Boolean.class)) {
+                            if(null == link.destination()) {
+                                field.set(result, null);
+                            }
+                            else {
+                                if("0".equals(String.valueOf(link.destination())) || "false".equalsIgnoreCase(String.valueOf(link.destination()))) {
+                                    field.set(result, false);
+                                }
+                                else {
+                                    field.set(result, true);
+                                }
+                            }
+                        }
+                        else {
+                            field.set(result, link.destination());
+                        }
                     }
                 }
             }

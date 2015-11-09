@@ -104,7 +104,7 @@ public class PropertyPrepare implements IPrepare {
             return null == prepare.property;
         }
         else {
-            return property.equals(prepare.property);
+            return property.equalsIgnoreCase(prepare.property);
         }
     }
 }

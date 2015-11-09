@@ -80,6 +80,7 @@ public class ServletFilter implements Filter {
     @Override
     public void doFilter(ServletRequest request, ServletResponse response, FilterChain chain) throws IOException, ServletException {
         if(((HttpServletRequest) request).getRequestURI().equals("/")) {
+            chain.doFilter(request, response);
             return;
         }
         request.setCharacterEncoding("UTF-8");
