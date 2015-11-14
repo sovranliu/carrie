@@ -66,6 +66,14 @@ public class Duration implements Serializable {
      * 一周包含的毫秒数
      */
     public final static long WEEK_MILLIS = DAY_MILLIS * WEEK_DAYS;
+    /**
+     * 一年包含的天数
+     */
+    public final static int YEAR_DAYS = 365;
+    /**
+     * 一年包含的毫秒数
+     */
+    public final static long YEAR_MILLIS = DAY_MILLIS * YEAR_DAYS;
 
 
     /**
@@ -126,6 +134,15 @@ public class Duration implements Serializable {
      */
     public static Duration createWeeks(int weeks) {
         return new Duration(Duration.WEEK_MILLIS * weeks);
+    }
+
+    /**
+     * 获取星期跨度
+     *
+     * @return 星期跨度
+     */
+    public int years() {
+        return (int)(millis / Duration.YEAR_MILLIS);
     }
 
     /**

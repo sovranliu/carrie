@@ -202,6 +202,16 @@ public class Date implements Comparable<Date>, Serializable {
     }
 
     /**
+     * 转为字符串
+     *
+     * @param format 格式
+     * @return 字符串
+     */
+    public String toString(String format) {
+        return (new SimpleDateFormat(format)).format(calendar.getTime());
+    }
+
+    /**
      * Compares this object with the specified object for order.  Returns a
      * negative integer, zero, or a positive integer as this object is less
      * than, equal to, or greater than the specified object.

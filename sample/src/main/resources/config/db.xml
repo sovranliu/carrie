@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <db>
-    <connection name="Demo">
-        <db type="mysql" ip="127.0.0.1" port="3306" name="Demo" />
-        <user name="user" password="password" />
-        <config autoreconnect="true" />
-    </connection>
+    <sample>
+        <db type="mysql" ip="127.0.0.1" port="3306" name="sample" />
+        <user name="root" password="123456" />
+        <config autoreconnect="true" initialpoolsize="2" maxPoolSize="3" minPoolSize="1" maxStatements="10" maxIdleTime="10000" />
+    </sample>
 </db>

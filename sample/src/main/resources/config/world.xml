@@ -1,36 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <world>
 	<clusters>
-		<cluster id="studentId" name="Student" table="Demo.DM_Student">
-			<methods>
-				<method name="query" type="ALTER" sql="UPDATE DM_Student SET Status = 0 WHERE Type = {0}" />
-				<method name="cancel" type="LOAD" sql="UPDATE DM_Student SET Status = 0 WHERE #if {1} > 0 #then ID = {0} AND #end Version = {Version}" />
-				<method name="approval" type="SP" sp="Demo.SP_Approval({0}, {1})" />
-			</methods>
-			<relations>
-				<relation name="classroom" target="Classroom" mode="1">
-					<condition category="relative" type="EQUAL" self-field="classroomId" other-field="id" />
-				</relation>
-			</relations>
-		</cluster>
-		<cluster name="Classroom" class="com.slfuture.demo.Classroom">
-			<relations>
-				<relation name="students" target="Student" mode="0-N">
-					<condition category="relative" type="EQUAL" self-field="id" other-field="classroomId" />
-				</relation>
-				<relation origin="teacher" target="Teacher" mode="1">
-					<condition category="relative" type="EQUAL" self-field="id" other-field="classroomId" />
-				</relation>
-			</relations>
-		</cluster>
-		<cluster name="Teacher" class="com.slfuture.demo.Teacher">
-			<relations>
-				<relation name="classroom" target="Classroom" mode="0-1">
-					<condition category="prerequisite" type="EQUAL" self-field="classroomId" value="(int)0" />
-					<condition link="and" category="relative" type="EQUAL" self-field="classroomId" other-field="id" />
-					<condition category="postrequisite" type="EQUAL" self-field="status" value="(int)1" />
-				</relation>
-			</relations>
-		</cluster>
 	</clusters>
 </world>

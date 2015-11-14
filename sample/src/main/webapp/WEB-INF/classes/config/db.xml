@@ -1,8 +1,0 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<db>
-    <connection name="Demo">
-        <db type="mysql" ip="127.0.0.1" port="3306" name="Demo" />
-        <user name="user" password="password" />
-        <config autoreconnect="true" />
-    </connection>
-</db>

@@ -1,8 +1,10 @@
 package com.slfuture.carrie.lightning;
 
+import com.slfuture.carrie.base.type.safe.Table;
+import com.slfuture.carrie.lightning.action.Action;
+import com.slfuture.carrie.lightning.action.JavaScriptAction;
 import com.slfuture.carrie.lightning.context.PageContext;
 import com.slfuture.carrie.base.model.Path;
-import com.slfuture.carrie.base.type.Table;
 import com.slfuture.carrie.lightning.context.PageVisitor;
 import com.slfuture.carrie.utility.config.Configuration;
 import com.slfuture.carrie.world.World;
@@ -13,8 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.InputStream;
 import java.util.Properties;
 import java.util.Stack;
 
@@ -182,7 +182,7 @@ public class Lightning {
                 if(file.getName().endsWith(".action")) {
                     path = path.substring(0, path.length() - ".action".length());
                     // 初始化Action
-                    Action action = new Action();
+                    Action action = new JavaScriptAction();
                     action.uri = new Path(path, "/");
                     action.file = file;
                     if(!action.initialize()) {

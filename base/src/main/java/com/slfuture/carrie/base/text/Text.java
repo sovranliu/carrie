@@ -355,4 +355,30 @@ public class Text {
         }
         return text;
     }
+
+    /**
+     * 两端删减空字符
+     *
+     * @param text 被处理字符
+     * @return 处理后的字符串
+     */
+    public static String trim(String text) {
+        while(text.length() > 0) {
+            String character = text.substring(0, 1);
+            if(" ".equals(character) || "\r".equals(character) || "\n".equals(character) || "\t".equals(character)) {
+                text = text.substring(1);
+                continue;
+            }
+            break;
+        }
+        while(text.length() > 0) {
+            String character = text.substring(text.length() - 1);
+            if(" ".equals(character) || "\r".equals(character) || "\n".equals(character) || "\t".equals(character)) {
+                text = text.substring(0, text.length() - 1);
+                continue;
+            }
+            break;
+        }
+        return text;
+    }
 }
