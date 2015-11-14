@@ -92,7 +92,23 @@ public class ProxyHandler extends ObjectHandler {
         }
         com.slfuture.carrie.world.annotation.Method methodAnnotation = method.getAnnotation(com.slfuture.carrie.world.annotation.Method.class);
         if(null != methodAnnotation) {
-            com.slfuture.carrie.base.model.Method methodModel = (com.slfuture.carrie.base.model.Method) (args[0]);
+            com.slfuture.carrie.base.model.Method methodModel = null;
+            if(args[0] instanceof String) {
+                methodModel = new com.slfuture.carrie.base.model.Method();
+                methodModel.name = (String) args[0];
+                methodModel.parameters = new Class<?>[args.length - 1];
+                for(int i = 1; i < args.length; i++) {
+                    if(null == args[i]) {
+                        methodModel.parameters[i - 1] = Object.class;
+                    }
+                    else {
+                        methodModel.parameters[i - 1] = args[i].getClass();
+                    }
+                }
+            }
+            else if(args[0] instanceof com.slfuture.carrie.base.model.Method) {
+                methodModel = (com.slfuture.carrie.base.model.Method) (args[0]);
+            }
             return super.invoke(null, ObjectHandler.INVOKE_TYPE_METHOD, methodModel, (Object[]) (args[1]));
         }
         Relative relationdAnnotation = method.getAnnotation(Relative.class);

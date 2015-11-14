@@ -32,6 +32,16 @@ public interface IObject {
     public Object invoke(com.slfuture.carrie.base.model.Method method, Object... args);
 
     /**
+     * 调用方法
+     *
+     * @param methodName 方法名称
+     * @param args 参数列表
+     * @return 方法值
+     */
+    @Method
+    public Object invoke(String methodName, Object... args);
+
+    /**
      * 获取关系对象
      *
      * @param name 关系名称
