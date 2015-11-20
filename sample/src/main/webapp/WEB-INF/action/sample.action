@@ -1,0 +1,2 @@
+#include<com.slfuture.carrie.sample.action.ajax.SampleAjaxAction.java>
+return "sample.html";

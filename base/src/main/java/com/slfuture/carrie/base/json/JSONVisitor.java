@@ -3,7 +3,10 @@ package com.slfuture.carrie.base.json;
 import com.slfuture.carrie.base.json.core.IJSON;
 import com.slfuture.carrie.base.type.List;
 import com.slfuture.carrie.base.type.core.ICollection;
+import com.slfuture.carrie.base.type.core.ILink;
 import com.slfuture.carrie.base.type.core.IMixedMapping;
+
+import java.lang.reflect.Field;
 
 /**
  * JSON 遍历器
@@ -533,5 +536,120 @@ public class JSONVisitor implements IMixedMapping<String, Object> {
             return null;
         }
         return ((JSONObject) value).get(key);
+    }
+
+    /**
+     * 构建指定类实例
+     *
+     * @param clazz 类
+     * @return 类实例
+     */
+    public <T> T build(Class<T> clazz) throws IllegalAccessException, InstantiationException {
+        T result = (T) clazz.newInstance();
+        for(ILink<String, IJSON> link : (JSONObject) value) {
+            try {
+                for(Field field : clazz.getFields()) {
+                    if(field.getName().equalsIgnoreCase(link.origin())) {
+                        if(null == link.destination()) {
+                            field.set(result, null);
+                        }
+                        else if(link.destination() instanceof JSONNumber) {
+                            double d = ((JSONNumber) (link.destination())).doubleValue();
+                            if(field.getType().equals(boolean.class) || field.getType().equals(Boolean.class)) {
+                                if(0 == d) {
+                                    field.set(result, false);
+                                }
+                                else {
+                                    field.set(result, true);
+                                }
+                            }
+                            else if(field.getType().equals(byte.class) || field.getType().equals(Byte.class)) {
+                                field.set(result, (byte) d);
+                            }
+                            else if(field.getType().equals(short.class) || field.getType().equals(Short.class)) {
+                                field.set(result, (short) d);
+                            }
+                            else if(field.getType().equals(int.class) || field.getType().equals(Integer.class)) {
+                                field.set(result, (int) d);
+                            }
+                            else if(field.getType().equals(long.class) || field.getType().equals(Long.class)) {
+                                field.set(result, (long) d);
+                            }
+                            else if(field.getType().equals(float.class) || field.getType().equals(Float.class)) {
+                                field.set(result, (float) d);
+                            }
+                            else {
+                                field.set(result, d);
+                            }
+                        }
+                        else if(link.destination() instanceof JSONBoolean) {
+                            field.set(result, ((JSONBoolean) (link.destination())).getValue());
+                        }
+                        else if(link.destination() instanceof JSONString) {
+                            field.set(result, ((JSONString) (link.destination())).getValue());
+                        }
+                        field.set(result, link.destination());
+                    }
+                }
+            }
+            catch (Exception e) { }
+        }
+        return result;
+    }
+
+    /**
+     * 赋值指定实例
+     *
+     * @param target 类实例
+     */
+    public <T> void build(T target) {
+        for(ILink<String, IJSON> link : (JSONObject) value) {
+            for(Field field : target.getClass().getDeclaredFields()) {
+                if(field.getName().equalsIgnoreCase(link.origin())) {
+                    try {
+                        if(null == link.destination()) {
+                            field.set(target, null);
+                        }
+                        else if(link.destination() instanceof JSONNumber) {
+                            double d = ((JSONNumber) (link.destination())).doubleValue();
+                            if(field.getType().equals(boolean.class) || field.getType().equals(Boolean.class)) {
+                                if(0 == d) {
+                                    field.set(target, false);
+                                }
+                                else {
+                                    field.set(target, true);
+                                }
+                            }
+                            else if(field.getType().equals(byte.class) || field.getType().equals(Byte.class)) {
+                                field.set(target, (byte) d);
+                            }
+                            else if(field.getType().equals(short.class) || field.getType().equals(Short.class)) {
+                                field.set(target, (short) d);
+                            }
+                            else if(field.getType().equals(int.class) || field.getType().equals(Integer.class)) {
+                                field.set(target, (int) d);
+                            }
+                            else if(field.getType().equals(long.class) || field.getType().equals(Long.class)) {
+                                field.set(target, (long) d);
+                            }
+                            else if(field.getType().equals(float.class) || field.getType().equals(Float.class)) {
+                                field.set(target, (float) d);
+                            }
+                            else {
+                                field.set(target, d);
+                            }
+                        }
+                        else if(link.destination() instanceof JSONBoolean) {
+                            field.set(target, ((JSONBoolean) (link.destination())).getValue());
+                        }
+                        else if(link.destination() instanceof JSONString) {
+                            field.set(target, ((JSONString) (link.destination())).getValue());
+                        }
+                        field.set(target, link.destination());
+                    }
+                    catch (Exception e) { }
+                }
+            }
+        }
     }
 }
