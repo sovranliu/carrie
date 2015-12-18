@@ -157,7 +157,13 @@ public class DateTime implements Comparable<DateTime>, Serializable {
      * @return 日期对象
      */
     public static DateTime parse(String dateString) throws ParseException {
-        SimpleDateFormat format = new SimpleDateFormat(DATETIME_FORMAT);
+        SimpleDateFormat format = null;
+        if(-1 == dateString.indexOf("T")) {
+            format = new SimpleDateFormat(DATETIME_FORMAT);
+        }
+        else {
+            format = new SimpleDateFormat(DATETIME_FORMAT.replace(" ", "T"));
+        }
         return DateTime.parse(format.parse(dateString));
     }
 

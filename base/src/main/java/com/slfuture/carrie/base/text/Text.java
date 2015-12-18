@@ -3,6 +3,7 @@ package com.slfuture.carrie.base.text;
 import com.slfuture.carrie.base.character.filter.ByteUTF8Filter;
 import com.slfuture.carrie.base.interaction.FilterReader;
 import com.slfuture.carrie.base.io.disk.DiskReadableHandle;
+import com.slfuture.carrie.base.io.disk.DiskWritableHandle;
 import com.slfuture.carrie.base.logic.core.ICondition;
 import com.slfuture.carrie.base.model.Result;
 import com.slfuture.carrie.base.text.filter.BytesLineFilter;
@@ -12,10 +13,7 @@ import com.slfuture.carrie.base.time.Time;
 import com.slfuture.carrie.base.type.Set;
 import com.slfuture.carrie.base.type.core.ICollection;
 
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
+import java.io.*;
 import java.util.regex.Pattern;
 
 /**
@@ -138,6 +136,21 @@ public class Text {
             handle.close();
         }
         return builder.toString();
+    }
+
+    /**
+     * 保存文件
+     *
+     * @param text 文本内容
+     * @param encoding 文件编码格式
+     * @param file 保存目标
+     */
+    public static boolean saveFile(String text, int encoding, File file) throws IOException {
+        DiskWritableHandle handle = new DiskWritableHandle();
+        handle.create(file);
+        handle.write(text.getBytes("UTF-8"));
+        handle.close();
+        return true;
     }
 
     /**

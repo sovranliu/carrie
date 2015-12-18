@@ -1,6 +1,9 @@
 package com.slfuture.carrie.base.json;
 
 import com.slfuture.carrie.base.json.core.IJSON;
+import com.slfuture.carrie.base.time.Date;
+import com.slfuture.carrie.base.time.DateTime;
+import com.slfuture.carrie.base.time.Time;
 import com.slfuture.carrie.base.type.List;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ILink;
@@ -586,7 +589,18 @@ public class JSONVisitor implements IMixedMapping<String, Object> {
                             field.set(result, ((JSONBoolean) (link.destination())).getValue());
                         }
                         else if(link.destination() instanceof JSONString) {
-                            field.set(result, ((JSONString) (link.destination())).getValue());
+                            if(field.getType().equals(DateTime.class)) {
+                                field.set(result, DateTime.parse(((JSONString) link.destination()).getValue()));
+                            }
+                            else if(field.getType().equals(Date.class)) {
+                                field.set(result, Date.parse(((JSONString) link.destination()).getValue()));
+                            }
+                            else if(field.getType().equals(Time.class)) {
+                                field.set(result, Time.parse(((JSONString) link.destination()).getValue()));
+                            }
+                            else {
+                                field.set(result, ((JSONString) (link.destination())).getValue());
+                            }
                         }
                         field.set(result, link.destination());
                     }
@@ -643,7 +657,18 @@ public class JSONVisitor implements IMixedMapping<String, Object> {
                             field.set(target, ((JSONBoolean) (link.destination())).getValue());
                         }
                         else if(link.destination() instanceof JSONString) {
-                            field.set(target, ((JSONString) (link.destination())).getValue());
+                            if(field.getType().equals(DateTime.class)) {
+                                field.set(target, DateTime.parse(((JSONString) link.destination()).getValue()));
+                            }
+                            else if(field.getType().equals(Date.class)) {
+                                field.set(target, Date.parse(((JSONString) link.destination()).getValue()));
+                            }
+                            else if(field.getType().equals(Time.class)) {
+                                field.set(target, Time.parse(((JSONString) link.destination()).getValue()));
+                            }
+                            else {
+                                field.set(target, ((JSONString) (link.destination())).getValue());
+                            }
                         }
                         field.set(target, link.destination());
                     }
