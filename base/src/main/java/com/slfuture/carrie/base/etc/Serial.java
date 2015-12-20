@@ -2,9 +2,7 @@ package com.slfuture.carrie.base.etc;
 
 import com.slfuture.carrie.base.time.DateTime;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.lang.reflect.Method;
 import java.nio.Buffer;
 import java.nio.MappedByteBuffer;
@@ -197,6 +195,56 @@ public class Serial {
             }
         }
         return result;
+    }
+
+    /**
+     * 将文件转化成类实例
+     *
+     * @param file 文件对象
+     * @param clazz 实例类
+     * @return 类实例
+     */
+    public static <T> T extract(File file, Class<T> clazz) throws IOException, ClassNotFoundException {
+        ObjectInputStream stream = null;
+        T result = null;
+        try {
+            stream = new ObjectInputStream(new FileInputStream(file));
+            result = (T) stream.readObject();
+        }
+        catch(IOException ex) {
+            throw ex;
+        }
+        catch(ClassNotFoundException ex) {
+            throw ex;
+        }
+        finally {
+            if(null != stream) {
+                stream.close();
+            }
+        }
+        return result;
+    }
+
+    /**
+     * 将类实例存储到文件
+     *
+     * @param instance 实例类
+     * @param file 文件对象
+     */
+    public static <T> void restore(T instance, File file) throws IOException {
+        ObjectOutputStream stream = null;
+        try {
+            stream = new ObjectOutputStream(new FileOutputStream(file, false));
+            stream.writeObject(instance);
+        }
+        catch(IOException ex) {
+            throw ex;
+        }
+        finally {
+            if(null != stream) {
+                stream.close();
+            }
+        }
     }
 
     /**
