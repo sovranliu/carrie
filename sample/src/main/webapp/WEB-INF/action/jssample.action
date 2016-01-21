@@ -1,0 +1,3 @@
+// 请求入口
+context.set("id", "");
+return "sample.html";

@@ -1,3 +1,2 @@
 // 请求入口
-context.set("id", context.parameters.get("id"));
-return "sample.html";
+return "hello.html";

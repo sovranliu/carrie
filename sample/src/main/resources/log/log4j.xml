@@ -2,7 +2,7 @@
 <!DOCTYPE log4j:configuration PUBLIC "-//log4j/log4j Configuration//EN" "log4j.dtd">
 <log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/" threshold="null" debug="null">
 	<appender name="common" class="org.apache.log4j.DailyRollingFileAppender">
-		<param name="File" value="/F:/apps/log/sample/app.log" />
+		<param name="File" value="/apps/log/sample/app.log" />
 		<layout class="org.apache.log4j.PatternLayout">
 			<param name="ConversionPattern" value="[s]%d %-5p %l [%c] %m%n" />
 		</layout>
