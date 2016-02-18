@@ -5,9 +5,11 @@ import com.slfuture.carrie.base.time.Date;
 import com.slfuture.carrie.base.time.DateTime;
 import com.slfuture.carrie.base.time.Time;
 import com.slfuture.carrie.base.type.List;
+import com.slfuture.carrie.base.type.Table;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.ILink;
 import com.slfuture.carrie.base.type.core.IMixedMapping;
+import com.slfuture.carrie.base.type.core.ITable;
 
 import java.lang.reflect.Field;
 
@@ -145,6 +147,23 @@ public class JSONVisitor implements IMixedMapping<String, Object> {
         List<JSONVisitor> result = new List<JSONVisitor>();
         for(IJSON item : array) {
             result.add(new JSONVisitor(item));
+        }
+        return result;
+    }
+
+    /**
+     * 获取属性节点映射
+     *
+     * @return 子节点集合
+     */
+    public ITable<String, JSONVisitor> toVisitorMap() {
+        if(false == (value instanceof JSONObject)) {
+            return null;
+        }
+        Table<String, JSONVisitor> result = new Table<String, JSONVisitor>();
+        JSONObject object = (JSONObject) value;
+        for(ILink<String, IJSON> link : object) {
+            result.put(link.origin(), new JSONVisitor(link.destination()));
         }
         return result;
     }
