@@ -3,6 +3,7 @@ package com.slfuture.carrie.base.type;
 import com.slfuture.carrie.base.type.core.ICollection;
 import com.slfuture.carrie.base.type.core.IList;
 
+import java.io.Serializable;
 import java.util.Iterator;
 
 /**
@@ -10,7 +11,9 @@ import java.util.Iterator;
  *
  * 支持空元素和重复元素
 */
-public class List<I> implements IList<I> {
+public class List<I> implements IList<I>, Cloneable, Serializable {
+    private static final long serialVersionUID = -1;
+
     /**
      * 链表迭代器
      */
