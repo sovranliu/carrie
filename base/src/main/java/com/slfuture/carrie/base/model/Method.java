@@ -140,6 +140,9 @@ public class Method {
         String parameterString = Text.substring(string, "(", ")");
         ArrayList<Class<?>> list = new ArrayList<Class<?>>();
         for(String parameter : parameterString.split(",")) {
+            if(Text.isBlank(parameterString)) {
+                continue;
+            }
             try {
                 list.add(Class.forName(parameter.trim()));
             }
@@ -173,7 +176,7 @@ public class Method {
             else {
                 sentry = true;
             }
-            builder.append(parameter);
+            builder.append(parameter.getName());
         }
         builder.append(")");
         return builder.toString();

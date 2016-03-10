@@ -3,11 +3,11 @@ package com.slfuture.carrie.base.model.core;
 /**
  * 可触发接口
  */
-public interface IEventable<T> {
+public interface IEventable<E> {
     /**
-     * 回调事件
+     * 事件回调
      *
-     * @param data 回调数据
+     * @param event 事件
      */
-    public void on(T data);
+    public void on(E event);
 }
